@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+<title>Modelling microbial growth under static and dynamic conditions: biogrowth</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#header {
+text-align: center;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Modelling microbial growth under static and dynamic conditions: biogrowth</h1>
+
+
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>A description of microbial growth is essential for shelf-life estimation and microbial risk assessment of food products. The <strong>biogrowth</strong> package for R includes several functions for modelling microbial growth according to the methods developed within the field of predictive microbiology. This includes:</p>
+<ul>
+<li>Model fitting of primary models to data gathered under static conditions.</li>
+<li>Model fitting of secondary (cardinal) models to growth rates gathered under static conditions.</li>
+<li>One-step model fitting of growth models to data gathered under dynamic conditions.</li>
+<li>Deterministic predictions under static or dynamic conditions.</li>
+<li>Stochastic predictions under static or dynamic conditions.</li>
+</ul>
+<p>The calculations are done using mathematical models commonly used in predictive microbiology (Perez-Rodriguez and Valero, 2012). Primary modelling is done using the Baranyi, modified Gompertz and trilinear models, whereas secondary modelling is done using the gamma concept.</p>
+<p>Once installed, <strong>biogrowth</strong> can be loaded with</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">library</span>(biogrowth)</span></code></pre></div>
+<p>This loads all the relevant functions in the package. Moreover, this also loads the example datasets that are included in the package.</p>
+<p>In this document, we will present the functions included in <strong>biogrowth</strong>. In order to ease the manipulations, we will be using the <strong>tidyverse</strong> package.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="kw">library</span>(tidyverse)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="co">#&gt; -- Attaching packages ------------------------------------------------------------ tidyverse 1.3.0 --</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="co">#&gt; v ggplot2 3.3.2     v purrr   0.3.4</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="co">#&gt; v tibble  3.0.3     v dplyr   0.8.5</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a><span class="co">#&gt; v tidyr   1.0.2     v stringr 1.4.0</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a><span class="co">#&gt; v readr   1.3.1     v forcats 0.5.0</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a><span class="co">#&gt; -- Conflicts --------------------------------------------------------------- tidyverse_conflicts() --</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a><span class="co">#&gt; x dplyr::filter() masks stats::filter()</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a><span class="co">#&gt; x dplyr::lag()    masks stats::lag()</span></span></code></pre></div>
+<p>Several functions in the package make use of stochastic algorithm. For reproducibility, we will set the internal seed of R’s internal random number generator (PRNG) to some arbitrary value</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="kw">set.seed</span>(<span class="dv">1241</span>)</span></code></pre></div>
+<p>According to the usual conventions in predictive microbiology, in this document we will use <span class="math inline">\(log\)</span> to refer to the decimal logarithm and <span class="math inline">\(ln\)</span> for the natural logarithm.</p>
+</div>
+<div id="mathematical-background" class="section level1">
+<h1>Mathematical background</h1>
+<div id="microbial-growth-according-to-predictive-microbiology" class="section level2">
+<h2>Microbial growth according to predictive microbiology</h2>
+<p>In predictive microbiology mathematical models are usually divided in <em>primary</em> and <em>secondary</em> models (Perez-Rodriguez and Valero, 2012). Primary models describe the variation of the variable(s) of interest (usually the microbial count) against time. Due to the strong empirical component of these models, primary models have model parameters that are dependent on the environmental conditions. A typical example is the relationship between the specific growth rate and the storage temperature. Hence, secondary models describe the relationship between the parameters of the primary model and the environmental conditions.</p>
+</div>
+<div id="primary-growth-models-included-in-biogrowth" class="section level2">
+<h2>Primary growth models included in biogrowth</h2>
+<div id="modified-gompertz-model-under-static-conditions" class="section level3">
+<h3>Modified Gompertz model under static conditions</h3>
+<p>Zwietering et al. (1990) proposed a reparameterization of the Gompertz model with parameters that have a biological interpretation for microbial growth. This model predicts the microbial count <span class="math inline">\(N(t)\)</span> for storage time <span class="math inline">\(t\)</span> as a sigmoid using the following algebraic equation</p>
+<p><span class="math display">\[
+\log N(t) = \log N_0 + C \left( \exp \left( -\exp \left( 2.71 \frac{\mu}{C}(\lambda-t)+1 \right) \right) \right)
+\]</span></p>
+<p>where <span class="math inline">\(N_0\)</span> is the initial microbial count, <span class="math inline">\(\mu\)</span> is the maximum specific growth rate, <span class="math inline">\(\lambda\)</span> is the duration of the lag phase and <span class="math inline">\(C\)</span> is the difference between the initial microbial count and the maximum microbial count.</p>
+</div>
+<div id="baranyi-model-under-dynamic-conditions" class="section level3">
+<h3>Baranyi model under dynamic conditions</h3>
+<p>Baranyi and Roberts (1994) proposed a system of two differential equations to describe microbial growth:</p>
+<p><span class="math display">\[
+\frac{dN}{dt} = \frac{Q}{1+Q}\mu\left(1 - \frac{N}{N_{max}} \right)N
+\]</span></p>
+<p><span class="math display">\[
+\frac{dQ}{dt}=\mu \space Q
+\]</span> In this model, the deviations with respect to exponential growth are justified based on two hypothesis. It introduces the variable <span class="math inline">\(Q(t)\)</span>, which represents a theoretical substance that must be produced before the microorganism can enter the exponential growth phase. Hence, its initial value (<span class="math inline">\(Q_0\)</span>) defines the lag phase duration (under static conditions) as <span class="math inline">\(\lambda = \frac{\ln (1+1/Q_{0})}{\mu}\)</span>. On the other hand, the stationary growth phase is defined by the logistic term <span class="math inline">\((1-N/N_{max})\)</span>, which reduces the growth rate as the microorganism reaches the maximum count.</p>
+<p>Note that the original paper by Baranyi and Roberts included an exponent, <span class="math inline">\(m\)</span>, in the term defining the stationary growth phase. However, that term is usually set to 1 in predictive microbiology and, consequently, has been omitted from <em>biogrowth</em>. Also, in its original paper, the specific growth rate of <span class="math inline">\(Q(t)\)</span> was given by a different growth rate (<span class="math inline">\(\nu\)</span>). However, because this variable does not correspond to any known substance, this growth rate lacks a biological meaning and has been set to <span class="math inline">\(\mu\)</span>.</p>
+</div>
+<div id="baranyi-model-under-static-conditions" class="section level3">
+<h3>Baranyi model under static conditions</h3>
+<p>For static conditions, the differential equation proposed by Baranyi and Roberts (1994) has as particular solution the sigmoid given by</p>
+<p><span class="math display">\[
+\log N(t) = \log N_0 + \mu \cdot A(t) - \frac{\log(1 + (\exp(\mu \cdot A(t)) - 1)}{ \exp(\log N_{max} - \log N_0))}
+\]</span> where <span class="math inline">\(A\)</span> is an adjustment function:</p>
+<p><span class="math display">\[
+A(t) = t + \frac{1}{\mu}  \log(\exp(-\mu * t) + \exp(-h_0) - \exp(-\mu \cdot t - h_0))
+\]</span></p>
+<p>In these equations, where <span class="math inline">\(N_0\)</span> is the initial microbial count, <span class="math inline">\(\mu\)</span> is the maximum specific growth rate and <span class="math inline">\(N_{max}\)</span> is the maximum growth rate. The parameter <span class="math inline">\(h_0\)</span> is usually called the <em>work to be done</em> and is defined as <span class="math inline">\(h_{0} = \mu\cdot\lambda\)</span>, where <span class="math inline">\(\lambda\)</span> is the lag phase. For compatibility with the other models, the functions in <strong>biogrowth</strong> take as input <span class="math inline">\(\lambda\)</span> instead of <span class="math inline">\(h_0\)</span>.</p>
+</div>
+<div id="trilinear-model-under-static-conditions" class="section level3">
+<h3>Trilinear model under static conditions</h3>
+<p>Buchanan et al. (1997) proposed a trilinear model as a more simple approach to describe microbial growth. This model is defined by the piece-wise equation:</p>
+<p><span class="math display">\[
+\log N(t) = \log N_0; t \leq \lambda
+\]</span> <span class="math display">\[
+\log N(t) = \log N_0 + \mu(t-\lambda); t\in(\lambda,t_{max})
+\]</span></p>
+<p><span class="math display">\[
+\log N(t) = \log N_{max}; t \geq t_{max}
+\]</span></p>
+<p>where <span class="math inline">\(t_{max}\)</span>, defined is the time required for the microbial count to reach <span class="math inline">\(N_{max}\)</span>.</p>
+</div>
+</div>
+<div id="secondary-growth-models-included-in-biogrowth" class="section level2">
+<h2>Secondary growth models included in biogrowth</h2>
+<p>Although other approaches for secondary modeling exist in the literature, the <strong>biogrowth</strong> package uses the gamma approach proposed by Zwietering et al. (1992). This approach assumes that the effect of each environmental factor on the growth rate is multiplicative and independent. Hence, the specific growth rate (<span class="math inline">\(\mu\)</span>) observed under a combination of environmental conditions (<span class="math inline">\(X_1\)</span>, <span class="math inline">\(X_2\)</span>,…,<span class="math inline">\(X_n\)</span>) is the result of multiplying the value of <span class="math inline">\(\mu\)</span> observed under optimal conditions for growth (<span class="math inline">\(\mu_{opt}\)</span>) times a <em>gamma factor</em> corresponding to each environmental factor (<span class="math inline">\(\gamma(X_i)\)</span>). Because gamma factors represent growth rates under sub-optimal conditions, they are correction factors taking values between 0 and 1.</p>
+<p>Note that this approach does not take into consideration interaction between the different terms. The reason for this is that, in the opinion of the authors, their implementation is still a research topic, without any model being broadly accepted. Therefore, their inclusion is not in line with the phylosophi of <strong>biogrowth</strong>, which aims at easing the application of commonly accepted modelling approaches.</p>
+<p><span class="math display">\[
+\mu = \mu_{opt} \cdot \gamma(X_1) \cdot \gamma(X_2) \cdot ... \cdot \gamma(X_n)
+\]</span></p>
+<div id="gamma-factors-by-zwietering" class="section level3">
+<h3>Gamma factors by Zwietering</h3>
+<p>The equation for the gamma factors defined by Zwietering et al. (1992) for an arbitrary environmental factor <span class="math inline">\(X\)</span> can be written as</p>
+<p><span class="math display">\[
+\gamma(X) = \left( \frac{X-X_{min}}{X_{opt}-X_{min}} \right)^n
+\]</span></p>
+<p>where <span class="math inline">\(X_min\)</span> is the minimum value of <span class="math inline">\(X\)</span> enabling growth, <span class="math inline">\(X_{opt}\)</span> is the optimum value of <span class="math inline">\(X\)</span> for growth and <span class="math inline">\(n\)</span> is the order of the model. The latter value usually takes the value 1 or 2, depending on the environmental factor.</p>
+</div>
+<div id="cardinal-parameter-models-cpm" class="section level3">
+<h3>Cardinal Parameter Models (CPM)</h3>
+<p>Rosso et al. (1995) defined a piecewise equation for the gamma factors</p>
+<p><span class="math display">\[
+\gamma(X)=0; X&lt;X_{min}
+\]</span></p>
+<p><span class="math display">\[
+\gamma(X)=0; X&gt;X_{max}
+\]</span></p>
+<p><span class="math display">\[
+\gamma(X) = \frac{(X-X_{max})(X-X_{min})^n}
+{(X_{opt}-X_{min})^{n-1}( (X_{opt}-X_{min})(X-X_{opt}) - (X_{opt}-X_{max}) \cdot ((n-1)X_{opt} + X_{min}-n \cdot X) )}; otherwise
+\]</span> In this equation, <span class="math inline">\(X_{min}\)</span>, <span class="math inline">\(X_{opt}\)</span> and <span class="math inline">\(X_{max}\)</span> are the minimum, maximum and optimum values of <span class="math inline">\(X\)</span> for microbial growth (usually called <em>cardinal parameters</em>). The coefficient <span class="math inline">\(n\)</span> is the shape parameter of the cardinal model.</p>
+</div>
+</div>
+<div id="numerical-methods" class="section level2">
+<h2>Numerical methods</h2>
+<p>The numerical calculations are largely based on the <strong>FME</strong> and <strong>deSolve</strong> packages. The differential equations required for dynamic calculations are calculated using the <code>ode()</code> function from <strong>deSolve</strong>, which implements the LSODA numerical method. Model fitting is done using the <code>modFit()</code> function from <strong>FME</strong> for linear regression and the <code>modMCMC</code> function from the same package for MCMC fitting.</p>
+</div>
+</div>
+<div id="datasets-included-in-the-package" class="section level1">
+<h1>Datasets included in the package</h1>
+<p>The <strong>biogrowth</strong> package includes three datasets to aid in the understanding of its functions: * <code>example_cardinal</code>: an example of the results of a set of growth experiments to estimate cardinal parameters. * <code>example_dynamic_growth</code> and <code>example_env_conditions</code>: an example of the results of a dynamic growth experiment.</p>
+<p>All of them are automatically saved when the package is installed. Each one of them can be loaded with a call to the function <code>data()</code> passing the name of the dataset as an argument.</p>
+<p>The dataset <code>example_cardinal</code> includes an example of the type of data used for estimating cardinal model parameters. It has three columns: temperature, pH and mu. The two first represent the storage conditions during several static growth experiments, whereas the latter is the specific growth rate estimated in those experiments. This dataset is intended to be used for <code>fit_secondary_growth()</code>.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="kw">data</span>(<span class="st">&quot;example_cardinal&quot;</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a><span class="kw">head</span>(example_cardinal)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a><span class="co">#&gt;   temperature pH           mu</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a><span class="co">#&gt; 1    0.000000  5 9.768505e-04</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a><span class="co">#&gt; 2    5.714286  5 2.624919e-03</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a><span class="co">#&gt; 3   11.428571  5 0.000000e+00</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a><span class="co">#&gt; 4   17.142857  5 1.530706e-04</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a><span class="co">#&gt; 5   22.857143  5 2.301817e-05</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true"></a><span class="co">#&gt; 6   28.571429  5 3.895598e-04</span></span></code></pre></div>
+<p>The datasets <code>example_dynamic_growth</code> and <code>example_env_conditions</code> describe a dynamic growth experiment, which can be used for the <code>fit_dynamic_growth()</code> function. The dataset <code>example_env_conditions</code> describes the experimental design; i.e. how the environmental factors vary during the experiment. It has three columns: time (the elapsed time), temperature (the storage temperature) and aw (the water activity).</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="kw">data</span>(<span class="st">&quot;example_env_conditions&quot;</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a><span class="kw">head</span>(example_env_conditions)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a><span class="co">#&gt; # A tibble: 3 x 3</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a><span class="co">#&gt;    time temperature    aw</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a><span class="co">#&gt;   &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a><span class="co">#&gt; 1     0          20  0.99</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true"></a><span class="co">#&gt; 2     5          30  0.95</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true"></a><span class="co">#&gt; 3    15          35  0.9</span></span></code></pre></div>
+<p>The dataset <code>example_dynamic_growth</code> illustrates the microbial counts observed during the experiment described by <code>example_env_conditions</code>. It has two columns: time (the elapsed time) and logN (the observed microbial count).</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="kw">data</span>(<span class="st">&quot;example_dynamic_growth&quot;</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a><span class="kw">head</span>(example_dynamic_growth)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a><span class="co">#&gt; # A tibble: 6 x 2</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a><span class="co">#&gt;   time      logN        </span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true"></a><span class="co">#&gt;   &lt;deSolve&gt; &lt;deSolve&gt;   </span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true"></a><span class="co">#&gt; 1 0.0000000  0.066970558</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true"></a><span class="co">#&gt; 2 0.5172414 -0.004634428</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true"></a><span class="co">#&gt; 3 1.0344828 -0.097964735</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true"></a><span class="co">#&gt; 4 1.5517241 -0.098558778</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true"></a><span class="co">#&gt; 5 2.0689655  0.110913049</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true"></a><span class="co">#&gt; 6 2.5862069 -0.046531175</span></span></code></pre></div>
+</div>
+<div id="deterministic-modelling" class="section level1">
+<h1>Deterministic modelling</h1>
+<div id="growth-prediction-under-static-conditions" class="section level2">
+<h2>Growth prediction under static conditions</h2>
+<p>The <strong>biogrowth</strong> package includes the function <code>predict_isothermal_growth</code> to make predictions under static conditions. The calculations are based on the primary model, without the need of defining a secondary model. This function has 3 arguments:</p>
+<ul>
+<li><code>model_name</code>: a character vector indicating the primary model. Admisible values are “modGompertz”, “Baranyi” and “Trilinear”.</li>
+<li><code>times</code>: a numeric vector of storage times to make the predictions.</li>
+<li><code>model_pars</code>: a named list defining the values of the model parameters.</li>
+</ul>
+<p>For instance, to make predictions using the modified Gompertz model we would define</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a>my_model &lt;-<span class="st"> &quot;modGompertz&quot;</span></span></code></pre></div>
+<p>This model has 3 model parameters (<code>mu</code>, <code>lambda</code> and <code>C</code>). Additional, for making the calculations, we need to define an initial microbial count (<code>logN0</code>). All this information must be defined in a single list:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a>my_pars &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">logN0 =</span> <span class="dv">2</span>, <span class="dt">C =</span> <span class="dv">6</span>, <span class="dt">mu =</span> <span class="fl">.2</span>, <span class="dt">lambda =</span> <span class="dv">25</span>)</span></code></pre></div>
+<p>Finally, we have to define the storage times for which the prediction is calculated. For instance, we can define</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a>my_time &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">100</span>, <span class="dt">length =</span> <span class="dv">1000</span>)</span></code></pre></div>
+<p>Once we have defined the arguments, we can call the function <code>predict_isothermal_growth</code> to get the model predictions.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a>static_prediction &lt;-<span class="st"> </span><span class="kw">predict_isothermal_growth</span>(my_model, my_time, my_pars)</span></code></pre></div>
+<p>This function returns a list of class <code>IsothermalGrowth</code> with the results of the simulation. It has three items:</p>
+<ul>
+<li><code>simulation</code>: A tibble with the results of the simulation.</li>
+<li><code>model</code>: The name of the model used for making the calculations.</li>
+<li><code>pars</code>: Vector of model parameters used for the calculations.</li>
+</ul>
+<p>Hence, we can retrieve the results of the simulation by accessing the <code>simulation</code> item</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true"></a>static_prediction<span class="op">$</span>simulation</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true"></a><span class="co">#&gt; # A tibble: 1,000 x 2</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true"></a><span class="co">#&gt;     time  logN</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true"></a><span class="co">#&gt;    &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true"></a><span class="co">#&gt;  1 0        2.</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true"></a><span class="co">#&gt;  2 0.100    2.</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true"></a><span class="co">#&gt;  3 0.200    2.</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true"></a><span class="co">#&gt;  4 0.300    2.</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true"></a><span class="co">#&gt;  5 0.400    2.</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true"></a><span class="co">#&gt;  6 0.501    2.</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true"></a><span class="co">#&gt;  7 0.601    2.</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true"></a><span class="co">#&gt;  8 0.701    2.</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true"></a><span class="co">#&gt;  9 0.801    2.</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true"></a><span class="co">#&gt; 10 0.901    2.</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true"></a><span class="co">#&gt; # ... with 990 more rows</span></span></code></pre></div>
+<p>Alternatively, this class implements an S3 method for plot that illustrates the survivor curve:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true"></a><span class="co"># this is a bit confusing to me, as normally plot() refers to base R plotting functions (but I will adapt :P)</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true"></a><span class="kw">plot</span>(static_prediction)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>The plot is generated as a gpplot object. Therefore, it can be edited using layers as usual in the ggplot2 package. For instance,</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true"></a><span class="kw">plot</span>(static_prediction) <span class="op">+</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Storage time (h)&quot;</span>) <span class="op">+</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true"></a><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Microbial count (log CFU/ml)&quot;</span>) <span class="op">+</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true"></a><span class="st">  </span><span class="kw">theme_gray</span>()</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+</div>
+<div id="growth-prediction-under-dynamic-conditions" class="section level2">
+<h2>Growth prediction under dynamic conditions</h2>
+<p>The <strong>biogrowth</strong> package can also be used for simulating growth under dynamic conditions using the <code>predict_dynamic_growth()</code> function. This function has 5 arguments:</p>
+<ul>
+<li><code>times</code>: Numeric vector of storage times to make the calculations.</li>
+<li><code>env_conditions</code>: A tibble describing the variation of the environmental conditions through storage.</li>
+<li><code>primary_pars</code>: A list describing the model parameters of the primary model.</li>
+<li><code>secondary_models</code>: A nested list defining the secondary model(s).</li>
+<li><code>...</code>: Additional arguments passed to the numeric solver of the differential equation.</li>
+</ul>
+<p>The varying environmental conditions are defined using a tibble. This object must have a column named <code>time</code> and as many additional columns as needed for each environmental factor. For the simulations, the value of the environmental conditions at time points not included in <code>env_conditions</code> is calculated by linear interpolation.</p>
+<p>For instance, we can define the temperature and pH variation through storage using the following tibble:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true"></a>my_conditions &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">time =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">5</span>, <span class="dv">40</span>),</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true"></a>                         <span class="dt">temperature =</span> <span class="kw">c</span>(<span class="dv">20</span>, <span class="dv">30</span>, <span class="dv">35</span>),</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true"></a>                         <span class="dt">pH =</span> <span class="kw">c</span>(<span class="dv">7</span>, <span class="fl">6.5</span>, <span class="dv">5</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true"></a>                         )</span></code></pre></div>
+<p>Then, the simulations would consider this temperature profile</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true"></a><span class="kw">ggplot</span>(my_conditions) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time, <span class="dt">y =</span> temperature))</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>And this pH profile</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true"></a><span class="kw">ggplot</span>(my_conditions) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time, <span class="dt">y =</span> pH))</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>Therefore, in order to get smoother profiles, one has to define additional rows in the tibble.</p>
+<p>For dynamic conditions, <strong>biogrowth</strong> can only use the Baranyi growth model as primary model. This model requires the definition of two model parameters: the specific growth rate at optimum conditions (<code>mu_opt</code>) and the maximum microbial count (<code>Nmax</code>). Moreover, the initial values of the microbial count (<code>N0</code>) and the theoretical substance <span class="math inline">\(Q\)</span> (<code>Q0</code>) must be defined. For the <code>predict_dynamic_growth()</code>function, they must be defined in a single list:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true"></a><span class="co"># can you give a sort of range for this theoretical substance? Or should the user play around a bit to find a value that suits the needs? </span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true"></a>my_primary &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">mu_opt =</span> <span class="dv">2</span>,</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true"></a>             <span class="dt">Nmax =</span> <span class="fl">1e8</span>,</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true"></a>             <span class="dt">N0 =</span> <span class="fl">1e0</span>,</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true"></a>             <span class="dt">Q0 =</span> <span class="fl">1e-3</span>)</span></code></pre></div>
+<p>The next step is the definition of the secondary models. As already described above, <strong>biogrowth</strong> describes the variation of <span class="math inline">\(\mu\)</span> with temperature based on the gamma concept. Therefore, we need to define one secondary model per environmental condition. This must be done using a list. We define a list per environmental condition and this list defines the type of gamma model as well as the model parameters.</p>
+<p>For instance, we will define a gamma-type model for temperature as defined by Zwietering et al. This is done by including an item called <code>model</code> in the list and assigning it the value <code>&quot;Zwietering&quot;</code>. Then, we define the values of the model parameters. In this case, we need the minimum (<code>xmin</code>) and optimum (<code>xopt</code>) cardinal values, as well as the order of the model (<code>n</code>). We define them using individual entries in the list:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true"></a>sec_temperature &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">model =</span> <span class="st">&quot;Zwietering&quot;</span>,</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true"></a>                        <span class="dt">xmin =</span> <span class="dv">25</span>,</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true"></a>                        <span class="dt">xopt =</span> <span class="dv">35</span>,</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true"></a>                        <span class="dt">n =</span> <span class="dv">1</span>)</span></code></pre></div>
+<p>Next, we will define a CPM model for the effect of pH. Note that the model selection is for illustration purposes, not based on predictive power. The definition is very similar as for the Zwietering-type model. First of all, we need to set the item <code>model</code> to <code>&quot;CPM&quot;</code> instead of <code>&quot;Zwietering&quot;</code>. Then, we need to give one additional parameter value (<code>xmax</code>):</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true"></a>sec_pH =<span class="st"> </span><span class="kw">list</span>(<span class="dt">model =</span> <span class="st">&quot;CPM&quot;</span>,</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true"></a>              <span class="dt">xmin =</span> <span class="fl">5.5</span>,</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true"></a>              <span class="dt">xopt =</span> <span class="fl">6.5</span>,</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true"></a>              <span class="dt">xmax =</span> <span class="fl">7.5</span>,</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true"></a>              <span class="dt">n =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p>The final step for the definition of the gamma-type secondary model is putting all the individual models together in a single list. Be mindful, though, that every element on the list must be named using the same column names as in <code>env_conditions</code>. Before, we had used the column names <code>temperature</code> and <code>pH</code>. Therefore, we must repeat the exact same names in the definition of the secondary model.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true"></a>my_secondary &lt;-<span class="st"> </span><span class="kw">list</span>(</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true"></a>    <span class="dt">temperature =</span> sec_temperature,</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true"></a>    <span class="dt">pH =</span> sec_pH</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true"></a>    )</span></code></pre></div>
+<p>The final argument is the time points where to make the calculations. We can use a numeric vector between 0 and 50 for this:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true"></a>my_times &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">50</span>, <span class="dt">length =</span> <span class="dv">1000</span>)</span></code></pre></div>
+<p>Once we have defined every argument, we can call the <code>predict_dynamic_growth()</code> function:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true"></a>dynamic_prediction &lt;-<span class="st"> </span><span class="kw">predict_dynamic_growth</span>(my_times,</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true"></a>                       my_conditions, my_primary,</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true"></a>                       my_secondary)</span></code></pre></div>
+<p>This function returns a list of class <code>DynamicGrowth</code> with several items:</p>
+<ul>
+<li><code>simulation</code>: A tibble with the results of the simulation.</li>
+<li><code>gammas</code>: A tibble describing the variation of each gamma factor through the simulation.</li>
+<li><code>env_conditions</code>: Environmental conditions used for the simulations.</li>
+<li><code>primary_pars</code>: Primary model parameters used for the simulations.</li>
+<li><code>sec_models</code>: Secondary model parameters used for the simulations.</li>
+</ul>
+<p>Therefore, the results of the simulation can be retrieved from the <code>simulation</code> item:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true"></a>dynamic_prediction<span class="op">$</span>simulation</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true"></a><span class="co">#&gt; # A tibble: 1,000 x 4</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true"></a><span class="co">#&gt;      time     Q     N  logN</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true"></a><span class="co">#&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true"></a><span class="co">#&gt;  1 0      0.001     1     0</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true"></a><span class="co">#&gt;  2 0.0501 0.001     1     0</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true"></a><span class="co">#&gt;  3 0.100  0.001     1     0</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true"></a><span class="co">#&gt;  4 0.150  0.001     1     0</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true"></a><span class="co">#&gt;  5 0.200  0.001     1     0</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true"></a><span class="co">#&gt;  6 0.250  0.001     1     0</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true"></a><span class="co">#&gt;  7 0.300  0.001     1     0</span></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true"></a><span class="co">#&gt;  8 0.350  0.001     1     0</span></span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true"></a><span class="co">#&gt;  9 0.400  0.001     1     0</span></span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true"></a><span class="co">#&gt; 10 0.450  0.001     1     0</span></span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true"></a><span class="co">#&gt; # ... with 990 more rows</span></span></code></pre></div>
+<p>Alternatively, this class implements an S3 method for plot that can be used to visualize the growth curve:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true"></a><span class="kw">plot</span>(dynamic_prediction)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>The argument <code>add_factor</code> of the plot method can be used to plot the variation of a single environmental factor through storage. For that, one has to pass the name of the desired factor to the function. Note that this name must be identical to the one used for the columns in <code>env_conditions</code>. For instance, we can add the plot of temperature</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true"></a><span class="kw">plot</span>(dynamic_prediction, <span class="dt">add_factor =</span> <span class="st">&quot;temperature&quot;</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>The arguments <code>ylims</code>, <code>label_y1</code> and <code>label_y2</code> enable to further edit the plot by changing the limits of the y-axis and the names of the primary and secondary axes:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true"></a><span class="kw">plot</span>(dynamic_prediction, <span class="dt">add_factor =</span> <span class="st">&quot;temperature&quot;</span>, <span class="dt">ylims=</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">8</span>), </span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true"></a>     <span class="dt">label_y1 =</span> <span class="st">&quot;Microbial count (log CFU/ml)&quot;</span>, <span class="dt">label_y2 =</span> <span class="st">&quot;Storage temperature (ºC)&quot;</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+</div>
+<div id="time-to-reach-a-given-microbial-count" class="section level2">
+<h2>Time to reach a given microbial count</h2>
+<p>For shelf-life estimation and food safety, it is usually of interest to calculate the storage time required to reach a given microbial count. The <strong>biogrowth</strong> package includes the function <code>time_to_logcount()</code> can be used for this purpose. This function has 2 arguments:</p>
+<ul>
+<li><code>model</code>: A model returned by <code>predict_dynamic_growth()</code> or <code>predict_isothermal_growth()</code>.</li>
+<li><code>log_count</code>: target microbial count.</li>
+</ul>
+<p>For instance, we can use this function to estimate the time required to reach a microbial count of 2.5 log CFU/ml for the static prediction we did earlier:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true"></a><span class="kw">time_to_logcount</span>(static_prediction, <span class="fl">2.5</span>)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true"></a><span class="co">#&gt; [1] 25.99356</span></span></code></pre></div>
+<p>Or the time required to reach 5 log CFU/ml in the dynamic prediction:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true"></a><span class="kw">time_to_logcount</span>(dynamic_prediction, <span class="dv">5</span>)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true"></a><span class="co">#&gt; [1] 11.36447</span></span></code></pre></div>
+<p>If the value of <code>log_count</code> was outside the range of the simulations, the function returns an <code>NA</code>:</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true"></a><span class="kw">time_to_logcount</span>(dynamic_prediction, <span class="dv">10</span>)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true"></a><span class="co">#&gt; [1] NA</span></span></code></pre></div>
+<p>Note that the calculations are based on linear interpolation of the simulated growth curve. Therefore, its accuracy is strongly dependent on the number of time points used for the simulation.</p>
+</div>
+<div id="fitting-of-primary-models" class="section level2">
+<h2>Fitting of primary models</h2>
+<p>The function <code>fit_isothermal_growth()</code> can be used to estimate the values of primary growth models from data obtained under static conditions. This function has 4 arguments:</p>
+<ul>
+<li><code>fit_data</code> defines the data used for model fitting.</li>
+<li><code>model_name</code> defines the primary model to use.</li>
+<li><code>starting_point</code> defines the initial values of the model parameters.</li>
+<li><code>known_pars</code> defines parameters that are considered known and are not fitted to the data.</li>
+<li><code>...</code> can be used to pass additional arguments to the <code>modFit()</code> function from the <strong>FME</strong> package (e.g. lower and upper bounds for the model parameters).</li>
+</ul>
+<p>The data used for model fitting is defined through the <code>fit_data</code> argument. It must be a tibble with two columns named <code>time</code> (the elapsed time) and <code>logN</code> (the microbial count).</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true"></a>my_data &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">time =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">25</span>, <span class="dv">50</span>, <span class="dv">75</span>, <span class="dv">100</span>),</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true"></a>                  <span class="dt">logN =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="fl">2.5</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">8</span>))</span></code></pre></div>
+<p>The primary model is defined using <code>model_name</code>. It can be one of <code>&quot;Baranyi&quot;</code>, <code>&quot;modGompertz&quot;</code> or <code>&quot;Trilinear&quot;</code>. For instance, we can use the Baranyi model in this example:</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true"></a>my_model &lt;-<span class="st"> &quot;Baranyi&quot;</span></span></code></pre></div>
+<p>This function uses non-linear regression (through the <code>modFit()</code> function of the <strong>FME</strong> package), so it requires initial values for every model parameter to fit. In the case of the Baranyi model, the model parameters are: <code>mu</code>, <code>lambda</code> and <code>logNmax</code>. Additional, the initial microbial count must be defined. Nonetheless, the <code>fit_isothermal_growth()</code> function enables to fix any model parameter before model fit using the <code>known_pars</code> argument. For instance, we can fix the specific growth rate to 0.2</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true"></a>known &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dt">mu =</span> <span class="fl">.2</span>)</span></code></pre></div>
+<p>And fit the remaining model parameters</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true"></a>start =<span class="st"> </span><span class="kw">c</span>(<span class="dt">logNmax =</span> <span class="dv">8</span>, <span class="dt">lambda =</span> <span class="dv">25</span>, <span class="dt">logN0 =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p>Once every model parameter has been defined, we can call the <code>fit_isothermal_growth()</code> function:</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true"></a>static_fit &lt;-<span class="st"> </span><span class="kw">fit_isothermal_growth</span>(my_data, my_model,</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true"></a>                      start, known</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true"></a>                      )</span></code></pre></div>
+<p>This function returns a list of class <code>FitIsoGrowth</code> with several items:</p>
+<ul>
+<li><code>data</code>: data used for model fitting</li>
+<li><code>model</code>: name of the primary model</li>
+<li><code>starting_point</code>: starting point used for model fitting</li>
+<li><code>known</code>: fixed model parameters</li>
+<li><code>fit</code>: object returned by <code>modFit()</code></li>
+<li><code>best_prediction</code>: an instance of <code>IsothermalGrowth</code> corresponding to the fitted model.</li>
+</ul>
+<p>The <code>FitIsoGrowth</code> class includes several S3 methods to visualize the results. The statistical information of the fit can be retrieved using <code>summary()</code></p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true"></a><span class="kw">summary</span>(static_fit)</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true"></a><span class="co">#&gt; </span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true"></a><span class="co">#&gt; Parameters:</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true"></a><span class="co">#&gt;         Estimate Std. Error t value Pr(&gt;|t|)    </span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true"></a><span class="co">#&gt; logNmax   8.0347     0.1552  51.781 0.000373 ***</span></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true"></a><span class="co">#&gt; lambda   23.6989     1.8454  12.842 0.006009 ** </span></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true"></a><span class="co">#&gt; logN0     1.9018     0.2075   9.164 0.011698 *  </span></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true"></a><span class="co">#&gt; ---</span></span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true"></a><span class="co">#&gt; Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</span></span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true"></a><span class="co">#&gt; </span></span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true"></a><span class="co">#&gt; Residual standard error: 0.2188 on 2 degrees of freedom</span></span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true"></a><span class="co">#&gt; </span></span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true"></a><span class="co">#&gt; Parameter correlation:</span></span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true"></a><span class="co">#&gt;         logNmax lambda   logN0</span></span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true"></a><span class="co">#&gt; logNmax 1.00000 0.1496 0.04448</span></span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true"></a><span class="co">#&gt; lambda  0.14960 1.0000 0.74113</span></span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true"></a><span class="co">#&gt; logN0   0.04448 0.7411 1.00000</span></span></code></pre></div>
+<p>whereas <code>plot()</code> compares the data and the fitted curve</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true"></a><span class="kw">plot</span>(static_fit)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+</div>
+<div id="fitting-of-secondary-gamma-models" class="section level2">
+<h2>Fitting of secondary (gamma) models</h2>
+<p>The function <code>fit_secondary_growth()</code> can be used to estimate the values of the cardinal parameters from the specific growth rates observed in a series of static growth experiments. This function has 6 arguments:</p>
+<ul>
+<li><code>fit_data</code>: data used for the fit.</li>
+<li><code>starting_point</code>: initial value of the model parameters</li>
+<li><code>known_pars</code>: model parameters fixed (not fitted to the data).</li>
+<li><code>sec_model_names</code>: type of secondary model for each environmental factor.</li>
+<li><code>transformation</code>: transformation of the growth rate for the fit (square root by default).</li>
+<li><code>...</code>: additional arguments passed to <code>modFit()</code>.</li>
+</ul>
+<p>A method to estimate the cardinal parameters is based on realizing various static growth experiments under a variety of experimental conditions. Such dataset is passed using the <code>fit_data</code> argument. The <strong>biogrowth</strong> package includes an example dataset with the right format.</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true"></a><span class="kw">data</span>(<span class="st">&quot;example_cardinal&quot;</span>)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true"></a><span class="kw">head</span>(example_cardinal)</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true"></a><span class="co">#&gt;   temperature pH           mu</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true"></a><span class="co">#&gt; 1    0.000000  5 9.768505e-04</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true"></a><span class="co">#&gt; 2    5.714286  5 2.624919e-03</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true"></a><span class="co">#&gt; 3   11.428571  5 0.000000e+00</span></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true"></a><span class="co">#&gt; 4   17.142857  5 1.530706e-04</span></span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true"></a><span class="co">#&gt; 5   22.857143  5 2.301817e-05</span></span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true"></a><span class="co">#&gt; 6   28.571429  5 3.895598e-04</span></span></code></pre></div>
+<p>This dataset must have one column named <code>mu</code> with the observed growth rate. Then, it must have as many additional columns as environmental factors included in the experiment. In the example dataset, the series of experiments considered two environmental conditions: temperature and pH. Nonetheless, the <code>fit_secondary_growth()</code> function is entirely flexible with respect to the number of factors and their names. The only restriction is that the definition of the columns of the dataset and the secondary models is consistent.</p>
+<p>The type of secondary model to use for each environmental factor is defined in the <code>sec_model_names</code> argument. It is a named vector whose names are the environmental factors and whose values define the model to use. Right now, the function admits cardinal parameters models (“CPM”) and the gamma-type model defined by Zwietering et al. (“Zwietering”). For this example, we will use a CPM for the pH and an Zwietering model for temperature. Note that the names of the vector are identical to the column names of <code>fit_data</code>.</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true"></a>sec_model_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dt">temperature =</span> <span class="st">&quot;Zwietering&quot;</span>,</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true"></a>                     <span class="dt">pH =</span> <span class="st">&quot;CPM&quot;</span>)</span></code></pre></div>
+<p>The <code>fit_secondary_growth()</code> function estimates the values of the cardinal parameters, as well as the specific growth rate under optimal conditions. Also, it enables to fix any model parameter to an arbitrary value before fitting the model. The model parameters to fit are defined using the <code>known_pars</code> argument. The remaining parameters, because of the use of non-linear regression for parameter estimation, require the definition of initial parameter values.</p>
+<p>The specific growth rate under optimal conditions is named <code>mu_opt</code>. The remaining cardinal parameters are named according to the convention <code>environ_factor</code>+<code>_</code>+<code>parameter(lower case)</code>. For instance, the minimum temperature for growth is <code>temperature_xmin</code> and the order of the CPM for pH is <code>pH_n</code>. Note that the environmental factor must be identical to the one used in <code>sec_model_names</code>.</p>
+<p>For this example, we will consider that the maximum specific growth rate is known, as well as most of the the cardinal parameters for pH. For temperature, we will only fix the order of the model.</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true"></a>known_pars &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">mu_opt =</span> <span class="fl">1.2</span>,</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true"></a>                   <span class="dt">temperature_n =</span> <span class="dv">1</span>,</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true"></a>                   <span class="dt">pH_n =</span> <span class="dv">2</span>, <span class="dt">pH_xmax =</span> <span class="fl">6.8</span>, <span class="dt">pH_xmin =</span> <span class="fl">5.2</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true"></a>                   )</span></code></pre></div>
+<p>The remaining model parameters will be fitted using reasonable initial values.</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true"></a>my_start &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">temperature_xmin =</span> <span class="dv">5</span>, <span class="dt">temperature_xopt =</span> <span class="dv">35</span>,</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true"></a>               <span class="dt">pH_xopt =</span> <span class="fl">6.5</span>)</span></code></pre></div>
+<p>Finally, the <code>transformation</code> argument defines the transformation of the growth rate to use for model fitting. By default, the function applies a square root transformation, which has proved to stabilize the variance of microbial growth. Once the arguments have been defined, we can call the <code>fit_secondary_growth()</code> function. Note that, because we are using the default value of <code>transformation</code>, we do not need to define this argument:</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true"></a>fit_cardinal &lt;-<span class="st"> </span><span class="kw">fit_secondary_growth</span>(example_cardinal, my_start, known_pars, sec_model_names)</span></code></pre></div>
+<p>This function returns an instance of <code>FitSecondaryGrowth</code> with 5 items:</p>
+<ul>
+<li><code>fit_results</code> the object returned by <code>modFit</code>.</li>
+<li><code>secondary_model</code> parameters of the secondary model.</li>
+<li><code>mu_opt_fit</code> growth rate under optimal storage conditiosn.</li>
+<li><code>data</code> data used for the fit.</li>
+<li><code>transformation</code> tranformation applied to the growth rate before fitting.</li>
+</ul>
+<p>This class incorporates several S3 method to ease visualization of results. The function <code>summary()</code> returns the statistical information of the fit.</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true"></a><span class="kw">summary</span>(fit_cardinal)</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true"></a><span class="co">#&gt; </span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true"></a><span class="co">#&gt; Parameters:</span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true"></a><span class="co">#&gt;                   Estimate Std. Error t value Pr(&gt;|t|)    </span></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true"></a><span class="co">#&gt; temperature_xmin -0.002358   0.097302  -0.024    0.981    </span></span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true"></a><span class="co">#&gt; temperature_xopt 72.101526  11.721935   6.151 6.51e-08 ***</span></span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true"></a><span class="co">#&gt; pH_xopt           6.511204   0.073697  88.351  &lt; 2e-16 ***</span></span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true"></a><span class="co">#&gt; ---</span></span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true"></a><span class="co">#&gt; Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</span></span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true"></a><span class="co">#&gt; </span></span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true"></a><span class="co">#&gt; Residual standard error: 0.2165 on 61 degrees of freedom</span></span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true"></a><span class="co">#&gt; </span></span>
+<span id="cb42-13"><a href="#cb42-13" aria-hidden="true"></a><span class="co">#&gt; Parameter correlation:</span></span>
+<span id="cb42-14"><a href="#cb42-14" aria-hidden="true"></a><span class="co">#&gt;                  temperature_xmin temperature_xopt    pH_xopt</span></span>
+<span id="cb42-15"><a href="#cb42-15" aria-hidden="true"></a><span class="co">#&gt; temperature_xmin        1.000e+00         -0.02162  8.197e-07</span></span>
+<span id="cb42-16"><a href="#cb42-16" aria-hidden="true"></a><span class="co">#&gt; temperature_xopt       -2.162e-02          1.00000 -2.213e-01</span></span>
+<span id="cb42-17"><a href="#cb42-17" aria-hidden="true"></a><span class="co">#&gt; pH_xopt                 8.197e-07         -0.22128  1.000e+00</span></span></code></pre></div>
+</div>
+<div id="one-step-fitting-under-dynamic-conditions" class="section level2">
+<h2>One-step fitting under dynamic conditions</h2>
+<p>The function <code>fit_dynamic_growth()</code> can be used to estimate the parameters of both the primary and the secondary model based on a growth experiment obtained under dynamic conditions. This function has 6 arguments:</p>
+<ul>
+<li><code>fit_data</code>: data used for model fitting.</li>
+<li><code>env_conditions</code>: variation of the environmental conditions during the experiment.</li>
+<li><code>starting_point</code>: initial value of the model parameters.</li>
+<li><code>known_pars</code>: model parameters known (i.e. not fitted).</li>
+<li><code>sec_model_names</code>: type of secondary model for each environmental factor.</li>
+<li><code>...</code>: additional arguments passed to <code>modFit</code>.</li>
+</ul>
+<p>The arguments <code>env_conditions</code> and <code>fit_data</code> are tibbles that describe, respectively, the experimental design and the observations. To help understanding <code>fit_dynamic_growth()</code>, <strong>biogrowth</strong> includes two example datasets that can be used with this function:</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true"></a><span class="kw">data</span>(<span class="st">&quot;example_dynamic_growth&quot;</span>)</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true"></a><span class="kw">data</span>(<span class="st">&quot;example_env_conditions&quot;</span>)</span></code></pre></div>
+<p>The tibble passed to the argument <code>env_conditions</code> must have a column named <code>time</code> and as many additional columns as environmental factors. The <code>fit_dynamic_growth()</code> function is totally flexible with respect to the number of factors or the way they are named. The only requirement is that the definition of every argument is consistent. In the case of <code>example_env_conditions</code>, this dataset considers two factors: temperature and water activity (<code>aw</code>).</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true"></a><span class="kw">head</span>(example_env_conditions)</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true"></a><span class="co">#&gt; # A tibble: 3 x 3</span></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true"></a><span class="co">#&gt;    time temperature    aw</span></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true"></a><span class="co">#&gt;   &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true"></a><span class="co">#&gt; 1     0          20  0.99</span></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true"></a><span class="co">#&gt; 2     5          30  0.95</span></span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true"></a><span class="co">#&gt; 3    15          35  0.9</span></span></code></pre></div>
+<p>Note that for the calculations this function joins the data points by linear interpolation, as shown in this plot:</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true"></a><span class="kw">ggplot</span>(example_env_conditions, <span class="kw">aes</span>(<span class="dt">x =</span> time, <span class="dt">y =</span> temperature)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true"></a><span class="st">  </span><span class="kw">geom_point</span>()</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>In order to have a stepwise profile, one should define additional time points.</p>
+<p>The tibble passed to the argument <code>fit_data</code> must have two columns named <code>time</code> (elapsed time) and <code>logN</code> (log microbial count), in the same format as <code>example_dynamic_growth</code>.</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true"></a><span class="kw">head</span>(example_dynamic_growth)</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true"></a><span class="co">#&gt; # A tibble: 6 x 2</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true"></a><span class="co">#&gt;   time      logN        </span></span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true"></a><span class="co">#&gt;   &lt;deSolve&gt; &lt;deSolve&gt;   </span></span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true"></a><span class="co">#&gt; 1 0.0000000  0.066970558</span></span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true"></a><span class="co">#&gt; 2 0.5172414 -0.004634428</span></span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true"></a><span class="co">#&gt; 3 1.0344828 -0.097964735</span></span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true"></a><span class="co">#&gt; 4 1.5517241 -0.098558778</span></span>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true"></a><span class="co">#&gt; 5 2.0689655  0.110913049</span></span>
+<span id="cb46-10"><a href="#cb46-10" aria-hidden="true"></a><span class="co">#&gt; 6 2.5862069 -0.046531175</span></span></code></pre></div>
+<p>The type of secondary model for each environmental factor is defined by the argument <code>sec_model_names</code>. As in every function in <strong>biogrowth</strong>, this argument is a named vector where the names refer to the environmental factor and the value the type of model. Supported models are cardinal models (<code>&quot;CPM&quot;</code>) and the gamma models by Zwietering (<code>&quot;Zwietering&quot;</code>). In this example we will use cardinal models for both environmental factors. Note that the names of this vector must be identical to the columns in <code>env_conditions</code>.</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true"></a>sec_model_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dt">temperature =</span> <span class="st">&quot;CPM&quot;</span>,</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true"></a>                     <span class="dt">aw=</span> <span class="st">&quot;CPM&quot;</span>)</span></code></pre></div>
+<p>The <code>fit_dynamic_growth()</code> function enables to fit or fix any model parameter. This distinction is made using the arguments <code>known_pars</code> (fixed parameters) and <code>starting_point</code> (fitted parameters). Note that these arguments must contain every parameter of the primary and secondary models.</p>
+<p>Regarding the primary model, this function only enables the use of the Baranyi model. This primary model has two variables that need initial values (<code>N0</code> and <code>Q0</code>) and one primary model parameter (<code>Nmax</code>). The specific growth rate is described using the gamma concept. This requires the definition of its value under optimal conditions (<code>mu_opt</code>) as well as the cardinal parameters for each environmental factor. As well as for other functions, these must be defined as <code>factor</code>+<code>_</code>+<code>parameter name</code>. For instance, the minimum water activity for growth must be written as <code>aw_min</code>.</p>
+<p>In this example we will consider the model parameters of the primary model as known. For the secondary model for water activity, we will only consider the optimum value for growth as unknown. Finally, for the effect of temperature, the only parameter we consider known is the order of the model:</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true"></a>known_pars &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">Nmax =</span> <span class="fl">1e4</span>,  <span class="co"># Nmax for primary model</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true"></a>                   <span class="dt">N0 =</span> <span class="fl">1e0</span>, <span class="dt">Q0 =</span> <span class="fl">1e-3</span>,  <span class="co"># Initial values of the primary model</span></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true"></a>                   <span class="dt">mu_opt =</span> <span class="dv">4</span>, <span class="co"># mu_opt of the gamma model</span></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true"></a>                   <span class="dt">temperature_n =</span> <span class="dv">1</span>,  <span class="co"># Secondary model for temperature</span></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true"></a>                   <span class="dt">aw_xmax =</span> <span class="dv">1</span>, <span class="dt">aw_xmin =</span> <span class="fl">.9</span>, <span class="dt">aw_n =</span> <span class="dv">1</span>  <span class="co"># Secondary model for water activity</span></span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true"></a>)</span></code></pre></div>
+<p>Then, the remaining model parameters must be defined in <code>starting_points</code>. Due to the use of non-linear regression for model fitting, it is required to define initial values for these parameters. They can be defined based on previous esperience or preliminary numerical simulations.</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true"></a>my_start &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">temperature_xmin =</span> <span class="dv">25</span>, <span class="dt">temperature_xopt =</span> <span class="dv">35</span>,</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true"></a>               <span class="dt">temperature_xmax =</span> <span class="dv">40</span>,</span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true"></a>               <span class="dt">aw_xopt =</span> <span class="fl">.95</span>)</span></code></pre></div>
+<p>Once every model parameter has been defined, we can call the <code>fit_dynamic_growth()</code> function.</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true"></a>my_dyna_fit &lt;-<span class="st"> </span><span class="kw">fit_dynamic_growth</span>(example_dynamic_growth, example_env_conditions, </span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true"></a>                         my_start,</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true"></a>                         known_pars, </span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true"></a>                         sec_model_names)</span></code></pre></div>
+<p>This function returns an instance of <code>FitDynamicGrowth</code> with 6 items:</p>
+<ul>
+<li><code>fit_results</code>: object returned by <code>modFit()</code>.</li>
+<li><code>best_prediction</code>: an instance of <code>DynamicGrowth</code> with the prediction corresponding to the fitted model.</li>
+<li><code>data</code>: data used to fit the model.</li>
+<li><code>starting</code>: starting values used for parameter estimation.</li>
+<li><code>known</code>: model parameters considered known.</li>
+<li><code>sec_models</code>: type of secondary model for each environmental factor.</li>
+</ul>
+<p>The <code>FitDynamicGrowth</code> includes several S3 methods that ease the visualization of the results. The summary function returns the statistical information of the fit.</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true"></a><span class="kw">summary</span>(my_dyna_fit)</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true"></a><span class="co">#&gt; </span></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true"></a><span class="co">#&gt; Parameters:</span></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true"></a><span class="co">#&gt;                   Estimate Std. Error t value Pr(&gt;|t|)</span></span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true"></a><span class="co">#&gt; temperature_xmin 2.667e+01  5.172e+01   0.516    0.610</span></span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true"></a><span class="co">#&gt; temperature_xopt 3.888e+01  3.200e+03   0.012    0.990</span></span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true"></a><span class="co">#&gt; temperature_xmax 7.044e+01  2.416e+04   0.003    0.998</span></span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true"></a><span class="co">#&gt; aw_xopt          9.852e-01  2.771e+00   0.356    0.725</span></span>
+<span id="cb51-9"><a href="#cb51-9" aria-hidden="true"></a><span class="co">#&gt; </span></span>
+<span id="cb51-10"><a href="#cb51-10" aria-hidden="true"></a><span class="co">#&gt; Residual standard error: 0.1506 on 26 degrees of freedom</span></span>
+<span id="cb51-11"><a href="#cb51-11" aria-hidden="true"></a><span class="co">#&gt; </span></span>
+<span id="cb51-12"><a href="#cb51-12" aria-hidden="true"></a><span class="co">#&gt; Parameter correlation:</span></span>
+<span id="cb51-13"><a href="#cb51-13" aria-hidden="true"></a><span class="co">#&gt;                  temperature_xmin temperature_xopt temperature_xmax aw_xopt</span></span>
+<span id="cb51-14"><a href="#cb51-14" aria-hidden="true"></a><span class="co">#&gt; temperature_xmin           1.0000           0.9963           0.9970 -0.9945</span></span>
+<span id="cb51-15"><a href="#cb51-15" aria-hidden="true"></a><span class="co">#&gt; temperature_xopt           0.9963           1.0000           1.0000 -0.9998</span></span>
+<span id="cb51-16"><a href="#cb51-16" aria-hidden="true"></a><span class="co">#&gt; temperature_xmax           0.9970           1.0000           1.0000 -0.9996</span></span>
+<span id="cb51-17"><a href="#cb51-17" aria-hidden="true"></a><span class="co">#&gt; aw_xopt                   -0.9945          -0.9998          -0.9996  1.0000</span></span></code></pre></div>
+<p>The <code>plot()</code> method compares the model predictions against the data used for the fit:</p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true"></a><span class="kw">plot</span>(my_dyna_fit)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>The variation of the environmental factor can be plotted alongside the previous plot. For that, the name of the environmental factor must be passed to <code>add_factor</code>. Note that the value passed must be identical to the one defined in the previous arguments. Then, the label of the primary or secondary axes can be changed using <code>label_y1</code> or <code>label_y2</code></p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true"></a><span class="kw">plot</span>(my_dyna_fit, <span class="dt">add_factor =</span> <span class="st">&quot;aw&quot;</span>,</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true"></a>     <span class="dt">label_y1 =</span> <span class="st">&quot;Log count (log CFU/ml)&quot;</span>,</span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true"></a>     <span class="dt">label_y2 =</span> <span class="st">&quot;Water activity&quot;</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+</div>
+</div>
+<div id="stochastic-modelling" class="section level1">
+<h1>Stochastic modelling</h1>
+<div id="stochastic-prediction-under-static-conditions" class="section level2">
+<h2>Stochastic prediction under static conditions</h2>
+<p>Due to the relevance of uncertainty and variability Quantitative Microbial Risk Assessment usually requires the calculation of stochastic simulations. The function <code>predict_stochastic_growth</code> enables to constract credible intervals of the microbial growth for a normal distribution of: * the square root of <span class="math inline">\(\mu\)</span> * the square root of <span class="math inline">\(\lambda\)</span> * the logarithm of the initial microbial count * the logarithm of the maximum microbial count</p>
+<p>For that, this function includes two arguments per growth parameter (expected value and standard deviation) and 4 additional arguments:</p>
+<ul>
+<li><code>model_name</code> defines the primary growth model</li>
+<li><code>times</code> defines the time points where to make the calculations</li>
+<li><code>n_sims</code> defines the number of Monte Carlo simulations.</li>
+<li><code>corr_matrix</code> correlation matrix between the model parameters. By default, this argument is set to a diagonal matrix (i.e. no correlation between parameters).</li>
+</ul>
+<p>The calculations are done by taking a sample of size <code>n_sims</code> of the model parameters according to a multi-variate normal distribution. For simulation, the microbial growth is predicted and the quantiles of the predicted microbial count is used as an estimate of the credible interval.</p>
+<p>For this example, we will use the tri-linear growth model</p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true"></a>my_model &lt;-<span class="st"> &quot;Trilinear&quot;</span></span></code></pre></div>
+<p>For the time points, we will take 100 points uniformly distributed between 0 and 30:</p>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true"></a>my_times &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">30</span>, <span class="dt">length =</span> <span class="dv">100</span>)</span></code></pre></div>
+<p>For the example, we will set the number of simulations to 1000. Nevertheless, it is advisable to repeat the calculations for various number of simulations to ensure that the relevant variables converged.</p>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true"></a>n_sims &lt;-<span class="st"> </span><span class="dv">1000</span></span></code></pre></div>
+<p>Once the arguments have been defined, we can call the <code>predict_stochastic_growth()</code> function.</p>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true"></a>stoc_growth &lt;-<span class="st"> </span><span class="kw">predict_stochastic_growth</span>(my_model, my_times, n_sims,</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true"></a>  <span class="dt">mean_logN0 =</span> <span class="dv">0</span>, <span class="dt">sd_logN0 =</span> <span class="fl">.2</span>,</span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true"></a>  <span class="dt">mean_sqmu =</span> <span class="dv">2</span>,<span class="dt">sd_sqmu =</span> <span class="fl">.3</span>,</span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true"></a>  <span class="dt">mean_sqlambda =</span> <span class="dv">4</span>, <span class="dt">sd_sqlambda =</span> <span class="fl">.4</span>,</span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true"></a>  <span class="dt">mean_logNmax =</span> <span class="dv">6</span>, <span class="dt">sd_logNmax =</span> <span class="fl">.5</span>)</span></code></pre></div>
+<p>This function returns an instance of <code>StochasticGrowth</code> with several items:</p>
+<ul>
+<li><code>sample</code>: sample of model parameters used for the simulations</li>
+<li><code>simulations</code>: results of the individual simulations</li>
+<li><code>quantiles</code>: quantiles of the microbial count predicted in the simulatinos</li>
+<li><code>model</code>: model used for the simulations</li>
+<li><code>mus</code>: expected values of the model parameters used for the simulations.</li>
+<li><code>sigma</code>: parameter variance-covariance matrix used for the simulations</li>
+</ul>
+<p>This class implements an S3 method for plot that can be used to visualize the credible intervals</p>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true"></a><span class="kw">plot</span>(stoc_growth)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>In this plot, the solid line represents the mean of the simulations. Then, the two shaded areas represent, respectively, the space between the 10th and 90th, and the 5th and 95th quantiles.</p>
+<p>By default, the function considers that there is no correlation between the model parameters. This can be varied by defining a correlation matrix. Note that the rows and columns of this matrix are defined in the order [logN0, sqrt(mu), sqrt(lambda), logNmax]. For instance, we can define a correlation of 0.7 between the square root of <span class="math inline">\(\mu\)</span> and the square root of <span class="math inline">\(\lambda\)</span>:</p>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true"></a>my_cor &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">1</span>,   <span class="dv">0</span>,   <span class="dv">0</span>, <span class="dv">0</span>,</span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true"></a>                   <span class="dv">0</span>,   <span class="dv">1</span>, <span class="fl">0.7</span>, <span class="dv">0</span>,</span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true"></a>                   <span class="dv">0</span>, <span class="fl">0.7</span>,   <span class="dv">1</span>, <span class="dv">0</span>,</span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true"></a>                   <span class="dv">0</span>,   <span class="dv">0</span>,   <span class="dv">0</span>, <span class="dv">1</span>),</span>
+<span id="cb59-5"><a href="#cb59-5" aria-hidden="true"></a>                 <span class="dt">nrow =</span> <span class="dv">4</span>)</span></code></pre></div>
+<p>Then, we can include it in the call to the function</p>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true"></a>stoc_growth2 &lt;-<span class="st"> </span><span class="kw">predict_stochastic_growth</span>(my_model, my_times, n_sims,</span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true"></a>  <span class="dt">mean_logN0 =</span> <span class="dv">0</span>, <span class="dt">sd_logN0 =</span> <span class="fl">.2</span>,</span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true"></a>  <span class="dt">mean_sqmu =</span> <span class="dv">2</span>,<span class="dt">sd_sqmu =</span> <span class="fl">.3</span>,</span>
+<span id="cb60-4"><a href="#cb60-4" aria-hidden="true"></a>  <span class="dt">mean_sqlambda =</span> <span class="dv">4</span>, <span class="dt">sd_sqlambda =</span> <span class="fl">.4</span>,</span>
+<span id="cb60-5"><a href="#cb60-5" aria-hidden="true"></a>  <span class="dt">mean_logNmax =</span> <span class="dv">6</span>, <span class="dt">sd_logNmax =</span> <span class="fl">.5</span>,</span>
+<span id="cb60-6"><a href="#cb60-6" aria-hidden="true"></a>  my_cor)</span>
+<span id="cb60-7"><a href="#cb60-7" aria-hidden="true"></a></span>
+<span id="cb60-8"><a href="#cb60-8" aria-hidden="true"></a><span class="kw">plot</span>(stoc_growth2)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>Note that, in order to omit the variability/uncertainty of any model parameter, one just has to set its corresponding standard error to zero.</p>
+</div>
+<div id="one-step-fitting-using-mcmc-algorithms" class="section level2">
+<h2>One-step fitting using MCMC algorithms</h2>
+<p>Numerical algorithms based on Markov Chains have been suggested as an alternative to non-linear regression for dynamic models. For that reason, <strong>biogrowth</strong> includes the function <code>fit_MCMC_growth()</code> that uses the interface included in the <strong>FME</strong> package to the Adaptive Monte Carlo algorithm by Haario et al. (2006). The arguments and the requirements of this function are identical to those of <code>fit_dynamic_growth()</code>. The only difference is that this function has the additional argument <code>niter</code>, which defines the number of samples from the Markov Chain. Hence, we will repeat the previous code to define the model parameters and the data.</p>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true"></a></span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true"></a><span class="kw">data</span>(<span class="st">&quot;example_dynamic_growth&quot;</span>)</span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true"></a><span class="kw">data</span>(<span class="st">&quot;example_env_conditions&quot;</span>)</span>
+<span id="cb61-4"><a href="#cb61-4" aria-hidden="true"></a></span>
+<span id="cb61-5"><a href="#cb61-5" aria-hidden="true"></a>sec_model_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dt">temperature =</span> <span class="st">&quot;CPM&quot;</span>,</span>
+<span id="cb61-6"><a href="#cb61-6" aria-hidden="true"></a>                     <span class="dt">aw=</span> <span class="st">&quot;CPM&quot;</span>)</span>
+<span id="cb61-7"><a href="#cb61-7" aria-hidden="true"></a></span>
+<span id="cb61-8"><a href="#cb61-8" aria-hidden="true"></a>known_pars &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">Nmax =</span> <span class="fl">1e4</span>,  <span class="co"># Primary model</span></span>
+<span id="cb61-9"><a href="#cb61-9" aria-hidden="true"></a>                   <span class="dt">N0 =</span> <span class="fl">1e0</span>, <span class="dt">Q0 =</span> <span class="fl">1e-3</span>,  <span class="co"># Initial values of the primary model</span></span>
+<span id="cb61-10"><a href="#cb61-10" aria-hidden="true"></a>                   <span class="dt">mu_opt =</span> <span class="dv">4</span>, <span class="co"># mu_opt of the gamma model</span></span>
+<span id="cb61-11"><a href="#cb61-11" aria-hidden="true"></a>                   <span class="dt">temperature_n =</span> <span class="dv">1</span>,  <span class="co"># Secondary model for temperature</span></span>
+<span id="cb61-12"><a href="#cb61-12" aria-hidden="true"></a>                   <span class="dt">aw_xmax =</span> <span class="dv">1</span>, <span class="dt">aw_xmin =</span> <span class="fl">.9</span>, <span class="dt">aw_n =</span> <span class="dv">1</span>  <span class="co"># Secondary model for water activity</span></span>
+<span id="cb61-13"><a href="#cb61-13" aria-hidden="true"></a>)</span>
+<span id="cb61-14"><a href="#cb61-14" aria-hidden="true"></a></span>
+<span id="cb61-15"><a href="#cb61-15" aria-hidden="true"></a>my_start &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">temperature_xmin =</span> <span class="dv">25</span>, <span class="dt">temperature_xopt =</span> <span class="dv">35</span>,</span>
+<span id="cb61-16"><a href="#cb61-16" aria-hidden="true"></a>                 <span class="dt">temperature_xmax =</span> <span class="dv">40</span>,</span>
+<span id="cb61-17"><a href="#cb61-17" aria-hidden="true"></a>                 <span class="dt">aw_xopt =</span> <span class="fl">.95</span>)</span></code></pre></div>
+<p>Then, we can call the <code>fit_MCMC_growth()</code> using this arguments plus the argument <code>niter</code> that we will set to 500.</p>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true"></a>my_MCMC_fit &lt;-<span class="st"> </span><span class="kw">fit_MCMC_growth</span>(example_dynamic_growth, example_env_conditions, </span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true"></a>                                my_start,</span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true"></a>                                known_pars, </span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true"></a>                                sec_model_names, </span>
+<span id="cb62-5"><a href="#cb62-5" aria-hidden="true"></a>                                <span class="dt">niter =</span> <span class="dv">500</span>)</span>
+<span id="cb62-6"><a href="#cb62-6" aria-hidden="true"></a><span class="co">#&gt; number of accepted runs: 64 out of 500 (12.8%)</span></span></code></pre></div>
+<p>This function returns an instance of <code>FitDynamicGrowthMCMC</code> with 6 entries:</p>
+<ul>
+<li><code>fit_results</code>: object returned by <code>modMCMC()</code>.</li>
+<li><code>best_prediction</code>: an instance of <code>DynamicGrowth</code> with the prediction corresponding to the fitted model.</li>
+<li><code>data</code>: data used to fit the model.</li>
+<li><code>starting</code>: starting values used for parameter estimation.</li>
+<li><code>known</code>: model parameters considered known.</li>
+<li><code>sec_models</code>: type of secondary model for each environmental factor.</li>
+</ul>
+<p>This class implements several S3 methods to aid in the the visualization of the results. A call to <code>summary()</code> returns the statistics of the Markov Chain.</p>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true"></a><span class="kw">summary</span>(my_MCMC_fit)</span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true"></a><span class="co">#&gt;      temperature_xmin temperature_xopt temperature_xmax    aw_xopt</span></span>
+<span id="cb63-3"><a href="#cb63-3" aria-hidden="true"></a><span class="co">#&gt; mean        21.999722        39.243253        49.851465 0.93129061</span></span>
+<span id="cb63-4"><a href="#cb63-4" aria-hidden="true"></a><span class="co">#&gt; sd           3.053936         4.840089         9.464075 0.04836511</span></span>
+<span id="cb63-5"><a href="#cb63-5" aria-hidden="true"></a><span class="co">#&gt; min         13.839620        25.274903        35.307447 0.86452993</span></span>
+<span id="cb63-6"><a href="#cb63-6" aria-hidden="true"></a><span class="co">#&gt; max         27.856366        48.926418        72.331381 1.01835691</span></span>
+<span id="cb63-7"><a href="#cb63-7" aria-hidden="true"></a><span class="co">#&gt; q025        20.121953        36.985343        41.050765 0.89147365</span></span>
+<span id="cb63-8"><a href="#cb63-8" aria-hidden="true"></a><span class="co">#&gt; q050        22.369813        38.618287        49.905573 0.91597845</span></span>
+<span id="cb63-9"><a href="#cb63-9" aria-hidden="true"></a><span class="co">#&gt; q075        24.348385        42.418180        57.128478 0.97890489</span></span></code></pre></div>
+<p>And a call to <code>plot()</code> compares the data against the model fitted.</p>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true"></a><span class="kw">plot</span>(my_MCMC_fit)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>As well as for <code>fit_dynamic_growth()</code>, the environmental conditions can be added to the plot using the <code>add_factor</code> argument.</p>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true"></a><span class="kw">plot</span>(my_MCMC_fit, <span class="dt">add_factor =</span> <span class="st">&quot;temperature&quot;</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+</div>
+<div id="stochastic-prediction-based-on-an-mcmc-fit" class="section level2">
+<h2>Stochastic prediction based on an MCMC fit</h2>
+<p>The function <code>predict_MCMC_growth()</code> provides an interface to make stochastic predictions based on parameter distributions estimated using <code>fit_MCMC_growth()</code>. This function has 4 arguments:</p>
+<ul>
+<li><code>MCMCfit</code> an instance of <code>FitDynamicGrowthMCMC</code> returned by <code>fit_MCMC_growth()</code>.</li>
+<li><code>times</code> vector of time points for the calculations.</li>
+<li><code>env_conditions</code> tibble describing the (dynamic) environmental conditions.</li>
+<li><code>niter</code> number of samples for the Monte Carlo calculations.</li>
+</ul>
+<p>For this first example, we will use the same data we used previously to illustrate the use of the <code>fit_MCMC_growth()</code> function. The environmental conditions were defined by <code>example_env_conditions</code></p>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true"></a>example_env_conditions</span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true"></a><span class="co">#&gt; # A tibble: 3 x 3</span></span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true"></a><span class="co">#&gt;    time temperature    aw</span></span>
+<span id="cb66-4"><a href="#cb66-4" aria-hidden="true"></a><span class="co">#&gt;   &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb66-5"><a href="#cb66-5" aria-hidden="true"></a><span class="co">#&gt; 1     0          20  0.99</span></span>
+<span id="cb66-6"><a href="#cb66-6" aria-hidden="true"></a><span class="co">#&gt; 2     5          30  0.95</span></span>
+<span id="cb66-7"><a href="#cb66-7" aria-hidden="true"></a><span class="co">#&gt; 3    15          35  0.9</span></span></code></pre></div>
+<p>This function estimates the credible intervals based on the quantiles of the predicted microbial count at each time point. Hence, their precision depends on the number of time points and the number of simulations. If the number of time points is too low, the prediction interval would not be “smooth”. On the other hand, if the number of simulations is too low, the crecible interval would vary between repetitions of the same calculation.</p>
+<p>As an example, we wil use 5 time points uniformly distributed between 0 and 15</p>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true"></a>my_times &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">15</span>, <span class="dt">length =</span> <span class="dv">5</span>)</span></code></pre></div>
+<p>and 100 iterations.</p>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true"></a>niter &lt;-<span class="st"> </span><span class="dv">100</span></span></code></pre></div>
+<p>Once we have defined every argument, we can call the <code>predict_MCMC_growth()</code> function.</p>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true"></a></span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true"></a>my_MCMC_prediction &lt;-<span class="st"> </span><span class="kw">predict_MCMC_growth</span>(my_MCMC_fit, </span>
+<span id="cb69-3"><a href="#cb69-3" aria-hidden="true"></a>                                          my_times,</span>
+<span id="cb69-4"><a href="#cb69-4" aria-hidden="true"></a>                                          example_env_conditions, </span>
+<span id="cb69-5"><a href="#cb69-5" aria-hidden="true"></a>                                          niter)</span></code></pre></div>
+<p>This function returns an instance of <code>MCMCgrowth</code> with 4 entries:</p>
+<ul>
+<li><code>sample</code> a tibble with the sample of model parameters used for the simulations.</li>
+<li><code>simulations</code> a tibble with the results of every individual simulation used.</li>
+<li><code>quantiles</code> a tibble providing the calculated quantiles (5th, 10th, 50th, 90th, 95th) of the microbial count for each time point.</li>
+<li><code>model</code> the instance of <code>FitDynamicGrowthMCMC</code> used for the predictions.</li>
+</ul>
+<p>Hence, the individual quantiles can be retrieved from <code>quantiles</code></p>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true"></a>my_MCMC_prediction<span class="op">$</span>quantiles</span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true"></a><span class="co">#&gt; # A tibble: 5 x 7</span></span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true"></a><span class="co">#&gt;    time     q50      q10    q90      q05    q95 m_logN</span></span>
+<span id="cb70-4"><a href="#cb70-4" aria-hidden="true"></a><span class="co">#&gt;   &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;</span></span>
+<span id="cb70-5"><a href="#cb70-5" aria-hidden="true"></a><span class="co">#&gt; 1  0    0       0        0      0        0      0     </span></span>
+<span id="cb70-6"><a href="#cb70-6" aria-hidden="true"></a><span class="co">#&gt; 2  3.75 0.00257 0.000567 0.0239 0.000394 0.0763 0.0125</span></span>
+<span id="cb70-7"><a href="#cb70-7" aria-hidden="true"></a><span class="co">#&gt; 3  7.5  2.62    1.81     3.40   1.57     3.77   2.60  </span></span>
+<span id="cb70-8"><a href="#cb70-8" aria-hidden="true"></a><span class="co">#&gt; 4 11.2  4.00    3.99     4.00   3.98     4.00   3.98  </span></span>
+<span id="cb70-9"><a href="#cb70-9" aria-hidden="true"></a><span class="co">#&gt; 5 15    4.00    4.00     4      4.00     4      4.00</span></span></code></pre></div>
+<p>This class implements an S3 method for <code>plot</code> to visualize the prediction interval.</p>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true"></a><span class="kw">plot</span>(my_MCMC_prediction)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>In this plot, the solid line represents the median of the simulations, whereas the two shaded areas represent the space between the 10th and 90th, and 5th and 95th quantiles. As shown in this plot, the prediction interval is far from smooth. The reason for that is the low number of time points used for the calculations. Consequently, we will repeat them using 100 time points instead of 5:</p>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true"></a>better_prediction &lt;-<span class="st"> </span><span class="kw">predict_MCMC_growth</span>(my_MCMC_fit, </span>
+<span id="cb72-2"><a href="#cb72-2" aria-hidden="true"></a>                                          <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">15</span>, <span class="dt">length =</span> <span class="dv">100</span>),</span>
+<span id="cb72-3"><a href="#cb72-3" aria-hidden="true"></a>                                          example_env_conditions, </span>
+<span id="cb72-4"><a href="#cb72-4" aria-hidden="true"></a>                                          niter)</span></code></pre></div>
+<p>If we visualize the new prediction interval</p>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true"></a><span class="kw">plot</span>(better_prediction)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>it is now smoother. However, the prediction interval is still odd. Even if it is smooth, there are several inflection points that are hard to justify based on the model equations. They are the result of the low number of Monte Carlo samples used for the simulations. Hence, this number should be increased to obtain reliable intervals (not done in this vignette due to excessive compilation time).</p>
+</div>
+<div id="distributions-of-times-to-reach-a-certain-count" class="section level2">
+<h2>Distributions of times to reach a certain count</h2>
+<p>For shelf-life estimation and risk assessment, the storage time required to reach a critical microbial count is usually of interest. For stochastic simulations, this time is not defined by a single value but by a probability distribution that can be estimated using the <code>distribution_to_logcount()</code> function. This function has two arguments:</p>
+<ul>
+<li><code>model</code>: an object returned by <code>predict_stochastic_growth()</code> or <code>fit_MCMC_growth()</code>.</li>
+<li><code>log_count</code>: target microbial count.</li>
+</ul>
+<p>For instance, we can use this function to get the distribution of times required to reach a microbial count of 4 log cFU/g based on the simulations we did before and saved in <code>stoc_growth</code></p>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true"></a>time_distrib &lt;-<span class="st"> </span><span class="kw">distribution_to_logcount</span>(stoc_growth, <span class="dv">4</span>)</span></code></pre></div>
+<p>This function returns an instance of <code>TimeDistribution</code> with 2 items:</p>
+<p><em><code>distribution</code> includes a numeric vector with the distribution of times to reach <code>log_count</code>. </em><code>summary</code> includes summary statistics of <code>distribution</code>.</p>
+<p>Hence, we can observe the summary</p>
+<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true"></a>time_distrib<span class="op">$</span>summary</span>
+<span id="cb75-2"><a href="#cb75-2" aria-hidden="true"></a><span class="co">#&gt; # A tibble: 1 x 5</span></span>
+<span id="cb75-3"><a href="#cb75-3" aria-hidden="true"></a><span class="co">#&gt;   m_time sd_time med_time   q10   q90</span></span>
+<span id="cb75-4"><a href="#cb75-4" aria-hidden="true"></a><span class="co">#&gt;    &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb75-5"><a href="#cb75-5" aria-hidden="true"></a><span class="co">#&gt; 1   17.3    3.23     17.0  13.3  21.5</span></span></code></pre></div>
+<p>Alternatively, this class implements an S3 method to visualize the distribution of times:</p>
+<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true"></a><span class="kw">plot</span>(time_distrib)</span>
+<span id="cb76-2"><a href="#cb76-2" aria-hidden="true"></a><span class="co">#&gt; `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span></span></code></pre></div>
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASAAAAEgCAMAAAAjXV6yAAAAvVBMVEUAAAAAADoAAGYAOmYAOpAAZrY6AAA6ADo6AGY6OgA6Ojo6OmY6ZmY6ZpA6ZrY6kLY6kNtZWVlmAABmOgBmOjpmZjpmZmZmZpBmkLZmkNtmtttmtv+QOgCQZgCQZjqQZmaQtraQttuQ2/+pqam2ZgC2Zjq2kDq2tpC2tra2ttu229u22/+2///bkDrbkGbbtmbbtpDbtrbb27bb29vb2//b/9vb////AAD/tmb/25D/27b/29v//7b//9v///8gsNuMAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAIsElEQVR4nO2daWPTRhRFZUhcCrRNAhQoLlAwDSWopE0JdrD8/39WNdosWct90oyWGd3zIRt6Hr2D9LTOjLcnjXhjr8DUoSAABQEoCEBBAAoCUBCAggA6gmYhdwxB7wXLfDP7cd2hIAAFASgIwCINoCAABQEoCMAiDZiYoPMYCqqDghQU1J1M0GSgIAAFASgIwCINoCAABQEoCMAiDaAgAAUBKAgw5SIttOVekaYgAAUBKKg7BSeTqNgUBKAgAAUBWKQB0xR0fv4t+4mC8lCQgoK6c16B+VbaQEEAmOTGi3m1312o76ctYttjoaCI3UXoZfvDuy6xrbBVkH/vc7gtqS/tY8tUVdVjK3YV6e3yLPzqnx79mYJS1tG2s34YlqCzJCyiY5vOCdpdnEVfT25DS2ftYqtwTtBmcajO+UJkskhXVWdrivRabToJ2+WrVrFSbBYU72EJ+WM9BcUkG038jbtYmbQErdVhnkW6jJ9uNOvoiqNVbCWuCTIeS0EACuqAzUW6l9hjKAhAQQAKylGsqtVWZl2kKQiQZNSwV1GQgoIAjYJy6LWiCwUBKAhAQQAWaQAFASgIYI+gWlvuCUpoFJSjsLhekx2wQFCVreGgIAAFASwo0kiQe0WaggAUBKAgGY2C6tBrsgMUBBhFUCc1FERBKe8FIuqKdIUn94o0BQEoCEBBCIEggMZat+Qoyd3TR9ELicHquOcKjpVjraCbm38v7n26CbleUlBMPsm4x1xC7u16SWwrbBW0v/t4uVy8/aj4C/uZZZEO3jwXmKmOFWOzoEFiLRf0/Sbivy6xMqwWtHuSFGkexWKOk1x7ixfSKj1HQbuLxVHf71x3+Y3nFf51noJKu1bWhU51i8r3zpyloGBV2oLSLnTBSnUVWxsYecHqIr1dnlwV/5J2l497HPoGehzaLOhwtZGJSLvLx7tasj3p9Zu3WFDw5teE9Iw66y4fl598EZqjoDrCDcecIJuLdB1hASrsYm1iy9gsKLnQOL7UCO2YK9I2CyoX6ay7vLnDvM2Cgn/UZcbls8WL7FIj6y5v7ETRhSLtLw4d5LPu8r6hSw0DgvKeRhEUH9y7xULcENTj7Q4HBAV/TvymfV5Qv9QexV5VL98QK8diQemlxvNP7WPlWCxomFgKasbyIn397OHDx390i5VhtaBgFZ4NLkVPnucpyPfuX+33d0+8s8rFG2Ol2CwovSe9XfI8KKbmqUavZ9J2C0q3oF4EGTMznKbyk9Wo+Pje8dC/gliMA4K2S+/R28unXunxmCAWEydkrkjHH9d6NdpQSvIuenvh/lXVwigW4oKg8Eh2cyN7iWqugnqMdUZQIHh9aqZFOvigju+iO67zFORHV2HBBx7mE2pOFHs6k3ZBUK+XGnFCNhfpYBXfjN70c9PefkHqPcTHby+f9XTT3gFB++sfozNpyS3FeQoa4EzaNK1Xow1jnElTUC0UBKAgQJyQ7UW6x1gKAlAQgIIA8qzboJECZiBB/ZihIAqioIRCQizSZSgIQEGAXgUl3zUyMZOkTqw83e5oZGImSZ1YlwWptxa9eC7j7vPNOywoeikvel1IZ755hwUdOhrqzDdfyMTFIq060unMN++8IDXjvM5880MI6keTLMlNKEZrvnnHBW0Ox66O3cLl6erSIncRkiQ3udfuO84377Qg39Ofb95lQX7yHoPWfPMOC9ou0+1HZ775Qg5uFWk/PqKrF8805pt3WJCZWAoCUBBAnq4uGvnoJqkTS0EACgJQEKCQA4t0GQoCUBCAgmqRJ2oGjXy6J6kTS0EACgJQEKAiBxbpPBQEoCAABQHkiZpBI5/uSerEUhCAggBDCzLtybkiTUEUREEUlEeeqFE00uqQpE4sBdUxkpkiGtmJktSJHdtNhEZ2oiR1YuvXeogibUwTBWklqRNLQRSkFyvPsHeKa2QySZ3YUZUUKa6RySR1YkdVUqS4RiaT7BQ7qotKbBM0VpEu/kZBdVAQYERBBjOataCR6U8QnE597NRlFNbVpCA8S+aoeYvpS5BgntVR8xbTl6CmmXrbreEkinT9v3QW1DDXc7s1dFRQYbZwvfnmBct8M/tx3ekoqGVsEUcFGZxO3SbMFGmHMXqYdxGjJ4ou0iZJY9OpC5axsEibi6UgAAUB5iPIYYwIqhXX8/KDNkBBIICCQAAFgYBZnA3rQEEACgJQEICCABQEMCxo+yC64Xj8DBYsXxrKu4Zs7G9hA/VjhdeR3dHJGjArKJmetXRrDSxfGsq7msPY37IGGsYKryEaNlt97qEBo4JC7Srh8s3Z5uXLQ3lXk90VFzbQMFZ4NbuLM7X2p/kMTAraeGfRmpRv7zcvXx7KuzFq8U7aQLp8qwaUoFwDhmtQLKj0gKh5+cJQ3pD1vc8tGiiPFY7wQ6G5BvoQVH7E2Lx8eSjvpogw0RYN1IwV3rC4EplrYAqCSj82BaQ1WtpA9VjhDQSrk9ueBbXexSLyQ3nXLx/tKPIG6sYKb4wJi1y/u1iLGpoXJDgUJ2N/ixuoHSu8ifDTey7S4sN8Qahgg0jH/pY2UD9WeDXZcj0d5rOVEJ8opkex46G8qzmM/S1roGGs8BrWYTGP5PR0opj9Lx0/g0XLHw/lXU1u7G9RAw1jhdeRLef3c6nhIBQEoCAABQEoCEBBAAoCUBBguoK+xxfWY6/GZAX9/eAzBTWxlt296R0KAkxUUPRE6zTaxdYnX197i5f74LXn/az2uLvwh8WLofY9GwT9rq7Jf1N/Ufe/tktP+BTQCBMVFO9isSDv5Gp/vVRfv3jR77/c7oMPorsXBrBAkLovE6ziW5Unt9tltO2op1eDYIGgVE0qKHlRd6AzAHsFDXSUs1CQ9BGsGaYrKCw9VYKC1eJl+OOX5dxrkJ8d5ouC0sO87KGAPpMVtHvinXytEhSdKHo/XQ20HpMVNBUoCEBBAAoCUBCAggAUBKAgAAUBKAhAQQAKAlAQ4H/LHQIzBUfIcQAAAABJRU5ErkJggg==" /><!-- --></p>
+<p>In this plot, the vertical red line illustrates the median of the distribution and the grey lines the 10th and 90th quantile.</p>
+</div>
+<div id="references" class="section level2">
+<h2>References</h2>
+<p>Baranyi, J., &amp; Roberts, T. A. (1994). A dynamic approach to predicting bacterial growth in food. International Journal of Food Microbiology, 23(3–4), 277–294. <a href="https://doi.org/10.1016/0168-1605(94)90157-0" class="uri">https://doi.org/10.1016/0168-1605(94)90157-0</a></p>
+<p>Buchanan, R. L., Whiting, R. C., &amp; Damert, W. C. (1997). When is simple good enough: a comparison of the Gompertz, Baranyi, and three-phase linear models for fitting bacterial growth curves. Food Microbiology, 14(4), 313–326. <a href="https://doi.org/10.1006/fmic.1997.0125" class="uri">https://doi.org/10.1006/fmic.1997.0125</a></p>
+<p>Haario, H., Laine, M., Mira, A., &amp; Saksman, E. (2006). DRAM: Efficient adaptive MCMC. Statistics and Computing, 16(4), 339–354. <a href="https://doi.org/10.1007/s11222-006-9438-0" class="uri">https://doi.org/10.1007/s11222-006-9438-0</a></p>
+<p>Perez-Rodriguez, F., &amp; Valero, A. (2012). Predictive Microbiology in Foods. Springer.</p>
+<p>Rosso, L., Lobry, J. R., Bajard, S., &amp; Flandrois, J. P. (1995). Convenient Model To Describe the Combined Effects of Temperature and pH on Microbial Growth. Applied and Environmental Microbiology, 61(2), 610–616.</p>
+<p>Soetaert, K., Petzoldt, T., &amp; Setzer, R. W. (2010). Solving Differential Equations in R: Package deSolve. Journal of Statistical Software, 33(9). <a href="https://doi.org/10.18637/jss.v033.i09" class="uri">https://doi.org/10.18637/jss.v033.i09</a></p>
+<p>Soetaert, K., &amp; Petzoldt, T. (2010). Inverse Modelling, Sensitivity and Monte Carlo Analysis in R Using Package FME. Journal of Statistical Software, 33(3). <a href="https://doi.org/10.18637/jss.v033.i03" class="uri">https://doi.org/10.18637/jss.v033.i03</a></p>
+<p>Zwietering, M. H., Jongenburger, I., Rombouts, F. M., &amp; Riet, K. van ’t. (1990). Modeling of the Bacterial Growth Curve. Applied and Environmental Microbiology, 56(6), 1875–1881.</p>
+<p>Zwietering, M. H., Wijtzes, T., De Wit, J. C., &amp; Riet, K. V. (1992). A Decision Support System for Prediction of the Microbial Spoilage in Foods. Journal of Food Protection, 55(12), 973–979. <a href="https://doi.org/10.4315/0362-028X-55.12.973" class="uri">https://doi.org/10.4315/0362-028X-55.12.973</a></p>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
