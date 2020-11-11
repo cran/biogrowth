@@ -1,7 +1,10 @@
 
 #' Isothermal Baranyi model
 #'
-#' Baranyi growth model as defined by Baranyi and Roberts (1994).
+#' Baranyi growth model as defined by Baranyi and Roberts (1994). We use the solution
+#' calculated by Poschet et al. (2005, doi: https://doi.org/10.1016/j.ijfoodmicro.2004.10.008)
+#' after log-transformation according to MONTE CARLO ANALYSIS FOR MICROBIAL GROWTH CURVES,
+#' by Oksuz and Buzrul.
 #'
 #' @param times Numeric vector of storage times
 #' @param logN0 Initial log microbial count
@@ -13,10 +16,14 @@
 #'
 iso_Baranyi <- function(times, logN0, mu, lambda, logNmax) {
 
-    h0 <- mu*lambda
+    # h0 <- mu*lambda
+    #
+    # A <- times + 1/mu * log(exp(-mu * times) + exp(-h0) - exp(-mu * times - h0))
+    # logN <- logN0 + mu * A - log(1 + (exp(mu * A) - 1) / exp(logNmax - logN0))
 
-    A <- times + 1/mu * log(exp(-mu * times) + exp(-h0) - exp(-mu * times - h0))
-    logN <- logN0 + mu * A - log(1 + (exp(mu * A) - 1) / exp(logNmax - logN0))
+    num <- 1 + exp(log(10)*mu*(times - lambda)) - exp(-log(10)*mu*lambda)
+    den <- exp(log(10)*mu*(times-lambda)) - exp(-log(10)*mu*lambda) + 10^(logNmax - logN0)
+    logN <- logNmax + log10(num/den)
 
     logN
 
@@ -33,7 +40,7 @@ iso_Baranyi <- function(times, logN0, mu, lambda, logNmax) {
 #'
 iso_repGompertz <- function(times, logN0, C, mu, lambda) {
 
-    logN <- logN0 + C*(exp(-exp( 2.71*(mu/C)*(lambda-times)+1 )))
+    logN <- logN0 + C*(exp(-exp( exp(1)*(mu/C)*(lambda-times)+1 )))
 
     logN
 
@@ -66,6 +73,7 @@ trilinear_model <- function(times, logN0, mu, lambda, logNmax) {
 #' @param model_name Character defining the growth model.
 #' @param times Numeric vector of storage times for the predictions.
 #' @param model_pars List defining the values of the model parameters.
+#' @param check Whether to do basic checks (TRUE by default).
 #'
 #' @return A list of class \code{IsothermalGrowth} with the items:
 #' \itemize{
@@ -94,7 +102,15 @@ trilinear_model <- function(times, logN0, mu, lambda, logNmax) {
 #' plot(static_prediction)
 #'
 #'
-predict_isothermal_growth <- function(model_name, times, model_pars) {
+predict_isothermal_growth <- function(model_name, times, model_pars, check = TRUE) {
+
+    ## Check the model parameters
+
+    if (isTRUE(check)) {
+
+        check_primary_pars(model_name, model_pars)
+
+    }
 
     ## Calculate the prediction
 

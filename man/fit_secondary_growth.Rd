@@ -10,6 +10,7 @@ fit_secondary_growth(
   known_pars,
   sec_model_names,
   transformation = "sq",
+  check = TRUE,
   ...
 )
 }
@@ -32,6 +33,8 @@ for each environmental factor.}
 \item{transformation}{Character defining the tranformation of \code{mu} for
 model fitting. One of \code{sq} (square root; default), \code{log} (log-transform) or
 \code{none} (no transformation).}
+
+\item{check}{Whether to do some basic checks (TRUE by default).}
 
 \item{...}{Additional arguments passed to \code{\link{modFit}}.}
 }
@@ -73,6 +76,17 @@ my_start <- list(temperature_xmin = 5, temperature_xopt = 35,
 
 fit_cardinal <- fit_secondary_growth(example_cardinal, my_start, known_pars, sec_model_names)
 
+## With summary, we can look at the parameter estimates
+
 summary(fit_cardinal)
+
+## The plot function compares predictions against observations
+
+plot(fit_cardinal)
+
+## Passing which = 2, generates a different kind of plot
+
+plot(fit_cardinal, which = 2)
+plot(fit_cardinal, which = 2, add_trend = TRUE)
 
 }

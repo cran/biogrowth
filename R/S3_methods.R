@@ -174,6 +174,151 @@ summary.FitSecondaryGrowth <- function(object, ...) {
 
 }
 
+#' Summary of a FitMultipleDynamicGrowth object
+#'
+#' @param object Instance of FitMultipleDynamicGrowth
+#' @param ... ignored
+#'
+#' @export
+#'
+summary.FitMultipleDynamicGrowth <- function(object, ...) {
+
+    summary(object$fit_results)
+
+}
+
+#' Summary of a FitMultipleGrowthMCMC object
+#'
+#' @param object instance of FitMultipleGrowthMCMC.
+#' @param ... ignored.
+#'
+#' @export
+#'
+summary.FitMultipleGrowthMCMC <- function(object, ...) {
+
+    summary(object$fit_results)
+
+}
+
+#---------------------------------------------------------
+
+#' Residuals of a FitSecondaryGrowth object
+#'
+#' @param object Instance of FitSecondaryGrowth
+#' @param ... ignored
+#'
+#' @importFrom stats residuals
+#'
+#' @export
+#'
+residuals.FitSecondaryGrowth <- function(object, ...) {
+    residuals(object$fit_results)
+}
+
+#' Residuals of FitIsoGrowth object
+#'
+#' @param object Instance of FitIsoGrowth
+#' @param ... ignored
+#'
+#' @importFrom stats residuals
+#'
+#' @export
+#'
+residuals.FitIsoGrowth <- function(object, ...) {
+    residuals(object$fit)
+}
+
+#' Residuals of FitDynamicGrowth
+#'
+#' @param object Instance of FitDynamicGrowth
+#' @param ... ignored
+#'
+#' @importFrom stats residuals
+#'
+#' @export
+#'
+residuals.FitDynamicGrowth <- function(object, ...) {
+    residuals(object$fit_results)
+}
+
+
+#' Residuals of FitDynamicGrowthMCMC
+#'
+#' @param object Instance of FitDynamicGrowthMCMC.
+#' @param ... ignored.
+#'
+#' @importFrom dplyr select
+#' @importFrom FME modCost
+#'
+#' @export
+#'
+residuals.FitDynamicGrowthMCMC <- function(object, ...) {
+
+    simulations <- object$best_prediction$simulation %>%
+        select("time", "logN") %>%
+        as.data.frame()
+
+    my_cost <- modCost(model = simulations,
+                obs = as.data.frame(object$data))
+
+    my_cost$residuals$res
+
+}
+
+#' Residuals of FitMultipleDynamicGrowth
+#'
+#' @param object Instance of FitMultipleDynamicGrowth
+#' @param ... ignored
+#'
+#' @importFrom stats residuals
+#'
+#' @export
+#'
+residuals.FitMultipleDynamicGrowth <- function(object, ...) {
+    residuals(object$fit_results)
+}
+
+#' Residuals of FitMultipleGrowthMCMC
+#'
+#' @param object Instance of FitMultipleGrowthMCMC
+#' @param ... ignored
+#'
+#' @importFrom dplyr bind_rows select
+#' @importFrom FME modCost
+#'
+#' @export
+#'
+#'
+residuals.FitMultipleGrowthMCMC <- function(object, ...) {
+
+    out <- lapply(1:length(object$data), function(i) {
+
+        simulations <- object$best_prediction[[i]]$simulation %>%
+            select("time", "logN") %>%
+            as.data.frame()
+
+        my_cost <- modCost(model = simulations,
+                           obs = as.data.frame(object$data[[i]]$data))
+
+        tibble(residual = my_cost$residuals$res,
+               experiment = i)
+
+    })
+
+    bind_rows(out)
+
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 

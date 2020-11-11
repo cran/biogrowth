@@ -11,7 +11,13 @@
   add_factor = NULL,
   ylims = NULL,
   label_y1 = "logN",
-  label_y2 = add_factor
+  label_y2 = add_factor,
+  line_col = "black",
+  line_size = 1,
+  line_type = "solid",
+  line_col2 = "black",
+  line_size2 = 1,
+  line_type2 = "dashed"
 )
 }
 \arguments{
@@ -22,7 +28,7 @@
 \item{...}{additional arguments passed to \code{plot}.}
 
 \item{add_factor}{whether to plot also one environmental factor.
-If \code{NULL} (default), no environmenta factor is plotted. If set
+If \code{NULL} (default), no environmental factor is plotted. If set
 to one character string that matches one entry of x$env_conditions,
 that condition is plotted in the secondary axis}
 
@@ -31,6 +37,18 @@ that condition is plotted in the secondary axis}
 \item{label_y1}{Label of the primary y-axis.}
 
 \item{label_y2}{Label of the secondary y-axis.}
+
+\item{line_col}{Aesthetic parameter to change the colour of the line geom in the plot, see: \code{\link{geom_line}}}
+
+\item{line_size}{Aesthetic parameter to change the thickness of the line geom in the plot, see: \code{\link{geom_line}}}
+
+\item{line_type}{Aesthetic parameter to change the type of the line geom in the plot, takes numbers (1-6) or strings ("solid") see: \code{\link{geom_line}}}
+
+\item{line_col2}{Same as lin_col, but for the environmental factor.}
+
+\item{line_size2}{Same as line_size, but for the environmental factor.}
+
+\item{line_type2}{Same as lin_type, but for the environmental factor.}
 }
 \value{
 An instance of \code{ggplot}.

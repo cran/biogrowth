@@ -25,10 +25,10 @@ calculate_gammas_secondary <- function(sec_model_names, my_data, secondary_model
         this_sec <- secondary_models[[this_condition]]
 
         this_gamma <- switch(this_sec$mode,
-                             # Ratkowsky = ratkowsky_model(this_x, this_sec$b, this_sec$xmin),
                              CPM = CPM_model(this_x, this_sec$xmin,
                                              this_sec$xopt, this_sec$xmax, this_sec$n),
                              Zwietering = zwietering_gamma(this_x, this_sec$xmin, this_sec$xopt, this_sec$n),
+                             fullRatkowsky = full_Ratkowski(this_x, this_sec$xmin, this_sec$xmax, this_sec$c),
                              stop(paste("Model", this_sec$model, "not known."))
         )
 
@@ -120,6 +120,7 @@ get_secondary_residuals <- function(this_p, my_data,
 #' model fitting. One of \code{sq} (square root; default), \code{log} (log-transform) or
 #' \code{none} (no transformation).
 #' @param ... Additional arguments passed to \code{\link{modFit}}.
+#' @param check Whether to do some basic checks (TRUE by default).
 #'
 #' @return A list of class \code{FitSecondaryGrowth} with the items:
 #' \itemize{
@@ -160,12 +161,36 @@ get_secondary_residuals <- function(this_p, my_data,
 #'
 #' fit_cardinal <- fit_secondary_growth(example_cardinal, my_start, known_pars, sec_model_names)
 #'
+#' ## With summary, we can look at the parameter estimates
+#'
 #' summary(fit_cardinal)
+#'
+#' ## The plot function compares predictions against observations
+#'
+#' plot(fit_cardinal)
+#'
+#' ## Passing which = 2, generates a different kind of plot
+#'
+#' plot(fit_cardinal, which = 2)
+#' plot(fit_cardinal, which = 2, add_trend = TRUE)
 #'
 fit_secondary_growth <- function(fit_data, starting_point,
                                  known_pars, sec_model_names,
                                  transformation = "sq",
+                                 check = TRUE,
                                  ...) {
+
+    ## Check model parameters
+
+    if (isTRUE(check)) {
+
+        secondary_models <- extract_secondary_pars(starting_point,
+                                                   known_pars,
+                                                   sec_model_names)
+
+        check_secondary_pars(secondary_models)
+
+    }
 
     ## Model fitting
 

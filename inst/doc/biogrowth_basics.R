@@ -14,6 +14,30 @@ library(tidyverse)
 set.seed(1241)
 
 ## -----------------------------------------------------------------------------
+primary_model_data()
+
+## -----------------------------------------------------------------------------
+meta_info <- primary_model_data("Trilinear")
+
+## -----------------------------------------------------------------------------
+meta_info$ref
+
+## -----------------------------------------------------------------------------
+meta_info$pars
+
+## -----------------------------------------------------------------------------
+secondary_model_data()
+
+## -----------------------------------------------------------------------------
+meta_info <- secondary_model_data("CPM")
+
+## -----------------------------------------------------------------------------
+meta_info$ref
+
+## -----------------------------------------------------------------------------
+meta_info$pars
+
+## -----------------------------------------------------------------------------
 data("example_cardinal")
 head(example_cardinal)
 
@@ -24,6 +48,20 @@ head(example_env_conditions)
 ## -----------------------------------------------------------------------------
 data("example_dynamic_growth")
 head(example_dynamic_growth)
+
+## -----------------------------------------------------------------------------
+data("multiple_experiments")
+length(multiple_experiments)
+
+## -----------------------------------------------------------------------------
+head(multiple_experiments[[1]]$data)
+
+## -----------------------------------------------------------------------------
+print(multiple_experiments[[1]]$conditions)
+
+## -----------------------------------------------------------------------------
+head(multiple_experiments[[2]]$data)
+print(multiple_experiments[[2]]$conditions)
 
 ## -----------------------------------------------------------------------------
 my_model <- "modGompertz"
@@ -42,7 +80,6 @@ static_prediction <- predict_isothermal_growth(my_model, my_time, my_pars)
 static_prediction$simulation
 
 ## -----------------------------------------------------------------------------
-# this is a bit confusing to me, as normally plot() refers to base R plotting functions (but I will adapt :P)
 plot(static_prediction)
 
 ## -----------------------------------------------------------------------------
@@ -66,7 +103,6 @@ ggplot(my_conditions) +
   geom_line(aes(x = time, y = pH))
 
 ## -----------------------------------------------------------------------------
-# can you give a sort of range for this theoretical substance? Or should the user play around a bit to find a value that suits the needs? 
 my_primary <- list(mu_opt = 2,
              Nmax = 1e8,
              N0 = 1e0,
@@ -171,6 +207,15 @@ fit_cardinal <- fit_secondary_growth(example_cardinal, my_start, known_pars, sec
 summary(fit_cardinal)
 
 ## -----------------------------------------------------------------------------
+plot(fit_cardinal)
+
+## ---- fig.width=7, fig.height=5-----------------------------------------------
+plot(fit_cardinal, which = 2)
+
+## ---- fig.width=7, fig.height=5-----------------------------------------------
+plot(fit_cardinal, which = 2, add_trend = TRUE)
+
+## -----------------------------------------------------------------------------
 data("example_dynamic_growth")
 data("example_env_conditions")
 
@@ -219,6 +264,45 @@ plot(my_dyna_fit)
 plot(my_dyna_fit, add_factor = "aw",
      label_y1 = "Log count (log CFU/ml)",
      label_y2 = "Water activity")
+
+## -----------------------------------------------------------------------------
+data("multiple_experiments")
+
+## -----------------------------------------------------------------------------
+ggplot(multiple_experiments[[1]]$data) + 
+  geom_point(aes(x = time, y = logN)) 
+
+## ---- fig.width=7, fig.height=5-----------------------------------------------
+
+multiple_experiments[[1]]$conditions %>%
+  pivot_longer(-time, names_to = "condition", values_to = "value") %>%
+  ggplot() +
+  geom_line(aes(x = time, y = value)) +
+  facet_wrap("condition", scales = "free")
+  
+
+## -----------------------------------------------------------------------------
+sec_names <- c(temperature = "CPM", pH = "CPM")
+
+## -----------------------------------------------------------------------------
+known <- list(Nmax = 1e8, N0 = 1e0, Q0 = 1e-3,
+    temperature_n = 2, temperature_xmin = 20, temperature_xmax = 35,
+    pH_n = 2, pH_xmin = 5.5, pH_xmax = 7.5, pH_xopt = 6.5)
+
+start <- list(mu_opt = .8, temperature_xopt = 30)
+
+
+## -----------------------------------------------------------------------------
+global_fit <- fit_multiple_growth(start, multiple_experiments, known, sec_names)
+
+## -----------------------------------------------------------------------------
+summary(global_fit)
+
+## ---- fig.width=7, fig.height=5-----------------------------------------------
+plot(global_fit)
+
+## ---- fig.width=7, fig.height=5-----------------------------------------------
+plot(global_fit, add_factor = "temperature")
 
 ## -----------------------------------------------------------------------------
 my_model <- "Trilinear"
@@ -281,7 +365,8 @@ my_MCMC_fit <- fit_MCMC_growth(example_dynamic_growth, example_env_conditions,
                                 my_start,
                                 known_pars, 
                                 sec_model_names, 
-                                niter = 500)
+                                niter = 500,
+                                updatecov = 10) 
 
 
 ## -----------------------------------------------------------------------------
@@ -292,6 +377,41 @@ plot(my_MCMC_fit)
 
 ## -----------------------------------------------------------------------------
 plot(my_MCMC_fit, add_factor = "temperature")
+
+## -----------------------------------------------------------------------------
+data("multiple_experiments")
+
+## -----------------------------------------------------------------------------
+## For each environmental factor, we need to defined a model
+
+sec_names <- c(temperature = "CPM", pH = "CPM")
+
+## Any model parameter can be fixed
+
+known <- list(Nmax = 1e8, N0 = 1e0, Q0 = 1e-3,
+    temperature_n = 2, temperature_xmin = 20, temperature_xmax = 35,
+    pH_n = 2, pH_xmin = 5.5, pH_xmax = 7.5, pH_xopt = 6.5)
+
+## The rest require starting values for model fitting
+
+start <- list(mu_opt = .8, temperature_xopt = 30)
+
+
+## -----------------------------------------------------------------------------
+set.seed(12412)
+global_MCMC <- fit_multiple_growth_MCMC(start, multiple_experiments, known, sec_names, niter = 1000,
+   lower = c(.2, 29),  # lower limits of the model parameters
+   upper = c(.8, 34))  # upper limits of the model parameters
+
+
+## -----------------------------------------------------------------------------
+summary(global_MCMC)
+
+## -----------------------------------------------------------------------------
+plot(global_MCMC)
+
+## -----------------------------------------------------------------------------
+plot(global_MCMC, add_factor = "temperature")
 
 ## -----------------------------------------------------------------------------
 example_env_conditions
