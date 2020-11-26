@@ -31,7 +31,9 @@ calculate_gammas_secondary <- function(sec_model_names, my_data, secondary_model
                              fullRatkowsky = full_Ratkowski(this_x, this_sec$xmin, this_sec$xmax, this_sec$c),
                              stop(paste("Model", this_sec$model, "not known."))
         )
-
+        
+        this_gamma <- tibble(this_gamma)
+        names(this_gamma) <- this_condition
         this_gamma
 
     }) %>%
@@ -122,15 +124,7 @@ get_secondary_residuals <- function(this_p, my_data,
 #' @param ... Additional arguments passed to \code{\link{modFit}}.
 #' @param check Whether to do some basic checks (TRUE by default).
 #'
-#' @return A list of class \code{FitSecondaryGrowth} with the items:
-#' \itemize{
-#' \item fit_results: object returned by \code{\link{modFit}}.
-#' \item secondary_model: secondary model fitted to the data.
-#' \item mu_opt_fit: estimated growth rate under optimum conditions.
-#' \item data: data used for the fit.
-#' \item transformation: type of transformation of \code{mu} for the fit.
-#' }
-#'
+#' @return An instance of \code{\link{FitSecondaryGrowth}}.
 #'
 #' @importFrom dplyr mutate
 #' @importFrom FME modFit
@@ -208,7 +202,7 @@ fit_secondary_growth <- function(fit_data, starting_point,
     ## Output
 
 
-    secondary_models <- extract_secondary_pars(as.data.frame(my_fit$par),
+    secondary_models <- extract_secondary_pars(as.list(my_fit$par),
                                                known_pars,
                                                sec_model_names)
 

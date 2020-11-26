@@ -238,13 +238,12 @@ sec_model_names <- c(temperature = "CPM",
 known_pars <- list(Nmax = 1e4,  # Nmax for primary model
                    N0 = 1e0, Q0 = 1e-3,  # Initial values of the primary model
                    mu_opt = 4, # mu_opt of the gamma model
-                   temperature_n = 1,  # Secondary model for temperature
+                   temperature_n = 1, temperature_xmax = 40,  # Secondary model for temperature
                    aw_xmax = 1, aw_xmin = .9, aw_n = 1  # Secondary model for water activity
-)
+                   )
 
 ## -----------------------------------------------------------------------------
 my_start <- list(temperature_xmin = 25, temperature_xopt = 35,
-               temperature_xmax = 40,
                aw_xopt = .95)
 
 
@@ -351,12 +350,12 @@ sec_model_names <- c(temperature = "CPM",
 known_pars <- list(Nmax = 1e4,  # Primary model
                    N0 = 1e0, Q0 = 1e-3,  # Initial values of the primary model
                    mu_opt = 4, # mu_opt of the gamma model
-                   temperature_n = 1,  # Secondary model for temperature
+                   temperature_n = 1, temperature_xmax = 40, # Secondary model for temperature
                    aw_xmax = 1, aw_xmin = .9, aw_n = 1  # Secondary model for water activity
 )
 
-my_start <- list(temperature_xmin = 25, temperature_xopt = 35,
-                 temperature_xmax = 40,
+my_start <- list(temperature_xmin = 25, 
+                 temperature_xopt = 35,
                  aw_xopt = .95)
 
 
@@ -365,8 +364,7 @@ my_MCMC_fit <- fit_MCMC_growth(example_dynamic_growth, example_env_conditions,
                                 my_start,
                                 known_pars, 
                                 sec_model_names, 
-                                niter = 500,
-                                updatecov = 10) 
+                                niter = 100) 
 
 
 ## -----------------------------------------------------------------------------
@@ -399,9 +397,10 @@ start <- list(mu_opt = .8, temperature_xopt = 30)
 
 ## -----------------------------------------------------------------------------
 set.seed(12412)
-global_MCMC <- fit_multiple_growth_MCMC(start, multiple_experiments, known, sec_names, niter = 1000,
-   lower = c(.2, 29),  # lower limits of the model parameters
-   upper = c(.8, 34))  # upper limits of the model parameters
+global_MCMC <- fit_multiple_growth_MCMC(start, multiple_experiments, known, sec_names, 
+                                        niter = 100,
+                                        lower = c(.2, 29),  # lower limits of the model parameters
+                                        upper = c(.8, 34))  # upper limits of the model parameters
 
 
 ## -----------------------------------------------------------------------------

@@ -71,16 +71,7 @@ get_dyna_residuals <- function(this_p, fit_data, env_conditions,
 #' Names must match columns in \code{fit_data} and \code{env_conditions}.
 #' @param ... Additional arguments passed to modFit.
 #'
-#' @return A list of class FitDynamicGrowth with the following items:
-#'      \itemize{
-#'          \item fit_results: the object returned by \code{modFit}.
-#'          \item best_prediction: the model prediction for the fitted parameters.
-#'          \item data: data used for the fit.
-#'          \item starting: starting values for model fitting
-#'          \item known: parameter values set as known.
-#'          \item sec_models: a named vector with the secondary model
-#'          for each environmental factor
-#'          }
+#' @return An instance of \code{\link{FitDynamicGrowth}}.
 #'
 #' @importFrom FME modFit
 #'
@@ -160,6 +151,7 @@ fit_dynamic_growth <- function(fit_data, env_conditions,
     out <- list(fit_results = my_fit,
                 best_prediction = best_prediction,
                 data = fit_data,
+                env_conditions = env_conditions,
                 starting = starting_point,
                 known = known_pars,
                 sec_models = sec_model_names
@@ -179,16 +171,7 @@ fit_dynamic_growth <- function(fit_data, env_conditions,
 #'
 #' @param niter number of iterations of the MCMC algorithm.
 #'
-#' @return A list of class 'FitDynamicGrowthMCMC' with the following items:
-#'      \itemize{
-#'          \item fit_results: the object returned by \code{modMCMC}.
-#'          \item best_prediction: the model prediction for the fitted parameters.
-#'          \item data: data used for the fit.
-#'          \item starting: starting values for model fitting
-#'          \item known: parameter values set as known.
-#'          \item sec_models: a named vector with the secondary model
-#'          for each environmental factor
-#'          }
+#' @return An instance of \code{\link{FitDynamicGrowthMCMC}}.
 #'
 #' @importFrom FME modMCMC
 #'
@@ -271,6 +254,7 @@ fit_MCMC_growth <- function(fit_data, env_conditions,
 
     out <- list(fit_results = my_fit,
                 best_prediction = best_prediction,
+                env_conditions = env_conditions,
                 data = fit_data,
                 starting = starting_point,
                 known = known_pars,

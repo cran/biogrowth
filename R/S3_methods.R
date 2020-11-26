@@ -105,209 +105,33 @@ is.MCMCgrowth <- function(x) inherits(x, "MCMCgrowth")
 #'
 is.StochasticGrowth <- function(x) inherits(x, "StochasticGrowth")
 
-#------------------------------------------------------------------------------
-
-## "summary" methods
-
-#' Summary of a FitDynamicGrowth object
+#' Test of FitMultipleDynamicGrowth object
 #'
-#' @param object Instance of FitDynamicGrowth
-#' @param ... ignored
+#' Tests if an object is of class \code{FitMultipleDynamicGrowth}.
 #'
-#' @export
+#' @param x object to be checked.
 #'
-summary.FitDynamicGrowth <- function(object, ...) {
-
-    summary(object$fit_results)
-
-}
-
-#' Summary of a FitDynamicGrowthMCMC object
-#'
-#' @param object Instance of FitDynamicGrowthMCMC
-#' @param ... ignored
+#' @return A boolean specifying whether \code{x} is of class
+#'         \code{FitMultipleDynamicGrowth}
 #'
 #' @export
 #'
-summary.FitDynamicGrowthMCMC <- function(object, ...) {
+is.FitMultipleDynamicGrowth <- function(x) inherits(x, "FitMultipleDynamicGrowth")
 
-    summary(object$fit_results)
-
-}
-
-#' Summary of a FitIsoGrowth object
+#' Test of FitMultipleDynamicGrowthMCMC object
 #'
-#' @param object Instance of FitIsoGrowth
-#' @param ... ignored
+#' Tests if an object is of class \code{FitMultipleDynamicGrowthMCMC}.
+#'
+#' @param x object to be checked.
+#'
+#' @return A boolean specifying whether \code{x} is of class
+#'         \code{FitMultipleDynamicGrowthMCMC}
 #'
 #' @export
 #'
-summary.FitIsoGrowth <- function(object, ...) {
-
-    summary(object$fit)
-
-}
-
-#' Summary of a FitSecondaryGrowth object
-#'
-#' @param object Instance of FitSecondaryGrowth
-#' @param ... ignored
-#'
-#' @export
-#'
-summary.FitSecondaryGrowth <- function(object, ...) {
-
-    summary(object$fit_results)
-
-}
-
-#' Summary of a FitSecondaryGrowth object
-#'
-#' @param object Instance of FitSecondaryGrowth
-#' @param ... ignored
-#'
-#' @export
-#'
-summary.FitSecondaryGrowth <- function(object, ...) {
-
-    summary(object$fit_results)
-
-}
-
-#' Summary of a FitMultipleDynamicGrowth object
-#'
-#' @param object Instance of FitMultipleDynamicGrowth
-#' @param ... ignored
-#'
-#' @export
-#'
-summary.FitMultipleDynamicGrowth <- function(object, ...) {
-
-    summary(object$fit_results)
-
-}
-
-#' Summary of a FitMultipleGrowthMCMC object
-#'
-#' @param object instance of FitMultipleGrowthMCMC.
-#' @param ... ignored.
-#'
-#' @export
-#'
-summary.FitMultipleGrowthMCMC <- function(object, ...) {
-
-    summary(object$fit_results)
-
-}
-
-#---------------------------------------------------------
-
-#' Residuals of a FitSecondaryGrowth object
-#'
-#' @param object Instance of FitSecondaryGrowth
-#' @param ... ignored
-#'
-#' @importFrom stats residuals
-#'
-#' @export
-#'
-residuals.FitSecondaryGrowth <- function(object, ...) {
-    residuals(object$fit_results)
-}
-
-#' Residuals of FitIsoGrowth object
-#'
-#' @param object Instance of FitIsoGrowth
-#' @param ... ignored
-#'
-#' @importFrom stats residuals
-#'
-#' @export
-#'
-residuals.FitIsoGrowth <- function(object, ...) {
-    residuals(object$fit)
-}
-
-#' Residuals of FitDynamicGrowth
-#'
-#' @param object Instance of FitDynamicGrowth
-#' @param ... ignored
-#'
-#' @importFrom stats residuals
-#'
-#' @export
-#'
-residuals.FitDynamicGrowth <- function(object, ...) {
-    residuals(object$fit_results)
-}
+is.FitMultipleDynamicGrowthMCMC <- function(x) inherits(x, "FitMultipleGrowthMCMC")
 
 
-#' Residuals of FitDynamicGrowthMCMC
-#'
-#' @param object Instance of FitDynamicGrowthMCMC.
-#' @param ... ignored.
-#'
-#' @importFrom dplyr select
-#' @importFrom FME modCost
-#'
-#' @export
-#'
-residuals.FitDynamicGrowthMCMC <- function(object, ...) {
-
-    simulations <- object$best_prediction$simulation %>%
-        select("time", "logN") %>%
-        as.data.frame()
-
-    my_cost <- modCost(model = simulations,
-                obs = as.data.frame(object$data))
-
-    my_cost$residuals$res
-
-}
-
-#' Residuals of FitMultipleDynamicGrowth
-#'
-#' @param object Instance of FitMultipleDynamicGrowth
-#' @param ... ignored
-#'
-#' @importFrom stats residuals
-#'
-#' @export
-#'
-residuals.FitMultipleDynamicGrowth <- function(object, ...) {
-    residuals(object$fit_results)
-}
-
-#' Residuals of FitMultipleGrowthMCMC
-#'
-#' @param object Instance of FitMultipleGrowthMCMC
-#' @param ... ignored
-#'
-#' @importFrom dplyr bind_rows select
-#' @importFrom FME modCost
-#'
-#' @export
-#'
-#'
-residuals.FitMultipleGrowthMCMC <- function(object, ...) {
-
-    out <- lapply(1:length(object$data), function(i) {
-
-        simulations <- object$best_prediction[[i]]$simulation %>%
-            select("time", "logN") %>%
-            as.data.frame()
-
-        my_cost <- modCost(model = simulations,
-                           obs = as.data.frame(object$data[[i]]$data))
-
-        tibble(residual = my_cost$residuals$res,
-               experiment = i)
-
-    })
-
-    bind_rows(out)
-
-}
 
 
 

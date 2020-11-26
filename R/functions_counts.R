@@ -61,11 +61,7 @@ time_to_logcount <- function(model, log_count) {
 #' @param model An instance of \code{StochasticGrowth} or \code{MCMCgrowth}.
 #' @param log_count The target microbial count.
 #'
-#' @return A list of class \code{TimeDistribution} with the items:
-#' \itemize{
-#' \item distribution Sample of the distribution of times to reach \code{log_count}.
-#' \item summary Summary statistics of distribution (mean, sd, median, q10 and q90).
-#' }
+#' @return An instance of \code{\link{TimeDistribution}}.
 #'
 #' @importFrom purrr map_dfr
 #' @importFrom dplyr %>% summarize
@@ -103,14 +99,14 @@ distribution_to_logcount <- function(model, log_count) {
 
         time_dist <- split(model$simulations, model$simulations$iter) %>%
             # split(.$iter) %>%
-            map_dfr(~ approx(.$logN, .$time, log_count)
+            map_dfr(~ approx(.$logN, .$time, log_count, ties = "ordered")
             )
 
     } else if(is.MCMCgrowth(model)) {
 
         time_dist <- split(model$simulations, model$simulations$sim) %>%
             # split(.$sim) %>%
-            map_dfr(~ approx(.$logN, .$time, log_count)
+            map_dfr(~ approx(.$logN, .$time, log_count, ties = "ordered")
             )
 
     } else {
