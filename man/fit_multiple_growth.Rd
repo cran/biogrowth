@@ -9,7 +9,9 @@ fit_multiple_growth(
   experiment_data,
   known_pars,
   sec_model_names,
-  ...
+  ...,
+  check = TRUE,
+  formula = logN ~ time
 )
 }
 \arguments{
@@ -17,15 +19,23 @@ fit_multiple_growth(
 
 \item{experiment_data}{a nested list with the experimental data. Each entry describes
 one experiment as a list with two elements: data and conditions. \code{data} is a tibble
-with two columns: time and logN. \code{conditions} is a tibble with one column named time
-and as many additional columns as environmental factors.}
+with a column giving the elapsed time (named "time" by default) and another one
+with the decimal logarithm of the population size (named "logN" by default).
+\code{conditions} is a tibble with one column giving the elapsed time (using the
+same name as \code{data}) and as many additional columns as environmental factors.
+The default column names can be changed with the formula argument.}
 
 \item{known_pars}{named vector of known model parameters}
 
 \item{sec_model_names}{named character vector with names the
 environmental conditions and values the secondary model (see secondary_model_data).}
 
-\item{...}{additional arguments for \code{modFit}.}
+\item{...}{additional arguments for \code{\link{modFit}}.}
+
+\item{check}{Whether to check the validity of the models. \code{TRUE} by default.}
+
+\item{formula}{an object of class "formula" describing the x and y variables.
+\code{logN ~ time} as a default.}
 }
 \value{
 An instance of \code{\link{FitMultipleDynamicGrowth}}.

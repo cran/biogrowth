@@ -1,26 +1,26 @@
 
 #' Growth under dynamic conditions
 #'
-#' Predicts microbial growth under dynamic conditions based on the
+#' Predicts population growth under dynamic conditions based on the
 #' Baranyi model (Baranyi and Roberts, 1994) and secondary models
 #' based on the gamma concept (Zwietering et al. 1992).
 #'
 #' Model predictions are done by linear interpolation of the environmental
 #' conditions defined in \code{env_conditions}.
 #'
-#' For consistency with the function for isothermal growth,
-#' calculations are done considering mu is in log10 scale. In other words,
-#' it is multiplied by ln(10).
-#'
 #' @param times Numeric vector of storage times to make the predictions
 #' @param env_conditions Tibble describing the variation of the environmental
-#' conditions during storage. It must have a column named \code{time} with the
-#' storage time and as many additional columns as environmental factors.
+#' conditions during storage. It must have with the elapsed time (named \code{time} 
+#' by default; can be changed with the "formula" argument), 
+#' and as many additional columns as environmental factors.
 #' @param primary_pars A named list defining the parameters of the primary model
 #' and the initial values of the model variables. That is, with names \code{mu_opt},
 #' \code{Nmax}, \code{N0}, \code{Q0}.
 #' @param secondary_models A nested list describing the secondary models.
 #' @param ... Additional arguments for \code{\link{ode}}.
+#' @param check Whether to check the validity of the models. \code{TRUE} by default.
+#' @param formula An object of class "formula" describing the x variable.
+#' \code{. ~ time} as a default.
 #'
 #' @return An instance of \code{\link{DynamicGrowth}}.
 #'
@@ -30,6 +30,8 @@
 #' @importFrom dplyr %>%
 #' @importFrom dplyr bind_cols
 #' @importFrom rlang .data
+#' @importFrom purrr map
+#' @importFrom formula.tools rhs
 #'
 #' @export
 #'
@@ -81,14 +83,49 @@
 #'     label_y2 = "Storage temperature (C)")
 #'
 predict_dynamic_growth <- function(times, env_conditions, primary_pars,
-                                   secondary_models, ...) {
+                                   secondary_models, 
+                                   ...,
+                                   check = TRUE,
+                                   formula = . ~ time) {
+    
+    ## Apply the formula
+    
+    x_col <- rhs(formula)
+    
+    env_conditions <- rename(env_conditions, time = x_col)
+    
+    ## Check model parameters
+    
+    if (isTRUE(check)) {
+        
+        sec_model_names <- secondary_models %>%
+            map(~ .$model) %>% 
+            unlist()
+        
+        check_pars_names <- lapply(names(secondary_models), function(each_factor) {
+            
+            this_model <- secondary_models[[each_factor]]
+            this_model$model <- NULL
+            paste0(each_factor, "_", names(this_model))
+        }) %>%
+            unlist()
+        
+        check_pars <- rep(1, length(check_pars_names))  # I do not check values, so it does not matter
+        names(check_pars) <- check_pars_names
+        
+        
+        check_secondary_pars(check_pars, unlist(primary_pars), sec_model_names,
+                             primary_pars = c("mu_opt", "N0", "Nmax", "Q0"))
+        
+    }
 
     ## Prepare stuff
 
     my_env <- approx_env(env_conditions)
 
     yini <- c(Q = primary_pars$Q0,
-              N = primary_pars$N0)
+              N = primary_pars$N0
+              )
 
     ## Make the simulation
 

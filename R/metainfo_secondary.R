@@ -58,45 +58,86 @@ secondary_model_data <- function(model_name=NULL) {
 
 #' Basic checks of secondary parameters
 #'
-#' Checks that the model name is correct, that the number of model parameters is correct
-#' and that every parameter is defined.
+#' Checks that the model names are correct, that no parameter is defined twice,
+#' that every parameter is defined and that no unknown parameter has been defined.
+#' Raises an error if any of these conditions is not met.
 #'
-#' @param secondary_models A list of secondary models returned by extract_secondary_pars
+#' @inheritParams fit_secondary_growth
+#' @param primary_pars Character vector with the parameter names of the primary model.
 #'
 #' @return NULL
 #'
-check_secondary_pars <- function(secondary_models) {
-
-    for (each_model in secondary_models) {
-
-        my_data <- secondary_model_data(each_model$model)
-
-        ## Check that model name is correct
-
-        if (is.null(my_data)) {
-            stop("Unknown model: ", each_model$model)
-        }
-
-        each_model$model <- NULL
-
-        ## Number of parameters
-
-        if (length(each_model) != length(my_data$pars)) {
-            warning("The number of model parameters (", length(each_model),
-                    ") does not match the one in the model (", length(my_data$pars), ")")
-        }
-
-        ## Parameter names
-
-        for (each_par in my_data$pars) {
-            if (!(each_par %in% names(each_model))) {
-                warning(paste("Parameter not defined:", each_par))
-            }
-        }
-
+check_secondary_pars <- function(starting_point, known_pars, sec_model_names,
+                                 primary_pars = "mu_opt") {
+    
+    
+    ## Check no parameter is defined twice
+    
+    if (any(names(starting_point) %in% names(known_pars))) {
+        stop("Parameters cannot be defined as both fixed and to be fitted.")
     }
-
-    NULL
+    
+    par_names <- c(names(starting_point), names(known_pars))
+    
+    ## Check the primary_pars are defined
+    
+    missing_primary <- primary_pars[!primary_pars %in% par_names]
+    
+    if (length(missing_primary) > 0) {
+        stop(paste("Parameter not defined:", missing_primary, "\n"))
+        
+    }
+    
+    ## Get rid of primary parameters
+    
+    my_regex <- paste(primary_pars, collapse="|")
+    par_names <- par_names[!grepl(my_regex, par_names)]
+    
+    # if (! "mu_opt" %in% par_names) {
+    #     stop("Parameter not defined: mu_opt")
+    # }
+    # 
+    # par_names <- par_names[!grepl("mu_opt", par_names)]  # We do not do further checks with it
+    
+    ## Checks for secondary model
+    
+    for (each_factor in names(sec_model_names)) {
+        
+        ## (Indirectly) check the model exists
+        
+        model_data <- secondary_model_data(sec_model_names[[each_factor]])
+        
+        req_pars <- paste0(each_factor, "_", model_data$pars)
+        
+        ## Check every required parameter is defined
+        
+        missing_pars <- req_pars[!req_pars %in% par_names]
+        
+        if (length(missing_pars) > 0) {
+            stop(paste("Parameter not defined:", missing_pars, "\n"))
+        }
+        
+        ## Check there is no unrecognized parameter
+        
+        this_pars <- par_names[grepl(paste0(each_factor, "_"), par_names)]
+        
+        unknown_pars <- this_pars[!this_pars %in% req_pars]
+        
+        if (length(unknown_pars) > 0) {
+            stop(paste("Unknown parameter: ", unknown_pars, "\n"))
+        }
+        
+    }
+    
+    ## Check there is no parameter left
+    
+    my_regex <- paste(paste0(names(sec_model_names), "_"), collapse="|")
+    wtpars <- par_names[!grepl(my_regex, par_names)]
+    
+    if (length(wtpars) > 0) {
+        stop(paste("Unknown parameter: ", wtpars, "\n"))
+    }
+    
 
 }
 

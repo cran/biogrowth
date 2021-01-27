@@ -36,7 +36,7 @@ get_dyna_residuals <- function(this_p, fit_data, env_conditions,
     times <- seq(0, max(fit_data$time), length = 1000)
 
     prediction <- predict_dynamic_growth(times, env_conditions, as.list(primary_pars),
-                                         secondary_models)
+                                         secondary_models, check=FALSE)
 
     ## Calculate residuals
 
@@ -53,12 +53,15 @@ get_dyna_residuals <- function(this_p, fit_data, env_conditions,
 #' using the one-step approach (non-linear regression).
 #'
 #' @param fit_data Tibble with the data to use for model fit. It must
-#' contain a column named 'time' with the storage time and another named
-#' 'logN' with the observed microbial count.
+#' contain a column with the elapsed time (named "time" by default) and another one
+#' with the decimal logarithm of the observed population size (named "logN" by default).
+#' Different column names can be specified using the "formula" argument.
 #' @param env_conditions Tibble with the (dynamic) environmental conditions
-#' during the experiment. It must have one column named 'time' with the
-#' storage time and as many columns as required with the environmental conditions.
-#' Note that only those defined in 'sec_model_names' will be considered for
+#' during the experiment. It must have one column with the
+#' elapsed time (named "time" by default) and as many columns as required with the 
+#' environmental conditions. A different column name can be specified using the 
+#' "formula" argument, although it must be the same one as in "fit_data".
+#' Note that only those defined in "sec_model_names" will be considered for
 #' the model fit.
 #' @param starting_point A named vector of starting values for the model parameters.
 #' Parameters for the primary model must be named in the usual way. Parameters for the
@@ -70,10 +73,15 @@ get_dyna_residuals <- function(this_p, fit_data, env_conditions,
 #' environmental factor. The names define the factor and the value the type of model.
 #' Names must match columns in \code{fit_data} and \code{env_conditions}.
 #' @param ... Additional arguments passed to modFit.
+#' @param check Whether to check model parameters (TRUE by default).
+#' @param formula an object of class "formula" describing the x and y variables.
+#' \code{logN ~ time} as a default.
 #'
 #' @return An instance of \code{\link{FitDynamicGrowth}}.
 #'
 #' @importFrom FME modFit
+#' @importFrom dplyr rename
+#' @importFrom formula.tools lhs rhs get.vars
 #'
 #' @export
 #'
@@ -122,7 +130,37 @@ get_dyna_residuals <- function(this_p, fit_data, env_conditions,
 #'
 fit_dynamic_growth <- function(fit_data, env_conditions,
                                starting_point, known_pars,
-                               sec_model_names, ...) {
+                               sec_model_names, ...,
+                               check=TRUE,
+                               formula = logN ~ time) {
+    
+    ## Check the model parameters
+    
+    if (isTRUE(check)) {
+        
+        check_secondary_pars(starting_point, known_pars, sec_model_names,
+                             primary_pars = c("mu_opt", "N0", "Nmax", "Q0"))
+        
+    }
+    
+    ## Apply the formula
+    
+    if (length(get.vars(formula)) > 2) {
+        stop("Only formulas with 2 terms are supported.")
+    }
+    
+    y_col <- lhs(formula)
+    x_col <- rhs(formula)
+    
+    fit_data <- select(fit_data, 
+                       time = x_col,
+                       logN = y_col
+    )
+    
+    env_conditions <- rename(env_conditions,
+                             time =  x_col)
+    
+    ## Call the fitting function
 
     my_fit <- modFit(get_dyna_residuals, unlist(starting_point),
                      fit_data = fit_data,
@@ -225,8 +263,39 @@ fit_dynamic_growth <- function(fit_data, env_conditions,
 #'
 fit_MCMC_growth <- function(fit_data, env_conditions,
                             starting_point, known_pars,
-                            sec_model_names, niter, ...) {
+                            sec_model_names, niter, ...,
+                            check = TRUE,
+                            formula = logN ~ time) {
 
+    ## Check the model parameters
+    
+    if (isTRUE(check)) {
+        
+        check_secondary_pars(starting_point, known_pars, sec_model_names,
+                             primary_pars = c("mu_opt", "N0", "Nmax", "Q0"))
+        
+    }
+    
+    ## Apply the formula
+    
+    if (length(get.vars(formula)) > 2) {
+        stop("Only formulas with 2 terms are supported.")
+    }
+    
+    y_col <- lhs(formula)
+    x_col <- rhs(formula)
+    
+    fit_data <- select(fit_data, 
+                       time = x_col,
+                       logN = y_col
+    )
+    
+    env_conditions <- rename(env_conditions,
+                             time =  x_col)
+    
+    
+    ## Fit the model
+    
     my_fit <- modMCMC(get_dyna_residuals, unlist(starting_point),
                      fit_data = fit_data,
                      env_conditions = env_conditions,

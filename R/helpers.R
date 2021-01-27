@@ -75,13 +75,8 @@ extract_primary_pars <- function(this_p, known_pars) {
 extract_secondary_pars <- function(this_p, known_pars, sec_model_names) {
 
     secondary_models <- lapply(1:length(sec_model_names), function(this_i) {
-
-        all_names <- switch(sec_model_names[[this_i]],
-                            Zwietering = c("xmin", "xopt", "n"),
-                            CPM = c("xmin", "xopt", "xmax", "n"),
-                            fullRatkowsky = c("c", "xmin", "xmax"),
-                            stop(paste("Unknown model:", sec_model_names[[this_i]]))
-        )
+        
+        all_names <- secondary_model_data(sec_model_names[[this_i]])$pars
 
         new_model <- lapply(all_names, function(par_name) {
 
@@ -110,3 +105,44 @@ extract_secondary_pars <- function(this_p, known_pars, sec_model_names) {
     secondary_models
 
 }
+
+#' Lag phase duration from Q0
+#' 
+#' Convenience function to calculate the lag phase duration (lambda) of the 
+#' Baranyi model from the
+#' maximum specific growth rate and the initial value of the variable Q.
+#' 
+#' Note that this function uses the unit system of biogrowth (i.e. log10). Care must
+#' be taken when using parameters obtained from other sources.
+#' 
+#' @param q0 Initial value of the variable Q.
+#' @param mu Specific growth rate in the exponential phase (log10(units)/[time]).
+#' 
+#' @export
+#' 
+Q0_to_lambda <- function(q0, mu) {
+    log10(1 +1/q0)/mu
+}
+
+#' Q0 from lag phase duration
+#' 
+#' Convenience function to calculate the value of Q0 for the Baranyi model from
+#' the duration of the lag phase
+#' 
+#' @param lambda Duration of the lag phase.
+#' @param mu Specific growth rate in the exponential phase (log10(units)/[time]).
+#' 
+#' @export
+#' 
+lambda_to_Q0 <- function(lambda, mu) {
+    1/(10^(mu*lambda) - 1)
+}
+
+
+
+
+
+
+
+
+

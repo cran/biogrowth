@@ -14,6 +14,10 @@
 #' during the experiment. It must have one column named 'time' with the
 #' storage time and as many columns as required with the environmental conditions.
 #' @param niter Number of iterations.
+#' @param newpars A named list defining new values for the some model parameters. 
+#' The name must be the identifier of a model already included in the model. 
+#' These parameters do not include variation, so defining a new value for a fitted
+#' parameters "fixes" it. \code{NULL} by default (no new parameters).
 #'
 #' @return An instance of \code{\link{MCMCgrowth}}.
 #'
@@ -58,18 +62,33 @@
 #'
 #' ## Define the conditions for the simulation
 #'
-#' my_times <- seq(0, 15, length = 5)
-#' niter <- 3000
+#' my_times <- seq(0, 15, length = 50)
+#' niter <- 2000
+#' 
+#' newpars <- list(N0 = 1e-1,  # A parameter that was fixed
+#'                 temperature_xmax = 120  # A parameter that was fitted
+#'                 )
+#' 
+#' 
+#' ## Make the simulations
 #'
 #' my_MCMC_prediction <- predict_MCMC_growth(my_MCMC_fit,
 #'     my_times,
 #'     example_env_conditions, # It could be different from the one used for fitting
-#'     niter)
+#'     niter,
+#'     newpars)
+#'     
+#' ## We can plot the prediction interval
 #'
 #' plot(my_MCMC_prediction)
+#' 
+#' ## We can also get the quantiles at each time point
+#' 
+#' print(my_MCMC_prediction$quantiles)
 #' }
 #'
-predict_MCMC_growth <- function(MCMCfit, times, env_conditions, niter) {
+predict_MCMC_growth <- function(MCMCfit, times, env_conditions, niter,
+                                newpars = NULL) {
 
     ## Extract the parameters
 
@@ -82,6 +101,28 @@ predict_MCMC_growth <- function(MCMCfit, times, env_conditions, niter) {
     known_pars <- MCMCfit$known
 
     sec_model_names <- MCMCfit$sec_models
+    
+    ## Set up the new parameters
+    
+    if (!is.null(newpars)) {
+        
+        for (each_par in names(newpars)) {
+            
+            if (each_par %in% names(par_sample)) {
+                
+                par_sample[[each_par]] <- newpars[[each_par]]
+                
+            } else if (each_par %in% names(known_pars)) {
+                
+                known_pars[[each_par]] <- newpars[[each_par]]
+                
+            } else {
+                stop("Parameter not defined in the model: ", each_par)
+            }
+            
+        }
+        
+    }
 
     ## Build the models
 
@@ -122,7 +163,8 @@ predict_MCMC_growth <- function(MCMCfit, times, env_conditions, niter) {
     out <- list(sample = par_sample,
                 simulations = simulations,
                 quantiles = q_values,
-                model = MCMCfit)
+                model = MCMCfit,
+                env_conditions = env_conditions)
 
     class(out) <- c("MCMCgrowth", class(out))
 

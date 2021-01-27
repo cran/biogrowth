@@ -37,7 +37,23 @@ primary_model_data <- function(model_name=NULL) {
                                                     "Baranyi, and three-phase linear models for fitting bacterial",
                                                     "growth curves. Food Microbiology, 14(4), 313-326.",
                                                     "https://doi.org/10.1006/fmic.1997.0125")
-                                        )
+                                        ),
+                       Logistic = list(identifier = "Logistic",
+                                       name = "Logistic growth model",
+                                       pars = c("logN0", "C", "mu", "lambda"),
+                                       model = logistic_model,
+                                       ref = paste("Zwietering, M. H., Jongenburger, I., Rombouts,",
+                                                   "F. M., and Riet, K. van t. (1990). Modeling of the Bacterial",
+                                                   "Growth Curve. Applied and Environmental Microbiology, 56(6), 1875-1881.")
+                                       ),
+                       Richards = list(identifier = "Richards",
+                                       name = "Richards growth model",
+                                       pars = c("logN0", "C", "mu", "lambda", "nu"),
+                                       model = richards_model,
+                                       ref = paste("Zwietering, M. H., Jongenburger, I., Rombouts,",
+                                                   "F. M., and Riet, K. van t. (1990). Modeling of the Bacterial",
+                                                   "Growth Curve. Applied and Environmental Microbiology, 56(6), 1875-1881.")
+                                       )
                        )
 
 

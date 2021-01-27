@@ -1,3 +1,20 @@
+# biogrowth 0.2.0
+
+* Included the Richards and logistic growth models.
+* predict_isothermal_growth now accepts both named vectors or list as arguments.
+* The model definition for predict_stochastic_growth has been improved. Now they are 
+defined in a single argument using a tibble which includes expected values, standard
+deviations and scale where the normal distribution is defined. This makes it easier
+to define (not so many arguments) and way more flexible (specially when it comes to 
+adding new models).
+* Using a flexible unit system was giving more issues than it solved. Especially when
+making the Baranyi model under dynamic and static conditions equivalent. Set the 
+unit system to log10 for population size and ln(units)/[time] for the growth rate.
+* Set the default binwidth of plot.TimeDistribution to NULL (geom_histogram picks it).
+* Added a new vignette about using predict_dynamic_growth() for static conditions.
+* Improved parameter validation for fit_secondary_growth.
+* Several improvements in the main vignette (new arguments, new functions, better descriptions...).
+
 # biogrowth 0.1.2
 
 * Documented S3 classes.

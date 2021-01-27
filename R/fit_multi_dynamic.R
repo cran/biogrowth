@@ -48,10 +48,23 @@ get_multi_dyna_residuals <- function(this_p, experiment_data,
 #'
 #' @inheritParams get_multi_dyna_residuals
 #' @param starting_point a named vector of starting values for the model parameters.
-#' @param ... additional arguments for \code{modFit}.
+#' @param ... additional arguments for \code{\link{modFit}}.
+#' @param check Whether to check the validity of the models. \code{TRUE} by default.
+#' @param experiment_data a nested list with the experimental data. Each entry describes
+#' one experiment as a list with two elements: data and conditions. \code{data} is a tibble
+#' with a column giving the elapsed time (named "time" by default) and another one
+#' with the decimal logarithm of the population size (named "logN" by default).
+#' \code{conditions} is a tibble with one column giving the elapsed time (using the
+#' same name as \code{data}) and as many additional columns as environmental factors.
+#' The default column names can be changed with the formula argument. 
+#' @param formula an object of class "formula" describing the x and y variables.
+#' \code{logN ~ time} as a default.
 #'
 #' @importFrom FME modFit
-#'
+#' @importFrom formula.tools lhs rhs get.vars
+#' @importFrom dplyr rename
+#' @importFrom formula.tools lhs rhs get.vars
+#' 
 #' @return An instance of \code{\link{FitMultipleDynamicGrowth}}.
 #'
 #' @export
@@ -95,7 +108,35 @@ get_multi_dyna_residuals <- function(this_p, experiment_data,
 #'
 fit_multiple_growth <- function(starting_point, experiment_data,
                                 known_pars, sec_model_names,
-                                ...) {
+                                ..., check = TRUE,
+                                formula = logN ~ time) {
+    
+    ## Check the model parameters
+    
+    if (isTRUE(check)) {
+        
+        check_secondary_pars(starting_point, known_pars, sec_model_names,
+                             primary_pars = c("mu_opt", "N0", "Nmax", "Q0"))
+        
+    }
+    
+    ## Apply the formula
+    
+    if (length(get.vars(formula)) > 2) {
+        stop("Only formulas with 2 terms are supported.")
+    }
+    
+    y_col <- lhs(formula)
+    x_col <- rhs(formula)
+    
+    for (i in 1:length(experiment_data)) {
+        
+        experiment_data[[i]]$data <- experiment_data[[i]]$data %>%
+            select(time = x_col, logN = y_col)
+        
+        experiment_data[[i]]$conditions <- experiment_data[[i]]$conditions %>%
+            rename(time = x_col)
+    }
 
     ## Fit the model
 
@@ -145,10 +186,8 @@ fit_multiple_growth <- function(starting_point, experiment_data,
 #' This functions enables to fit a growth model using a dataset comprised of
 #' several experiments with potentially different dynamic experimental conditions.
 #'
-#' @inheritParams get_multi_dyna_residuals
+#' @inheritParams fit_multiple_growth
 #' @param ... additional arguments for \code{modMCMC} (e.g. upper and lower bounds).
-#' @param starting_point a named vector with the starting values of the model parameters
-#' to estimate from the data.
 #' @param niter number of samples of the MCMC algorithm.
 #'
 #' @return An instance of \code{\link{FitMultipleGrowthMCMC}}.
@@ -197,8 +236,36 @@ fit_multiple_growth <- function(starting_point, experiment_data,
 #'
 fit_multiple_growth_MCMC <- function(starting_point, experiment_data,
                                 known_pars, sec_model_names, niter,
-                                ...) {
+                                ..., check = TRUE,
+                                formula = logN ~ time) {
 
+    ## Check the model parameters
+    
+    if (isTRUE(check)) {
+        
+        check_secondary_pars(starting_point, known_pars, sec_model_names,
+                             primary_pars = c("mu_opt", "N0", "Nmax", "Q0"))
+        
+    }
+    
+    ## Apply the formula
+    
+    if (length(get.vars(formula)) > 2) {
+        stop("Only formulas with 2 terms are supported.")
+    }
+    
+    y_col <- lhs(formula)
+    x_col <- rhs(formula)
+    
+    for (i in 1:length(experiment_data)) {
+        
+        experiment_data[[i]]$data <- experiment_data[[i]]$data %>%
+            select(time = x_col, logN = y_col)
+        
+        experiment_data[[i]]$conditions <- experiment_data[[i]]$conditions %>%
+            rename(time = x_col)
+    }
+    
     ## Fit the model
 
     my_fit <- modMCMC(get_multi_dyna_residuals, unlist(starting_point),

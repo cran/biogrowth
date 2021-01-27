@@ -4,7 +4,7 @@
 \alias{predict_MCMC_growth}
 \title{Stochastic growth of MCMC fit}
 \usage{
-predict_MCMC_growth(MCMCfit, times, env_conditions, niter)
+predict_MCMC_growth(MCMCfit, times, env_conditions, niter, newpars = NULL)
 }
 \arguments{
 \item{MCMCfit}{An instance of \code{FitDynamicGrowthMCMC} or
@@ -17,6 +17,11 @@ during the experiment. It must have one column named 'time' with the
 storage time and as many columns as required with the environmental conditions.}
 
 \item{niter}{Number of iterations.}
+
+\item{newpars}{A named list defining new values for the some model parameters. 
+The name must be the identifier of a model already included in the model. 
+These parameters do not include variation, so defining a new value for a fitted
+parameters "fixes" it. \code{NULL} by default (no new parameters).}
 }
 \value{
 An instance of \code{\link{MCMCgrowth}}.
@@ -55,15 +60,29 @@ my_MCMC_fit <- fit_MCMC_growth(example_dynamic_growth, example_env_conditions,
 
 ## Define the conditions for the simulation
 
-my_times <- seq(0, 15, length = 5)
-niter <- 3000
+my_times <- seq(0, 15, length = 50)
+niter <- 2000
+
+newpars <- list(N0 = 1e-1,  # A parameter that was fixed
+                temperature_xmax = 120  # A parameter that was fitted
+                )
+
+
+## Make the simulations
 
 my_MCMC_prediction <- predict_MCMC_growth(my_MCMC_fit,
     my_times,
     example_env_conditions, # It could be different from the one used for fitting
-    niter)
+    niter,
+    newpars)
+    
+## We can plot the prediction interval
 
 plot(my_MCMC_prediction)
+
+## We can also get the quantiles at each time point
+
+print(my_MCMC_prediction$quantiles)
 }
 
 }

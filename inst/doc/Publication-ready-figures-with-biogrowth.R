@@ -80,8 +80,8 @@ plot(dynamic_prediction,
 my_data <- tibble(time = c(0, 25, 50, 75, 100),
                   logN = c(2, 2.5, 7, 8, 8))
 my_model <- "Baranyi"
-known <- c(mu = .2)
-start = c(logNmax = 8, lambda = 25, logN0 = 2)
+known <- c()
+start = c(logNmax = 8, lambda = 25, logN0 = 2, mu = .2)
 
 # Fitting
 static_fit <- fit_isothermal_growth(my_data, my_model,
@@ -98,16 +98,20 @@ plot(static_fit,
 
 ## -----------------------------------------------------------------------------
 # Example data from the main vignette
-my_model <- "Trilinear"
-my_times <- seq(0, 30, length = 100)
-n_sims <- 1000
 
-# Calling the function
-stoc_growth <- predict_stochastic_growth(my_model, my_times, n_sims,
-  mean_logN0 = 0, sd_logN0 = .2,
-  mean_sqmu = 2,sd_sqmu = .3,
-  mean_sqlambda = 4, sd_sqlambda = .4,
-  mean_logNmax = 6, sd_logNmax = .5)
+my_model <- "Baranyi"
+my_times <- seq(0, 30, length = 100)
+n_sims <- 100  # Just as an example, should be increased in actual analyses
+
+pars <- tribble(
+    ~par, ~mean, ~sd, ~scale,
+    "logN0", 0, .2, "original",
+    "mu", 2, .3, "sqrt",
+    "lambda", 4, .4, "sqrt",
+    "logNmax", 6, .5, "original"
+)
+
+stoc_growth <- predict_stochastic_growth(my_model, my_times, n_sims, pars)
 
 ## -----------------------------------------------------------------------------
 plot(stoc_growth, 
@@ -201,19 +205,6 @@ P +
   theme(axis.line = element_line(colour = 'black', size = 0.4))
 
 ## -----------------------------------------------------------------------------
-# Example of full control over stochastic simulation
-
-# Defining parameters 
-my_model <- "Trilinear"
-my_times <- seq(0, 30, length = 100)
-n_sims <- 1000
-
-# Calling the function
-stoc_growth <- predict_stochastic_growth(my_model, my_times, n_sims,
-  mean_logN0 = 0, sd_logN0 = .2,
-  mean_sqmu = 2,sd_sqmu = .3,
-  mean_sqlambda = 4, sd_sqlambda = .4,
-  mean_logNmax = 6, sd_logNmax = .5)
 
 # Plotting
 ggplot(stoc_growth$quantiles, aes(x = .data$time)) +
