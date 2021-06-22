@@ -47,6 +47,8 @@
 #' my_times <- seq(0, 30, length = 100)
 #' n_sims <- 3000
 #' 
+#' library(tibble)
+#' 
 #' pars <- tribble(
 #'     ~par, ~mean, ~sd, ~scale,
 #'     "logN0", 0, .2, "original",
@@ -111,7 +113,7 @@ predict_stochastic_growth <- function(model_name, times, n_sims,
         new_col <- switch(transf,
                           original = par_sample[,i],
                           sqrt = par_sample[,i]^2,
-                          log = exp(par_sample[,i]),
+                          log = 10^par_sample[,i],
                           stop("Unknown scale:", transf)
         )
         

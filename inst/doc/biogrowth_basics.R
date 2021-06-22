@@ -353,12 +353,12 @@ pars <- tribble(
     ~par, ~mean, ~sd, ~scale,
     "logN0", 0, .2, "original",
     "mu", 2, .3, "sqrt",
-    "lambda", 4, .4, "log",
+    "lambda", .5, .1, "log",
     "C", 6, .5, "original"
     )
 
 ## -----------------------------------------------------------------------------
-my_times <- seq(0, 200, length = 100)
+my_times <- seq(0, 15, length = 100)
 
 ## -----------------------------------------------------------------------------
 n_sims <- 1000
@@ -503,7 +503,7 @@ other_prediction <- predict_MCMC_growth(my_MCMC_fit,
 plot(other_prediction)
 
 ## -----------------------------------------------------------------------------
-time_distrib <- distribution_to_logcount(stoc_growth, 4)
+time_distrib <- distribution_to_logcount(stoc_growth, 3)
 
 ## -----------------------------------------------------------------------------
 time_distrib$summary
@@ -512,5 +512,5 @@ time_distrib$summary
 plot(time_distrib)
 
 ## -----------------------------------------------------------------------------
-plot(time_distrib, bin_width = 2)
+plot(time_distrib, bin_width = .5)
 

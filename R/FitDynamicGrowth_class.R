@@ -185,13 +185,15 @@ fitted.FitDynamicGrowth <- function(object, ...) {
 #' 
 #' @param object an instance of \code{FitDynamicGrowth}.
 #' @param ... ignored
+#' @param times A numeric vector with the time points for the simulations. \code{NULL}
+#' by default (using the same time points as those for the simulation).
 #' @param newdata a tibble describing the environmental conditions (as \code{env_conditions})
 #' in \code{\link{predict_dynamic_growth}}. 
 #' If \code{NULL} (default), uses the same conditions as those for fitting.
 #' 
 #' @export
 #' 
-predict.FitDynamicGrowth <- function(object, newdata = NULL, ...) {
+predict.FitDynamicGrowth <- function(object, times = NULL, newdata = NULL, ...) {
     
     if (is.null(newdata)) {
         
@@ -199,9 +201,13 @@ predict.FitDynamicGrowth <- function(object, newdata = NULL, ...) {
         
     }
     
+    if (is.null(times)) {
+        times <- object$data$time
+    }
+    
     
     pred <- predict_dynamic_growth(
-        object$data$time,
+        times,
         newdata,
         object$best_prediction$primary_pars,
         object$best_prediction$sec_models
