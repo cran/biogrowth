@@ -325,7 +325,9 @@ start <- list(mu_opt = .8, temperature_xopt = 30)
 
 
 ## -----------------------------------------------------------------------------
-global_fit <- fit_multiple_growth(start, multiple_experiments, known, sec_names)
+global_fit <- fit_multiple_growth(start, multiple_experiments, known, sec_names,
+                                  lower = c(.5, 25),
+                                  upper = c(1, 33))
 
 ## -----------------------------------------------------------------------------
 summary(global_fit)

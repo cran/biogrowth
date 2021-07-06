@@ -1,3 +1,8 @@
+# biogrowth 0.2.2
+
+* Added an alias to the mod-Gompertz function so ??modGompertz or ??gompertz finds it
+* Added bounds for fit_multiple_growth in the vignette to avoid an error message in CRAN on macOS.
+
 # biogrowth 0.2.1
 
 * Included a times argument to the predict methods of dynamic fitting functions.

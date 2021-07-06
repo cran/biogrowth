@@ -1,6 +1,6 @@
-be6870b8024cac3e52c3b12a32bef76e *DESCRIPTION
+140d181282d6d9fd8d0c9624d7e1121f *DESCRIPTION
 43dab8913ee2e0eb1e8c5914889d3327 *NAMESPACE
-cfcc46e89ca01123f016ef904a16601a *NEWS.md
+a8812679d0155fc5e27a02c159243f5a *NEWS.md
 72aadb3e49c57e1bcb0517822887f5c4 *R/DynamicGrowth_class.R
 ef431af54b9800b6d6c2b6150270e03a *R/FitDynamicGrowthMCMC_class.R
 1a53c274853714075bf70dbaf6fab5f8 *R/FitDynamicGrowth_class.R
@@ -26,7 +26,7 @@ f4f1412c621f9209e940076fba6120dc *R/baranyi_model.R
 f2b197d435c8b304db8609ac5db4dbf3 *R/metainfo_secondary.R
 e5888d8dfbdf39ec80e34b3735315a4c *R/predict_MCMC_growth.R
 2af3a2199b025d179227ccd6cae88925 *R/predict_dynamic_growth.R
-66911a2f1f45b541b58ff601cdce332a *R/predict_isothermal_growth.R
+eea3e584aafd007ca7acc411ede6d76c *R/predict_isothermal_growth.R
 3da51677944b2ac3586c44d10825d694 *R/predict_stochastic_growth.R
 790032248f8ce0836159f51e390e73c4 *README.md
 2f32421fd5dfbe0476e5f5bd6e9980ae *build/vignette.rds
@@ -41,9 +41,9 @@ d180c479f6831ec3e9396a04378ec9d6 *data/example_cardinal.rda
 1727ab30ed3f980d2c627fe56a7e7608 *inst/doc/Publication-ready-figures-with-biogrowth.R
 357d59adacdc2583ebf112444d2285d7 *inst/doc/Publication-ready-figures-with-biogrowth.Rmd
 dd02df9b8459a24efb0fb5887254bc20 *inst/doc/Publication-ready-figures-with-biogrowth.html
-ab44094ee2cb0f50d7e97df99845148f *inst/doc/biogrowth_basics.R
-9beefe6cc163198d123c2d34d1d9b9ff *inst/doc/biogrowth_basics.Rmd
-2809c6a3f74b2aea1b1f75ec6a189852 *inst/doc/biogrowth_basics.html
+ecc399590b1bc2cf62c6aefece3b6de7 *inst/doc/biogrowth_basics.R
+0a47bb11059dad01e50c55c989460ec8 *inst/doc/biogrowth_basics.Rmd
+fccb213d6bfab108cd663df56b0ba3fd *inst/doc/biogrowth_basics.html
 3163ec085d37b14d0a13f13f91a81a5e *inst/doc/dynamic_for_static.R
 4fcb8f7ba35c7c4ce214bfa24624e44c *inst/doc/dynamic_for_static.Rmd
 11eafec5ed1b7997ce31ae3f577421ef *inst/doc/dynamic_for_static.html
@@ -102,7 +102,7 @@ a7872b56c462652346b26264d4df5c18 *man/is.IsothermalGrowth.Rd
 36bb20aac68de6a995371ba79569bac3 *man/is.MCMCgrowth.Rd
 efa9c17a2b63bea679d6ed6f9e381af8 *man/is.StochasticGrowth.Rd
 452b66fb3ede85c3d5a2aca854fad5af *man/iso_Baranyi.Rd
-b623ff0080bb6bd8447c06e997dc7071 *man/iso_repGompertz.Rd
+69c8c85d56e7a09f0f6ea1dbb23d9a7c *man/iso_repGompertz.Rd
 94da5f018a82521d37fda6b3f8ed5ab8 *man/lambda_to_Q0.Rd
 32bb055ab613703c3f4bde3f67341ae7 *man/logistic_model.Rd
 03e0237fbd215ac6aa0345035f2e3f14 *man/multiple_experiments.Rd
@@ -117,5 +117,5 @@ b02cb19cc05a20f694ffeb4766fab6b9 *man/secondary_model_data.Rd
 b3cb6fda9f5bf933a15cc8a450781806 *man/trilinear_model.Rd
 65c62da797790eb5fb10a100c5c22414 *man/zwietering_gamma.Rd
 357d59adacdc2583ebf112444d2285d7 *vignettes/Publication-ready-figures-with-biogrowth.Rmd
-9beefe6cc163198d123c2d34d1d9b9ff *vignettes/biogrowth_basics.Rmd
+0a47bb11059dad01e50c55c989460ec8 *vignettes/biogrowth_basics.Rmd
 4fcb8f7ba35c7c4ce214bfa24624e44c *vignettes/dynamic_for_static.Rmd
