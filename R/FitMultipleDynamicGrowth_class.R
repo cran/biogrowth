@@ -2,13 +2,16 @@
 #' FitMultipleDynamicGrowth class
 #' 
 #' @description 
-#' The \code{FitMultipleDynamicGrowth} class contains a model fitted to a set
-#' of experiments gathered under dynamic conditions. Its constructor is 
-#' \code{\link{fit_multiple_growth}}.
+#' `r lifecycle::badge("superseded")`
+#' 
+#' The class [FitMultipleDynamicGrowth] has been superseded by the top-level
+#' class [GlobalGrowthFit], which provides a unified approach for growth modelling.
+#' 
+#' Still, it is still returned if the superseded [fit_multiple_growth()] is called.
 #' 
 #' It is a subclass of list with the items:
 #'      \itemize{
-#'          \item fit_results: the object returned by \code{modFit}.
+#'          \item fit_results: the object returned by `modFit`.
 #'          \item best_prediction: a list with the models predictions for each condition.
 #'          \item data: a list with the data used for the fit.
 #'          \item starting: starting values for model fitting
@@ -23,7 +26,7 @@ NULL
 
 #' @describeIn FitMultipleDynamicGrowth print of the model
 #' 
-#' @param x An instance of \code{FitMultipleDynamicGrowth}.
+#' @param x An instance of `FitMultipleDynamicGrowth`.
 #' @param ... ignored
 #' 
 #' @export
@@ -41,6 +44,15 @@ print.FitMultipleDynamicGrowth <- function(x, ...) {
     print(unlist(x$best_prediction[[1]]$primary_pars))
     cat("\n")
     
+    logbase <- x$logbase_mu
+    
+    if ( abs(logbase - exp(1)) < .1 ) {
+        logbase <- "e"
+    }
+    
+    cat(paste0("Parameter mu defined in log-", logbase, " scale"))
+    cat("\n\n")
+    
     for (i in 1:length(x$best_prediction[[1]]$sec_models)) {
         cat(paste("Secondary model for ", names(x$best_prediction[[1]]$sec_models)[i], ":\n", sep = ""))
         print(unlist(x$best_prediction[[1]]$sec_models[[i]]))
@@ -56,7 +68,7 @@ print.FitMultipleDynamicGrowth <- function(x, ...) {
 #' @param x an instance of FitMultipleDynamicGrowth.
 #' @param point_size Size of the data points
 #' @param point_shape shape of the data points
-#' @param subplot_labels labels of the subplots according to \code{plot_grid}.
+#' @param subplot_labels labels of the subplots according to `plot_grid`.
 #' @param label_x label of the x-axis
 #'
 #' @importFrom ggplot2 geom_point
@@ -104,14 +116,17 @@ plot.FitMultipleDynamicGrowth <- function(x, y=NULL, ...,
 
 #' @describeIn FitMultipleDynamicGrowth statistical summary of the fit.
 #'
-#' @param object Instance of \code{FitMultipleDynamicGrowth}.
+#' @param object Instance of `FitMultipleDynamicGrowth`.
 #' @param ... ignored
 #'
 #' @export
 #'
 summary.FitMultipleDynamicGrowth <- function(object, ...) {
     
-    summary(object$fit_results)
+    out <- summary(object$fit)
+    out$logbase_mu <- object$logbase_mu
+    
+    out
     
 }
 
@@ -119,7 +134,7 @@ summary.FitMultipleDynamicGrowth <- function(object, ...) {
 #' tibble with 4 columns: time (storage time), logN (observed count),
 #' exp (name of the experiment) and res (residual).
 #'
-#' @param object Instance of \code{FitMultipleDynamicGrowth}.
+#' @param object Instance of `FitMultipleDynamicGrowth`.
 #' @param ... ignored
 #'
 #' @importFrom stats residuals
@@ -127,8 +142,6 @@ summary.FitMultipleDynamicGrowth <- function(object, ...) {
 #' @export
 #'
 residuals.FitMultipleDynamicGrowth <- function(object, ...) {
-    
-    residuals(object$fit_results)
     
     object$data %>%
         map(~ .$data) %>%
@@ -139,7 +152,7 @@ residuals.FitMultipleDynamicGrowth <- function(object, ...) {
 
 #' @describeIn FitMultipleDynamicGrowth vector of fitted parameters.
 #'
-#' @param object an instance of \code{FitMultipleDynamicGrowth}.
+#' @param object an instance of `FitMultipleDynamicGrowth`.
 #' @param ... ignored
 #'
 #' @importFrom stats coef
@@ -155,7 +168,7 @@ coef.FitMultipleDynamicGrowth <- function(object, ...) {
 #' @describeIn FitMultipleDynamicGrowth (unscaled) variance-covariance matrix, 
 #' estimated as 1/(0.5*Hessian).
 #'
-#' @param object an instance of \code{FitMultipleDynamicGrowth}.
+#' @param object an instance of `FitMultipleDynamicGrowth`.
 #' @param ... ignored
 #'
 #' @export
@@ -181,7 +194,7 @@ vcov.FitMultipleDynamicGrowth <- function(object, ...) {
 
 #' @describeIn FitMultipleDynamicGrowth deviance of the model.
 #'
-#' @param object an instance of \code{FitMultipleDynamicGrowth}.
+#' @param object an instance of `FitMultipleDynamicGrowth`.
 #' @param ... ignored
 #' 
 #' @importFrom stats deviance
@@ -198,7 +211,7 @@ deviance.FitMultipleDynamicGrowth <- function(object, ...) {
 #' tibble with 3 columns: time (storage time), exp (experiment 
 #' identifier) and fitted (fitted value).
 #' 
-#' @param object an instance of \code{FitMultipleDynamicGrowth}.
+#' @param object an instance of `FitMultipleDynamicGrowth`.
 #' @param ... ignored
 #' 
 #' @importFrom rlang .data
@@ -215,60 +228,102 @@ fitted.FitMultipleDynamicGrowth <- function(object, ...) {
     
 }
 
-#' @describeIn FitMultipleDynamicGrowth model predictions. They are returned as 
-#' a tibble with 3 columns: time (storage time), logN (observed count),
-#' and exp (name of the experiment).
+#' @describeIn FitMultipleDynamicGrowth vector of model predictions
 #'
-#' @param object Instance of \code{FitMultipleDynamicGrowth}.
+#' @param object Instance of `FitMultipleDynamicGrowth`.
 #' @param ... ignored
-#' @param times A numeric vector with the time points for the simulations. \code{NULL}
-#' by default (using the same time points as those for the simulation).
-#' @param newdata a tibble describing the environmental conditions (as \code{env_conditions})
-#' in \code{\link{fit_multiple_growth}}. 
-#' If \code{NULL} (default), uses the same conditions as those for fitting.
+#' @param times A numeric vector with the time points for the simulations. `NULL`
+#' by default (using the same time points as the ones defined in `env_conditions`).
+#' @param env_conditions a tibble describing the environmental conditions (as
+#' in [fit_multiple_growth()]. 
 #' 
 #' @importFrom dplyr bind_rows
 #'
 #' @export
 #'
-predict.FitMultipleDynamicGrowth <- function(object, times=NULL, newdata=NULL, ...) {
+predict.FitMultipleDynamicGrowth <- function(object, env_conditions, times=NULL, ...) {
     
-    if (is.null(newdata)) {
+    if (is.null(times)) {
         
-        newdata <- object$data
+        times <- env_conditions$time
         
     }
     
-    out <- lapply(1:length(newdata), function(i) {
-        
-        if (is.null(times)) {
-            times <- newdata[[i]]$data$time
-        } 
-        
-        pred <- predict_dynamic_growth(
-            times,
-            newdata[[i]]$conditions,
-            object$best_prediction[[1]]$primary_pars,
-            object$best_prediction[[1]]$sec_models
-        )
-        
-        exp_name <- names(newdata)[[i]]
-        
-        if (is.null(exp_name)) {
-            exp_name <- paste0("exp", i)
-        }
-        
-        tibble(time = times,
-               exp = exp_name,
-               logN = pred$simulation$logN)
-        
-    }) 
+    my_model <- object$best_prediction[[1]]  # Index does not matter, parameters are the same
     
-    bind_rows(out)
+    # pred <- predict_dynamic_growth(
+    #     times,
+    #     env_conditions,
+    #     my_model$primary_pars,
+    #     my_model$sec_models
+    # )
+    
+    pred <- predict_growth(environment = "dynamic",
+                           times,
+                           my_model$primary_pars,
+                           my_model$sec_models,
+                           env_conditions,
+                           logbase_mu = object$logbase_mu 
+    )
+    
+    pred$simulation$logN
+
+}
+
+#' @describeIn FitMultipleDynamicGrowth loglikelihood of the model
+#' 
+#' @param object an instance of FitMultipleDynamicGrowth
+#' @param ... ignored
+#' 
+#' @export
+#' 
+logLik.FitMultipleDynamicGrowth <- function(object, ...) {
+    
+    n <- object$data %>% map_dfr(~.$data) %>% nrow()
+    
+    df <- n - length(coef(object))
+    SS <- sum(residuals(object)$res^2)
+    
+    sigma <- sqrt(SS/df)
+
+    lL <- - n/2*log(2*pi) -n/2 * log(sigma^2) - 1/2/sigma^2*SS
+    
+    lL
     
 }
 
 
+#' @describeIn FitMultipleDynamicGrowth Akaike Information Criterion
+#'
+#' @param object an instance of FitMultipleDynamicGrowth
+#' @param ... ignored
+#' @param k penalty for the parameters (k=2 by default)
+#' 
+#' @importFrom stats logLik
+#'
+#' @export
+#'
+AIC.FitMultipleDynamicGrowth <- function(object, ..., k=2) {
+    
+    ## Normal AIC
+    
+    p <- length(coef(object))
+    
+    lL <- logLik(object) 
+    
+    AIC <- 2*p - 2*lL
+    
+    ## Calculate the penalty
+    
+    n <- object$data %>% map_dfr(~.$data) %>% nrow()
+    
+    penalty <- (k*p^2 + k*p)/(n - p - 1)
+    
+    ## Return
+    
+    AIC + penalty
+    
+}
 
 
 

@@ -1,28 +1,38 @@
 
 #' Growth under dynamic conditions
+#' 
+#' @description 
+#' `r lifecycle::badge("superseded")`
+#' 
+#' The function [predict_dynamic_growth()] has been superseded by the top-level
+#' function [predict_growth()], which provides a unified approach for growth modelling.
 #'
-#' Predicts population growth under dynamic conditions based on the
+#' Regardless on that, it can still predict population growth under dynamic conditions based on the
 #' Baranyi model (Baranyi and Roberts, 1994) and secondary models
 #' based on the gamma concept (Zwietering et al. 1992).
 #'
 #' Model predictions are done by linear interpolation of the environmental
-#' conditions defined in \code{env_conditions}.
+#' conditions defined in `env_conditions`.
 #'
 #' @param times Numeric vector of storage times to make the predictions
-#' @param env_conditions Tibble describing the variation of the environmental
-#' conditions during storage. It must have with the elapsed time (named \code{time} 
+#' @param env_conditions Tibble (or data.frame) describing the variation of the environmental
+#' conditions during storage. It must have with the elapsed time (named `time` 
 #' by default; can be changed with the "formula" argument), 
 #' and as many additional columns as environmental factors.
 #' @param primary_pars A named list defining the parameters of the primary model
-#' and the initial values of the model variables. That is, with names \code{mu_opt},
-#' \code{Nmax}, \code{N0}, \code{Q0}.
+#' and the initial values of the model variables. That is, with names `mu_opt`,
+#' `Nmax`, `N0`, `Q0`.
 #' @param secondary_models A nested list describing the secondary models.
-#' @param ... Additional arguments for \code{\link{ode}}.
-#' @param check Whether to check the validity of the models. \code{TRUE} by default.
+#' @param ... Additional arguments for [ode()].
+#' @param check Whether to check the validity of the models. `TRUE` by default.
 #' @param formula An object of class "formula" describing the x variable.
-#' \code{. ~ time} as a default.
+#' `. ~ time` as a default.
+#' @param logbase_mu Base of the logarithm the growth rate is referred to. 
+#' By default, the same as logbase_logN. See vignette about units for details. 
+#' @param logbase_logN Base of the logarithm for the population size. By default,
+#' 10 (i.e. log10). See vignette about units for details.
 #'
-#' @return An instance of \code{\link{DynamicGrowth}}.
+#' @return An instance of [DynamicGrowth()].
 #'
 #' @importFrom deSolve ode
 #' @importFrom tibble as_tibble
@@ -86,8 +96,10 @@ predict_dynamic_growth <- function(times, env_conditions, primary_pars,
                                    secondary_models, 
                                    ...,
                                    check = TRUE,
-                                   formula = . ~ time) {
-    
+                                   logbase_logN = 10,
+                                   logbase_mu = logbase_logN,
+                                   formula = . ~ time
+                                   ) {
     ## Apply the formula
     
     x_col <- rhs(formula)
@@ -118,25 +130,31 @@ predict_dynamic_growth <- function(times, env_conditions, primary_pars,
                              primary_pars = c("mu_opt", "N0", "Nmax", "Q0"))
         
     }
+    
+    ## Apply the logbase transformation to mu
+    
+    primary_pars_calc <- primary_pars
+    
+    primary_pars_calc$mu_opt <- primary_pars_calc$mu_opt/log(10, base = logbase_mu)
 
     ## Prepare stuff
 
     my_env <- approx_env(env_conditions)
 
-    yini <- c(Q = primary_pars$Q0,
-              N = primary_pars$N0
+    yini <- c(Q = primary_pars_calc$Q0,
+              N = primary_pars_calc$N0
               )
 
     ## Make the simulation
 
-    my_sim <- ode(yini, times, dBaranyi, primary_pars,
+    my_sim <- ode(yini, times, dBaranyi, primary_pars_calc,
                   env_func = my_env,
                   sec_models = secondary_models,
                   ...
     ) %>%
         as.data.frame() %>%
         as_tibble() %>%
-        mutate(logN = log10(.data$N))
+        mutate(logN = log(.data$N, base = logbase_logN))
 
     ## Calculate the gammas
 
@@ -157,7 +175,9 @@ predict_dynamic_growth <- function(times, env_conditions, primary_pars,
                 gammas = as_tibble(gammas),
                 env_conditions = my_env,
                 primary_pars = primary_pars,
-                sec_models = secondary_models)
+                sec_models = secondary_models,
+                logbase_mu = logbase_mu,
+                logbase_logN = logbase_logN)
 
     class(out) <- c("DynamicGrowth", class(out))
 

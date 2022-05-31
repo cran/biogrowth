@@ -2,14 +2,18 @@
 #' DynamicGrowth class
 #' 
 #' @description 
-#' The \code{DynamicGrowth} class contains the results of a growth prediction
-#' under dynamic conditions. Its constructor is \code{\link{predict_dynamic_growth}}.
+#' `r lifecycle::badge("superseded")`
+#' 
+#' The class [DynamicGrowth] has been superseded by the top-level
+#' class [GrowthPrediction], which provides a unified approach for growth modelling.
+#' 
+#' Still, it is returned if the superseded [predict_dynamic_growth()] is called.
 #' 
 #' A subclass of list with items:
 #' \itemize{
 #' \item simulation: A tibble with the model prediction
 #' \item gammas: A tibble with the value of each gamma factor for each
-#' value of \code{times}.
+#' value of `times`.
 #' \item env_conditions: A list of functions interpolating the environmental
 #' conditions.
 #' \item primary_pars: A list with the model parameters of the primary model.
@@ -22,7 +26,7 @@ NULL
 
 #' @describeIn DynamicGrowth print of the model
 #' 
-#' @param x An instance of \code{DynamicGrowth}.
+#' @param x An instance of `DynamicGrowth`.
 #' @param ... ignored
 #' 
 #' @export
@@ -38,6 +42,13 @@ print.DynamicGrowth <- function(x, ...) {
     print(unlist(x$primary_pars))
     cat("\n")
     
+    logbase <- x$logbase_mu
+    
+    if ( abs(logbase - exp(1)) < .1 ) {
+        logbase <- "e"
+    }
+    cat(paste0("Parameter mu defined in log-", logbase, " scale\n\n"))
+    
     for (i in 1:length(x$sec_models)) {
         cat(paste("Secondary model for ", names(x$sec_models)[i], ":\n", sep = ""))
         print(unlist(x$sec_models[[i]]))
@@ -48,22 +59,23 @@ print.DynamicGrowth <- function(x, ...) {
 
 #' @describeIn DynamicGrowth predicted growth curve under dynamic conditions.
 #'
-#' @param x The object of class \code{DynamicGrowth} to plot.
+#' @param x The object of class `DynamicGrowth` to plot.
 #' @param y ignored
-#' @param ... additional arguments passed to \code{plot}.
+#' @param ... additional arguments passed to `plot`.
 #' @param add_factor whether to plot also one environmental factor.
-#' If \code{NULL} (default), no environmental factor is plotted. If set
+#' If `NULL` (default), no environmental factor is plotted. If set
 #' to one character string that matches one entry of x$env_conditions,
 #' that condition is plotted in the secondary axis
 #' @param ylims A two dimensional vector with the limits of the primary y-axis.
 #' @param label_y1 Label of the primary y-axis.
 #' @param label_y2 Label of the secondary y-axis.
-#' @param line_col Aesthetic parameter to change the colour of the line geom in the plot, see: \code{\link{geom_line}}
-#' @param line_size Aesthetic parameter to change the thickness of the line geom in the plot, see: \code{\link{geom_line}}
-#' @param line_type Aesthetic parameter to change the type of the line geom in the plot, takes numbers (1-6) or strings ("solid") see: \code{\link{geom_line}}
+#' @param line_col Aesthetic parameter to change the colour of the line geom in the plot, see: [geom_line()]
+#' @param line_size Aesthetic parameter to change the thickness of the line geom in the plot, see: [geom_line()]
+#' @param line_type Aesthetic parameter to change the type of the line geom in the plot, takes numbers (1-6) or strings ("solid") see: [geom_line()]
 #' @param line_col2 Same as lin_col, but for the environmental factor.
 #' @param line_size2 Same as line_size, but for the environmental factor.
 #' @param line_type2 Same as lin_type, but for the environmental factor.
+#' @param label_x Label of the x-axis.
 #'
 #' @export
 #'
@@ -81,7 +93,8 @@ plot.DynamicGrowth <- function(x, y=NULL, ...,
                                line_type = "solid",
                                line_col2 = "black",
                                line_size2 = 1,
-                               line_type2 = "dashed"
+                               line_type2 = "dashed",
+                               label_x = "time"
 ) {
     
     p <- ggplot(x$simulation) +
@@ -131,8 +144,28 @@ plot.DynamicGrowth <- function(x, y=NULL, ...,
                                                    name = label_y2))
         
         
+    } else {
+        p <- p + scale_y_continuous(limits = ylims,
+                                    name = label_y1)
     }
     
-    p + theme_cowplot()
+    p + theme_cowplot() + xlab(label_x)
     
 }
+
+#' @describeIn DynamicGrowth coefficients of the model
+#' 
+#' @param object an instance of [DynamicGrowth]
+#' @param ... ignored
+#' 
+#' @export
+#' 
+coef.DynamicGrowth <- function(object, ...) {
+    
+    list(
+        primary = object$primary_pars,
+        secondary = object$sec_models
+        )
+    
+}
+

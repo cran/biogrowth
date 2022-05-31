@@ -68,10 +68,11 @@ by default.}
 \item{ylims}{limits of the primary y-axis. \code{NULL} by default (let ggplot choose).}
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 The \code{MCMCgrowth} class contains the results of a growth prediction
 consider parameter variability based on a model
-fitted using \code{\link{fit_MCMC_growth}} or 
-\code{\link{fit_multiple_growth_MCMC}}.
+fitted using an MCMC algorithm.
 
 It is a subclass of list with items:
 \itemize{
@@ -79,7 +80,7 @@ It is a subclass of list with items:
 \item simulations: Individual growth curves calculated based on the parameter
 sample.
 \item quantiles: Tibble with the limits of the credible intervals
- (5%, 10%, 50%, 90% and 95%) for each time point.
+(5\%, 10\%, 50\%, 90\% and 95\%) for each time point.
 \item model: Instance of \code{FitDynamicGrowthMCMC} used for predictions.
 \item env_conditions: A tibble with the environmental conditions of the simulation.
 }

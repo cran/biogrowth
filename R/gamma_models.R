@@ -26,7 +26,7 @@ CPM_model <- function(x, xmin, xopt, xmax, n) {
 #' Zwietering gamma model
 #'
 #' Gamma model as defined by Zwietering et al. (1992). To avoid unreasonable predictions,
-#' it has been modified setting gamma=0 for values of x outside [xmin, xopt]
+#' it has been modified setting gamma=0 for values of x outside (xmin, xopt)
 #'
 #' @param x Value of the environmental factor.
 #' @param xmin Minimum value of the environmental factor for growth.
@@ -77,12 +77,12 @@ full_Ratkowski <- function(x, xmin, xmax, c) {
 
 #' Calculates every gamma factor
 #'
-#' A helper function for \code{\link{predict_dynamic_growth}} that
+#' A helper function for [predict_dynamic_growth()] that
 #' calculates the value of every gamma factor corresponding to some
 #' storage time.
 #'
 #' @param this_t Storage time
-#' @param env_func A list of functions (generated using \code{approxfun}) that
+#' @param env_func A list of functions (generated using `approxfun`) that
 #' give the value of each environmental function for some storage time.
 #' @param sec_models A nested list describing the secondary models.
 #'

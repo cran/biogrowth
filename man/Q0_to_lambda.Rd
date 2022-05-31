@@ -4,19 +4,23 @@
 \alias{Q0_to_lambda}
 \title{Lag phase duration from Q0}
 \usage{
-Q0_to_lambda(q0, mu)
+Q0_to_lambda(q0, mu, logbase_mu = 10)
 }
 \arguments{
 \item{q0}{Initial value of the variable Q.}
 
-\item{mu}{Specific growth rate in the exponential phase (log10(units)/[time]).}
+\item{mu}{Specific growth rate in the exponential phase.}
+
+\item{logbase_mu}{Base of the logarithm the growth rate is referred to.
+By default, 10 (i.e. log10). See vignette about units for details.}
 }
 \description{
-Convenience function to calculate the lag phase duration (lambda) of the 
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
+Convenience function to calculate the lag phase duration (lambda) of the
 Baranyi model from the
 maximum specific growth rate and the initial value of the variable Q.
-}
-\details{
+
 Note that this function uses the unit system of biogrowth (i.e. log10). Care must
 be taken when using parameters obtained from other sources.
 }

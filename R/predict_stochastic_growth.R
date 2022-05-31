@@ -1,14 +1,55 @@
 
-#' Isothermal growth with variability
+#' Deprecated isothermal growth with parameter uncertainty
+#' 
+#' @description 
+#' `r lifecycle::badge("deprecated")`
+#' 
+#' [predict_stochastic_growth()] was renamed [predict_growth_uncertainty()] because
+#' the original function name may be misleading, as this is not a stochastic
+#' differential equation
+#' 
+#' @inheritParams predict_growth_uncertainty
+#' 
+#' @importFrom lifecycle deprecate_warn
+#' @export
+#' 
+predict_stochastic_growth <- function(model_name, 
+                                      times, 
+                                      n_sims,
+                                      pars, 
+                                      corr_matrix = diag(nrow(pars)),
+                                      check = TRUE
+                                      ) {
+    
+    deprecate_warn("1.0.0", "predict_stochastic_growth()", 
+                   "predict_growth_uncertainty()")
+    
+    predict_growth_uncertainty(model_name, 
+                               times, 
+                               n_sims,
+                               pars, 
+                               corr_matrix,
+                               check
+                               )
+    
+}
+
+
+#' Isothermal growth with parameter uncertainty
+#' 
+#' @description
+#' `r lifecycle::badge("stable")`
 #'
-#' Stochastic simulation of microbial growth based on probability
-#' distributions of the parameters of the primary model. It is included by
-#' Monte Carlo simulation considering the parameters follow a multivariate normal
+#' Simulation of microbial growth considering uncertianty in the model parameters.
+#' Calculations are based on 
+#' Monte Carlo simulations, considering the parameters follow a multivariate normal
 #' distribution. 
 #' 
-#' They are defined in the \code{pars} argument using a tibble with 4 columns:
+#' @details
+#' The distributions of the model parameters are
+#' defined in the `pars` argument using a tibble with 4 columns:
 #' \itemize{
-#'     \item{par: identifier of the model parameter (according to \code{\link{primary_model_data}})},
+#'     \item{par: identifier of the model parameter (according to [primary_model_data()])},
 #'     \item{mean: mean value of the model parameter.},
 #'     \item{sd: standard deviation of the model parameter.},
 #'     \item{scale: scale at which the model parameter is defined. Valid values are
@@ -23,11 +64,11 @@
 #' @param n_sims Number of simulations.
 #' @param pars A tibble describing the parameter uncertainty (see details).
 #' @param corr_matrix Correlation matrix of the model parameters. Defined in the
-#' same order as in \code{pars}. An identity matrix by default
+#' same order as in `pars`. An identity matrix by default
 #' (uncorrelated parameters).
-#' @param check Whether to do some tests. \code{FALSE} by default.
+#' @param check Whether to do some tests. `FALSE` by default.
 #'
-#' @return An instance of \code{\link{StochasticGrowth}}.
+#' @return An instance of [GrowthUncertainty()].
 #'
 #' @importFrom MASS mvrnorm
 #' @importFrom dplyr mutate
@@ -59,7 +100,7 @@
 #' 
 #' ## Calling the function
 #' 
-#' stoc_growth <- predict_stochastic_growth(my_model, my_times, n_sims, pars)
+#' stoc_growth <- predict_growth_uncertainty(my_model, my_times, n_sims, pars)
 #'
 #' ## We can plot the results
 #'
@@ -73,12 +114,25 @@
 #'     0,   0,   0, 1),
 #'     nrow = 4)
 #'
-#' stoc_growth2 <- predict_stochastic_growth(my_model, my_times, n_sims, pars, my_cor)
+#' stoc_growth2 <- predict_growth_uncertainty(my_model, my_times, n_sims, pars, my_cor)
 #'
 #' plot(stoc_growth2)
+#' 
+#' ## The time_to_size function can calculate the median growth curve to reach a size
+#' 
+#' time_to_size(stoc_growth, 4)
+#' 
+#' ## Or the distribution of times
+#' 
+#' dist <- time_to_size(stoc_growth, 4, type = "distribution")
+#' plot(dist)
+#' 
 #' }
+#' 
 #'
-predict_stochastic_growth <- function(model_name, times, n_sims,
+predict_growth_uncertainty <- function(model_name, 
+                                      times, 
+                                      n_sims,
                                       pars, 
                                       corr_matrix = diag(nrow(pars)),
                                       check = TRUE
@@ -154,7 +208,7 @@ predict_stochastic_growth <- function(model_name, times, n_sims,
                 mus = mus,
                 sigma = cov_matrix)
 
-    class(out) <- c("StochasticGrowth", class(out))
+    class(out) <- c("GrowthUncertainty", class(out))
 
     out
 

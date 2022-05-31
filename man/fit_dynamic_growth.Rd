@@ -12,6 +12,8 @@ fit_dynamic_growth(
   sec_model_names,
   ...,
   check = TRUE,
+  logbase_mu = logbase_logN,
+  logbase_logN = 10,
   formula = logN ~ time
 )
 }
@@ -23,8 +25,8 @@ Different column names can be specified using the "formula" argument.}
 
 \item{env_conditions}{Tibble with the (dynamic) environmental conditions
 during the experiment. It must have one column with the
-elapsed time (named "time" by default) and as many columns as required with the 
-environmental conditions. A different column name can be specified using the 
+elapsed time (named "time" by default) and as many columns as required with the
+environmental conditions. A different column name can be specified using the
 "formula" argument, although it must be the same one as in "fit_data".
 Note that only those defined in "sec_model_names" will be considered for
 the model fit.}
@@ -34,7 +36,7 @@ Parameters for the primary model must be named in the usual way. Parameters for 
 secondary model are named as \code{env_factor}+'_'+\code{parameter}. For instance,
 the maximum growth temperature shall be named 'temperature_xmax'.}
 
-\item{known_pars}{A named vectors of known model parameters (i.e. not fitted). They
+\item{known_pars}{A named vector of known model parameters (i.e. not fitted). They
 must be named using the same convention as for \code{starting_point}.}
 
 \item{sec_model_names}{A named character vector defining the secondary model for each
@@ -45,14 +47,25 @@ Names must match columns in \code{fit_data} and \code{env_conditions}.}
 
 \item{check}{Whether to check model parameters (TRUE by default).}
 
+\item{logbase_mu}{Base of the logarithm the growth rate is referred to.
+By default, the same as logbase_logN. See vignette about units for details.}
+
+\item{logbase_logN}{Base of the logarithm for the population size. By default,
+10 (i.e. log10). See vignette about units for details.}
+
 \item{formula}{an object of class "formula" describing the x and y variables.
 \code{logN ~ time} as a default.}
 }
 \value{
-An instance of \code{\link{FitDynamicGrowth}}.
+An instance of \code{\link[=FitDynamicGrowth]{FitDynamicGrowth()}}.
 }
 \description{
-Fits a growth model to a data obtained under dynamic conditions
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
+
+The function \code{\link[=fit_dynamic_growth]{fit_dynamic_growth()}} has been superseded by the top-level
+function \code{\link[=fit_growth]{fit_growth()}}, which provides a unified approach for growth modelling.
+
+Nonetheless, it can still fit a growth model to data obtained under dynamic conditions
 using the one-step approach (non-linear regression).
 }
 \examples{

@@ -4,23 +4,29 @@
 #'
 #' Function for calculating residuals of dynamic predictions under
 #' different conditions for the same model parameters according
-#' to the requirements of \code{\link{modFit}}.
+#' to the requirements of [modFit()].
 #'
 #' @param this_p named vector of model parameters
 #' @param known_pars named vector of known model parameters
-#' @param sec_model_names named character vector with names the
-#' environmental conditions and values the secondary model (see secondary_model_data).
+#' @param sec_model_names named character vector with names of the
+#' environmental conditions and values of the secondary model (see secondary_model_data).
 #' @param experiment_data a nested list with the experimental data. Each entry describes
-#' one experiment as a list with two elements: data and conditions. \code{data} is a tibble
-#' with two columns: time and logN. \code{conditions} is a tibble with one column named time
+#' one experiment as a list with two elements: data and conditions. `data` is a tibble
+#' with two columns: time and logN. `conditions` is a tibble with one column named time
 #' and as many additional columns as environmental factors.
+#' @param logbase_mu Base of the logarithm the growth rate is referred to. 
+#' By default, the same as logbase_logN. See vignette about units for details. 
+#' @param logbase_logN Base of the logarithm for the population size. By default,
+#' 10 (i.e. log10). See vignette about units for details.
 #'
-#' @return an instance of \code{modCost}.
+#' @return an instance of `modCost`.
 #'
 #' @importFrom FME modCost
 #'
 get_multi_dyna_residuals <- function(this_p, experiment_data,
-                                     known_pars, sec_model_names) {
+                                     known_pars, sec_model_names,
+                                     logbase_mu = logbase_logN,
+                                     logbase_logN = 10) {
 
     old_cost <- NULL
 
@@ -29,7 +35,10 @@ get_multi_dyna_residuals <- function(this_p, experiment_data,
             my_cost <- get_dyna_residuals(unlist(this_p), each_experiment$data,
                                           each_experiment$conditions,
                                           unlist(known_pars), sec_model_names,
-                                          cost = old_cost)
+                                          cost = old_cost,
+                                          logbase_mu = logbase_mu,
+                                          logbase_logN = logbase_logN
+                                          )
 
             old_cost <- my_cost
 
@@ -40,32 +49,42 @@ get_multi_dyna_residuals <- function(this_p, experiment_data,
 }
 
 #' Fitting growth models to multiple dynamic experiments
+#' 
+#' @description 
+#' `r lifecycle::badge("superseded")`
+#' 
+#' The function [fit_multiple_growth()] has been superseded by the top-level
+#' function [fit_growth()], which provides a unified approach for growth modelling.
 #'
-#' This functions enables to fit a growth model using a dataset comprised of
+#' But, if you so wish, this function still enables fitting a growth model using a dataset comprised of
 #' several experiments with potentially different dynamic experimental conditions.
 #' Note that the definition of secondary models must comply with the
 #' `secondary_model_data` function.
 #'
 #' @inheritParams get_multi_dyna_residuals
 #' @param starting_point a named vector of starting values for the model parameters.
-#' @param ... additional arguments for \code{\link{modFit}}.
-#' @param check Whether to check the validity of the models. \code{TRUE} by default.
+#' @param ... additional arguments for [modFit()].
+#' @param check Whether to check the validity of the models. `TRUE` by default.
 #' @param experiment_data a nested list with the experimental data. Each entry describes
-#' one experiment as a list with two elements: data and conditions. \code{data} is a tibble
+#' one experiment as a list with two elements: data and conditions. `data` is a tibble
 #' with a column giving the elapsed time (named "time" by default) and another one
 #' with the decimal logarithm of the population size (named "logN" by default).
-#' \code{conditions} is a tibble with one column giving the elapsed time (using the
-#' same name as \code{data}) and as many additional columns as environmental factors.
+#' `conditions` is a tibble with one column giving the elapsed time (using the
+#' same name as `data`) and as many additional columns as environmental factors.
 #' The default column names can be changed with the formula argument. 
 #' @param formula an object of class "formula" describing the x and y variables.
-#' \code{logN ~ time} as a default.
+#' `logN ~ time` as a default.
+#' @param logbase_mu Base of the logarithm the growth rate is referred to. 
+#' By default, the same as logbase_logN. See vignette about units for details. 
+#' @param logbase_logN Base of the logarithm for the population size. By default,
+#' 10 (i.e. log10). See vignette about units for details.
 #'
 #' @importFrom FME modFit
 #' @importFrom formula.tools lhs rhs get.vars
 #' @importFrom dplyr rename
 #' @importFrom formula.tools lhs rhs get.vars
 #' 
-#' @return An instance of \code{\link{FitMultipleDynamicGrowth}}.
+#' @return An instance of [FitMultipleDynamicGrowth()].
 #'
 #' @export
 #'
@@ -109,7 +128,10 @@ get_multi_dyna_residuals <- function(this_p, experiment_data,
 fit_multiple_growth <- function(starting_point, experiment_data,
                                 known_pars, sec_model_names,
                                 ..., check = TRUE,
-                                formula = logN ~ time) {
+                                formula = logN ~ time,
+                                logbase_mu = logbase_logN,
+                                logbase_logN = 10
+                                ) {
     
     ## Check the model parameters
     
@@ -144,6 +166,8 @@ fit_multiple_growth <- function(starting_point, experiment_data,
                      experiment_data = experiment_data,
                      known_pars = unlist(known_pars),
                      sec_model_names = sec_model_names,
+                     logbase_mu = logbase_mu,
+                     logbase_logN = logbase_logN,
                      ...)
 
     #- Output the results
@@ -158,10 +182,20 @@ fit_multiple_growth <- function(starting_point, experiment_data,
     best_predictions <- lapply(experiment_data, function(each_experiment) {
 
         times <- seq(0, max(each_experiment$data$time), length=100)
+        
+        best_prediction <- predict_growth(environment = "dynamic",
+                                          times,
+                                          as.list(primary_pars),
+                                          secondary_models,
+                                          each_experiment$conditions,
+                                          logbase_mu = logbase_mu,
+                                          logbase_logN = logbase_logN
+        )
 
-        best_prediction <- predict_dynamic_growth(times, each_experiment$conditions,
-                                                  as.list(primary_pars),
-                                                  secondary_models)
+        # best_prediction <- predict_dynamic_growth(times, each_experiment$conditions,
+        #                                           as.list(primary_pars),
+        #                                           secondary_models
+        #                                           )
 
     })
 
@@ -172,7 +206,9 @@ fit_multiple_growth <- function(starting_point, experiment_data,
                 data = experiment_data,
                 starting = starting_point,
                 known = known_pars,
-                sec_models = sec_model_names
+                sec_models = sec_model_names,
+                logbase_mu = logbase_mu,
+                logbase_logN = logbase_logN
     )
 
     class(out) <- c("FitMultipleDynamicGrowth", class(out))
@@ -182,15 +218,23 @@ fit_multiple_growth <- function(starting_point, experiment_data,
 
 
 #' Fitting growth models to multiple dynamic experiments using MCMC
+#' 
+#' @description 
+#' `r lifecycle::badge("superseded")`
+#' 
+#' The function [fit_multiple_growth_MCMC()] has been superseded by the top-level
+#' function [fit_growth()], which provides a unified approach for growth modelling.
 #'
-#' This functions enables to fit a growth model using a dataset comprised of
+#' However, this functions can still be used to fit a growth model using a dataset comprised of
 #' several experiments with potentially different dynamic experimental conditions.
 #'
 #' @inheritParams fit_multiple_growth
-#' @param ... additional arguments for \code{modMCMC} (e.g. upper and lower bounds).
+#' @param ... additional arguments for [modMCMC] (e.g. upper and lower bounds).
 #' @param niter number of samples of the MCMC algorithm.
+#' @param logbase_logN Base of the logarithm for the population size. By default,
+#' 10 (i.e. log10). See vignette about units for details.
 #'
-#' @return An instance of \code{\link{FitMultipleGrowthMCMC}}.
+#' @return An instance of [FitMultipleGrowthMCMC()].
 #'
 #' @export
 #'
@@ -236,8 +280,12 @@ fit_multiple_growth <- function(starting_point, experiment_data,
 #'
 fit_multiple_growth_MCMC <- function(starting_point, experiment_data,
                                 known_pars, sec_model_names, niter,
-                                ..., check = TRUE,
-                                formula = logN ~ time) {
+                                ..., 
+                                check = TRUE,
+                                formula = logN ~ time,
+                                logbase_mu = logbase_logN,
+                                logbase_logN = 10
+                                ) {
 
     ## Check the model parameters
     
@@ -273,6 +321,8 @@ fit_multiple_growth_MCMC <- function(starting_point, experiment_data,
                      known_pars = unlist(known_pars),
                      sec_model_names = sec_model_names,
                      niter = niter,
+                     logbase_mu = logbase_mu,
+                     logbase_logN = logbase_logN,
                      ...)
 
     #- Output the results
@@ -287,10 +337,19 @@ fit_multiple_growth_MCMC <- function(starting_point, experiment_data,
     best_predictions <- lapply(experiment_data, function(each_experiment) {
 
         times <- seq(0, max(each_experiment$data$time), length=100)
+        
+        best_prediction <- predict_growth(environment = "dynamic",
+                                          times,
+                                          as.list(primary_pars),
+                                          secondary_models,
+                                          each_experiment$conditions,
+                                          logbase_mu = logbase_mu,
+                                          logbase_logN = logbase_logN
+        )
 
-        best_prediction <- predict_dynamic_growth(times, each_experiment$conditions,
-                                                  as.list(primary_pars),
-                                                  secondary_models)
+        # best_prediction <- predict_dynamic_growth(times, each_experiment$conditions,
+        #                                           as.list(primary_pars),
+        #                                           secondary_models)
 
     })
 
@@ -301,7 +360,9 @@ fit_multiple_growth_MCMC <- function(starting_point, experiment_data,
                 data = experiment_data,
                 starting = starting_point,
                 known = known_pars,
-                sec_models = sec_model_names
+                sec_models = sec_model_names,
+                logbase_mu = logbase_mu,
+                logbase_logN = logbase_logN
     )
 
     class(out) <- c("FitMultipleGrowthMCMC", class(out))

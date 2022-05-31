@@ -11,7 +11,9 @@ fit_isothermal_growth(
   known_pars,
   ...,
   check = TRUE,
-  formula = logN ~ time
+  formula = logN ~ time,
+  logbase_mu = logbase_logN,
+  logbase_logN = 10
 )
 }
 \arguments{
@@ -26,18 +28,30 @@ defined using the \code{formula} argument.}
 
 \item{known_pars}{Named vector of known model parameters (not fitted).}
 
-\item{...}{Additional arguments passed to \code{\link{modFit}}.}
+\item{...}{Additional arguments passed to \code{\link[=modFit]{modFit()}}.}
 
 \item{check}{Whether to do some basic checks (TRUE by default).}
 
 \item{formula}{an object of class "formula" describing the x and y variables.
 \code{logN ~ time} as a default.}
+
+\item{logbase_mu}{Base of the logarithm the growth rate is referred to.
+By default, the same as logbase_logN. See vignette about units for details.}
+
+\item{logbase_logN}{Base of the logarithm for the population size. By default,
+10 (i.e. log10). See vignette about units for details.}
 }
 \value{
-An instance of \code{\link{FitIsoGrowth}}.
+An instance of \code{\link[=FitIsoGrowth]{FitIsoGrowth()}}.
 }
 \description{
-Fits a primary growth model to data obtained under static environmental conditions.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
+
+The function \code{\link[=fit_isothermal_growth]{fit_isothermal_growth()}} has been superseded by the top-level
+function \code{\link[=fit_growth]{fit_growth()}}, which provides a unified approach for growth modelling.
+
+Nonetheless, it can still fit a primary growth model to data obtained under static
+environmental conditions.
 }
 \examples{
 

@@ -36,7 +36,7 @@ for each environmental factor.}
 model fitting. One of \code{sq} (square root; default), \code{log} (log-transform) or
 \code{none} (no transformation).}
 
-\item{...}{Additional arguments passed to \code{\link{modFit}}.}
+\item{...}{Additional arguments passed to \code{\link[=modFit]{modFit()}}.}
 
 \item{check}{Whether to do some basic checks (TRUE by default).}
 
@@ -44,9 +44,11 @@ model fitting. One of \code{sq} (square root; default), \code{log} (log-transfor
 right hand side must be ".". By default \code{mu ~ .}.}
 }
 \value{
-An instance of \code{\link{FitSecondaryGrowth}}.
+An instance of \code{\link[=FitSecondaryGrowth]{FitSecondaryGrowth()}}.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 Fits a secondary growth model to a set of growth rates obtained experimentally.
 Modelling is done according to the gamma concept proposed by Zwietering (1992)
 and cardinal parameter models.
@@ -86,5 +88,6 @@ plot(fit_cardinal)
 
 plot(fit_cardinal, which = 2)
 plot(fit_cardinal, which = 2, add_trend = TRUE)
+plot(fit_cardinal, which = 2, add_segment = TRUE)
 
 }

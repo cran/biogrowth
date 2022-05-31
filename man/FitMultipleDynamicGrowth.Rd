@@ -11,6 +11,8 @@
 \alias{deviance.FitMultipleDynamicGrowth}
 \alias{fitted.FitMultipleDynamicGrowth}
 \alias{predict.FitMultipleDynamicGrowth}
+\alias{logLik.FitMultipleDynamicGrowth}
+\alias{AIC.FitMultipleDynamicGrowth}
 \title{FitMultipleDynamicGrowth class}
 \usage{
 \method{print}{FitMultipleDynamicGrowth}(x, ...)
@@ -47,7 +49,11 @@
 
 \method{fitted}{FitMultipleDynamicGrowth}(object, ...)
 
-\method{predict}{FitMultipleDynamicGrowth}(object, times = NULL, newdata = NULL, ...)
+\method{predict}{FitMultipleDynamicGrowth}(object, env_conditions, times = NULL, ...)
+
+\method{logLik}{FitMultipleDynamicGrowth}(object, ...)
+
+\method{AIC}{FitMultipleDynamicGrowth}(object, ..., k = 2)
 }
 \arguments{
 \item{x}{an instance of FitMultipleDynamicGrowth.}
@@ -69,11 +75,11 @@ that condition is plotted in the secondary axis}
 
 \item{label_y2}{Label of the secondary y-axis.}
 
-\item{line_col}{Aesthetic parameter to change the colour of the line geom in the plot, see: \code{\link{geom_line}}}
+\item{line_col}{Aesthetic parameter to change the colour of the line geom in the plot, see: \code{\link[=geom_line]{geom_line()}}}
 
-\item{line_size}{Aesthetic parameter to change the thickness of the line geom in the plot, see: \code{\link{geom_line}}}
+\item{line_size}{Aesthetic parameter to change the thickness of the line geom in the plot, see: \code{\link[=geom_line]{geom_line()}}}
 
-\item{line_type}{Aesthetic parameter to change the type of the line geom in the plot, takes numbers (1-6) or strings ("solid") see: \code{\link{geom_line}}}
+\item{line_type}{Aesthetic parameter to change the type of the line geom in the plot, takes numbers (1-6) or strings ("solid") see: \code{\link[=geom_line]{geom_line()}}}
 
 \item{line_col2}{Same as lin_col, but for the environmental factor.}
 
@@ -87,30 +93,34 @@ that condition is plotted in the secondary axis}
 
 \item{subplot_labels}{labels of the subplots according to \code{plot_grid}.}
 
-\item{object}{Instance of \code{FitMultipleDynamicGrowth}.}
+\item{object}{an instance of FitMultipleDynamicGrowth}
+
+\item{env_conditions}{a tibble describing the environmental conditions (as
+in \code{\link[=fit_multiple_growth]{fit_multiple_growth()}}.}
 
 \item{times}{A numeric vector with the time points for the simulations. \code{NULL}
-by default (using the same time points as those for the simulation).}
+by default (using the same time points as the ones defined in \code{env_conditions}).}
 
-\item{newdata}{a tibble describing the environmental conditions (as \code{env_conditions})
-in \code{\link{fit_multiple_growth}}. 
-If \code{NULL} (default), uses the same conditions as those for fitting.}
+\item{k}{penalty for the parameters (k=2 by default)}
 }
 \description{
-The \code{FitMultipleDynamicGrowth} class contains a model fitted to a set
-of experiments gathered under dynamic conditions. Its constructor is 
-\code{\link{fit_multiple_growth}}.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
+
+The class \link{FitMultipleDynamicGrowth} has been superseded by the top-level
+class \link{GlobalGrowthFit}, which provides a unified approach for growth modelling.
+
+Still, it is still returned if the superseded \code{\link[=fit_multiple_growth]{fit_multiple_growth()}} is called.
 
 It is a subclass of list with the items:
-     \itemize{
-         \item fit_results: the object returned by \code{modFit}.
-         \item best_prediction: a list with the models predictions for each condition.
-         \item data: a list with the data used for the fit.
-         \item starting: starting values for model fitting
-         \item known: parameter values set as known.
-         \item sec_models: a named vector with the secondary model
-         for each environmental factor.
-         }
+\itemize{
+\item fit_results: the object returned by \code{modFit}.
+\item best_prediction: a list with the models predictions for each condition.
+\item data: a list with the data used for the fit.
+\item starting: starting values for model fitting
+\item known: parameter values set as known.
+\item sec_models: a named vector with the secondary model
+for each environmental factor.
+}
 }
 \section{Functions}{
 \itemize{
@@ -121,23 +131,25 @@ the experimental data.
 
 \item \code{summary.FitMultipleDynamicGrowth}: statistical summary of the fit.
 
-\item \code{residuals.FitMultipleDynamicGrowth}: calculates the model residuals. Returns a 
+\item \code{residuals.FitMultipleDynamicGrowth}: calculates the model residuals. Returns a
 tibble with 4 columns: time (storage time), logN (observed count),
 exp (name of the experiment) and res (residual).
 
 \item \code{coef.FitMultipleDynamicGrowth}: vector of fitted parameters.
 
-\item \code{vcov.FitMultipleDynamicGrowth}: (unscaled) variance-covariance matrix, 
+\item \code{vcov.FitMultipleDynamicGrowth}: (unscaled) variance-covariance matrix,
 estimated as 1/(0.5*Hessian).
 
 \item \code{deviance.FitMultipleDynamicGrowth}: deviance of the model.
 
 \item \code{fitted.FitMultipleDynamicGrowth}: fitted values. They are returned as a
-tibble with 3 columns: time (storage time), exp (experiment 
+tibble with 3 columns: time (storage time), exp (experiment
 identifier) and fitted (fitted value).
 
-\item \code{predict.FitMultipleDynamicGrowth}: model predictions. They are returned as 
-a tibble with 3 columns: time (storage time), logN (observed count),
-and exp (name of the experiment).
+\item \code{predict.FitMultipleDynamicGrowth}: vector of model predictions
+
+\item \code{logLik.FitMultipleDynamicGrowth}: loglikelihood of the model
+
+\item \code{AIC.FitMultipleDynamicGrowth}: Akaike Information Criterion
 }}
 

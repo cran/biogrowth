@@ -1,9 +1,10 @@
 
 
 #' Residuals of dynamic prediction
+#' 
 #'
 #' Function for calculating residuals of a dynamic prediction according
-#' to the requirements of \code{\link{modFit}}.
+#' to the requirements of [modFit()].
 #'
 #' @param this_p named vector of model parameters
 #' @param fit_data tibble with the data for the fit
@@ -12,14 +13,20 @@
 #' @param sec_model_names named character vector with names the
 #' environmental conditions and values the secondary model (e.g. 'CPM').
 #' @param cost an instance of modCost to be combined (to fit multiple models).
+#' @param logbase_mu Base of the logarithm of the growthrate. 
+#' By default, the same as logbase_logN. See vignette about units for details. 
+#' @param logbase_logN Base of the logarithm for the population size. By default,
+#' 10 (i.e. log10). See vignette about units for details.
 #'
-#' @return An instance of \code{\link{modCost}}.
+#' @return An instance of [modCost()].
 #'
 #' @importFrom FME modCost
 #'
 get_dyna_residuals <- function(this_p, fit_data, env_conditions,
                                known_pars, sec_model_names,
-                               cost = NULL
+                               cost = NULL,
+                               logbase_mu = logbase_logN,
+                               logbase_logN = 10 
                                ) {
 
     ## Build the parameters of the primary model
@@ -34,9 +41,15 @@ get_dyna_residuals <- function(this_p, fit_data, env_conditions,
     ## Calculate the prediction
 
     times <- seq(0, max(fit_data$time), length = 1000)
-
-    prediction <- predict_dynamic_growth(times, env_conditions, as.list(primary_pars),
-                                         secondary_models, check=FALSE)
+    
+    prediction <- predict_growth(environment = "dynamic",
+                                 times,
+                                 as.list(primary_pars),
+                                 secondary_models,
+                                 env_conditions,
+                                 logbase_mu = logbase_mu,
+                                 logbase_logN = logbase_logN
+    )
 
     ## Calculate residuals
 
@@ -48,8 +61,14 @@ get_dyna_residuals <- function(this_p, fit_data, env_conditions,
 }
 
 #' Fit dynamic growth models
+#' 
+#' @description 
+#' `r lifecycle::badge("superseded")`
+#' 
+#' The function [fit_dynamic_growth()] has been superseded by the top-level
+#' function [fit_growth()], which provides a unified approach for growth modelling.
 #'
-#' Fits a growth model to a data obtained under dynamic conditions
+#' Nonetheless, it can still fit a growth model to data obtained under dynamic conditions
 #' using the one-step approach (non-linear regression).
 #'
 #' @param fit_data Tibble with the data to use for model fit. It must
@@ -65,19 +84,23 @@ get_dyna_residuals <- function(this_p, fit_data, env_conditions,
 #' the model fit.
 #' @param starting_point A named vector of starting values for the model parameters.
 #' Parameters for the primary model must be named in the usual way. Parameters for the
-#' secondary model are named as \code{env_factor}+'_'+\code{parameter}. For instance,
+#' secondary model are named as `env_factor`+'_'+`parameter`. For instance,
 #' the maximum growth temperature shall be named 'temperature_xmax'.
-#' @param known_pars A named vectors of known model parameters (i.e. not fitted). They
-#' must be named using the same convention as for \code{starting_point}.
+#' @param known_pars A named vector of known model parameters (i.e. not fitted). They
+#' must be named using the same convention as for `starting_point`.
 #' @param sec_model_names A named character vector defining the secondary model for each
 #' environmental factor. The names define the factor and the value the type of model.
-#' Names must match columns in \code{fit_data} and \code{env_conditions}.
+#' Names must match columns in `fit_data` and `env_conditions`.
 #' @param ... Additional arguments passed to modFit.
 #' @param check Whether to check model parameters (TRUE by default).
 #' @param formula an object of class "formula" describing the x and y variables.
-#' \code{logN ~ time} as a default.
+#' `logN ~ time` as a default.
+#' @param logbase_mu Base of the logarithm the growth rate is referred to. 
+#' By default, the same as logbase_logN. See vignette about units for details. 
+#' @param logbase_logN Base of the logarithm for the population size. By default,
+#' 10 (i.e. log10). See vignette about units for details.
 #'
-#' @return An instance of \code{\link{FitDynamicGrowth}}.
+#' @return An instance of [FitDynamicGrowth()].
 #'
 #' @importFrom FME modFit
 #' @importFrom dplyr rename
@@ -132,7 +155,10 @@ fit_dynamic_growth <- function(fit_data, env_conditions,
                                starting_point, known_pars,
                                sec_model_names, ...,
                                check=TRUE,
-                               formula = logN ~ time) {
+                               logbase_mu = logbase_logN,
+                               logbase_logN = 10,
+                               formula = logN ~ time
+                               ) {
     
     ## Check the model parameters
     
@@ -167,6 +193,8 @@ fit_dynamic_growth <- function(fit_data, env_conditions,
                      env_conditions = env_conditions,
                      known_pars = unlist(known_pars),
                      sec_model_names = sec_model_names,
+                     logbase_mu = logbase_mu,
+                     logbase_logN = logbase_logN,
                      ...)
 
     #- Output the results
@@ -182,9 +210,18 @@ fit_dynamic_growth <- function(fit_data, env_conditions,
 
     times <- seq(0, max(fit_data$time), length=100)
 
-    best_prediction <- predict_dynamic_growth(times, env_conditions,
-                                              as.list(primary_pars),
-                                              secondary_models)
+    # best_prediction <- predict_dynamic_growth(times, env_conditions,
+    #                                           as.list(primary_pars),
+    #                                           secondary_models)
+    
+    best_prediction <- predict_growth(environment = "dynamic",
+                                 times,
+                                 as.list(primary_pars),
+                                 secondary_models,
+                                 env_conditions,
+                                 logbase_mu = logbase_mu ,
+                                 logbase_logN = logbase_logN
+    )
 
     out <- list(fit_results = my_fit,
                 best_prediction = best_prediction,
@@ -192,7 +229,9 @@ fit_dynamic_growth <- function(fit_data, env_conditions,
                 env_conditions = env_conditions,
                 starting = starting_point,
                 known = known_pars,
-                sec_models = sec_model_names
+                sec_models = sec_model_names,
+                logbase_mu = logbase_mu,
+                logbase_logN = logbase_logN
                 )
 
     class(out) <- c("FitDynamicGrowth", class(out))
@@ -202,14 +241,22 @@ fit_dynamic_growth <- function(fit_data, env_conditions,
 
 #' Fit growth models using MCMC
 #'
-#' Fits a growth model to a data obtained under dynamic conditions
+#' @description 
+#' `r lifecycle::badge("superseded")`
+#' 
+#' The function [fit_MCMC_growth()] has been superseded by the top-level
+#' function [fit_growth()], which provides a unified approach for growth modelling.
+#' 
+#' But, it can still fit a growth model to a data obtained under dynamic conditions
 #' using the one-step approach (MCMC algorithm).
 #'
 #' @inheritParams fit_dynamic_growth
 #'
 #' @param niter number of iterations of the MCMC algorithm.
+#' @param logbase_logN Base of the logarithm for the population size. By default,
+#' 10 (i.e. log10). See vignette about units for details.
 #'
-#' @return An instance of \code{\link{FitDynamicGrowthMCMC}}.
+#' @return An instance of [FitDynamicGrowthMCMC()].
 #'
 #' @importFrom FME modMCMC
 #'
@@ -265,7 +312,10 @@ fit_MCMC_growth <- function(fit_data, env_conditions,
                             starting_point, known_pars,
                             sec_model_names, niter, ...,
                             check = TRUE,
-                            formula = logN ~ time) {
+                            formula = logN ~ time,
+                            logbase_mu = logbase_logN,
+                            logbase_logN = 10
+                            ) {
 
     ## Check the model parameters
     
@@ -302,6 +352,8 @@ fit_MCMC_growth <- function(fit_data, env_conditions,
                      known_pars = unlist(known_pars),
                      sec_model_names = sec_model_names,
                      niter = niter,
+                     logbase_mu = logbase_mu,
+                     logbase_logN = logbase_logN,
                      ...)
 
     #- Output the results
@@ -317,9 +369,18 @@ fit_MCMC_growth <- function(fit_data, env_conditions,
 
     times <- seq(0, max(fit_data$time), length=100)
 
-    best_prediction <- predict_dynamic_growth(times, env_conditions,
-                                              as.list(primary_pars),
-                                              secondary_models)
+    # best_prediction <- predict_dynamic_growth(times, env_conditions,
+    #                                           as.list(primary_pars),
+    #                                           secondary_models)
+    
+    best_prediction <- predict_growth(environment = "dynamic",
+                                      times,
+                                      as.list(primary_pars),
+                                      secondary_models,
+                                      env_conditions,
+                                      logbase_mu = logbase_mu,
+                                      logbase_logN = logbase_logN
+    )
 
     out <- list(fit_results = my_fit,
                 best_prediction = best_prediction,
@@ -327,7 +388,9 @@ fit_MCMC_growth <- function(fit_data, env_conditions,
                 data = fit_data,
                 starting = starting_point,
                 known = known_pars,
-                sec_models = sec_model_names
+                sec_models = sec_model_names,
+                logbase_mu = logbase_mu,
+                logbase_logN = logbase_logN
     )
 
     class(out) <- c("FitDynamicGrowthMCMC", class(out))

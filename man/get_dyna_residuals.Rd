@@ -10,7 +10,9 @@ get_dyna_residuals(
   env_conditions,
   known_pars,
   sec_model_names,
-  cost = NULL
+  cost = NULL,
+  logbase_mu = logbase_logN,
+  logbase_logN = 10
 )
 }
 \arguments{
@@ -26,11 +28,17 @@ get_dyna_residuals(
 environmental conditions and values the secondary model (e.g. 'CPM').}
 
 \item{cost}{an instance of modCost to be combined (to fit multiple models).}
+
+\item{logbase_mu}{Base of the logarithm of the growthrate.
+By default, the same as logbase_logN. See vignette about units for details.}
+
+\item{logbase_logN}{Base of the logarithm for the population size. By default,
+10 (i.e. log10). See vignette about units for details.}
 }
 \value{
-An instance of \code{\link{modCost}}.
+An instance of \code{\link[=modCost]{modCost()}}.
 }
 \description{
 Function for calculating residuals of a dynamic prediction according
-to the requirements of \code{\link{modFit}}.
+to the requirements of \code{\link[=modFit]{modFit()}}.
 }

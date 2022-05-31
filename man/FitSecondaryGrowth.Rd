@@ -11,11 +11,13 @@
 \alias{deviance.FitSecondaryGrowth}
 \alias{fitted.FitSecondaryGrowth}
 \alias{predict.FitSecondaryGrowth}
+\alias{logLik.FitSecondaryGrowth}
+\alias{AIC.FitSecondaryGrowth}
 \title{FitSecondaryGrowth class}
 \usage{
 \method{print}{FitSecondaryGrowth}(x, ...)
 
-\method{plot}{FitSecondaryGrowth}(x, y = NULL, ..., which = 1, add_trend = FALSE)
+\method{plot}{FitSecondaryGrowth}(x, y = NULL, ..., which = 1, add_trend = FALSE, add_segment = FALSE)
 
 \method{summary}{FitSecondaryGrowth}(object, ...)
 
@@ -30,6 +32,10 @@
 \method{fitted}{FitSecondaryGrowth}(object, ...)
 
 \method{predict}{FitSecondaryGrowth}(object, newdata = NULL, ...)
+
+\method{logLik}{FitSecondaryGrowth}(object, ...)
+
+\method{AIC}{FitSecondaryGrowth}(object, ..., k = 2)
 }
 \arguments{
 \item{x}{An instance of FitSecondaryGrowth.}
@@ -43,20 +49,24 @@
 
 \item{add_trend}{Whether to add a trend line (only for which=2)}
 
-\item{object}{an instance of \code{FitSecondaryGrowth}.}
+\item{add_segment}{Whether to join the observed and fitted points (only for which=2)}
+
+\item{object}{an instance of FitSecondaryGrowth}
 
 \item{newdata}{A tibble describing the environmental conditions as in
-\code{\link{fit_secondary_growth}}. If \code{NULL}, it uses the same
+\code{\link[=fit_secondary_growth]{fit_secondary_growth()}}. If \code{NULL}, it uses the same
 conditions as for model fitting (default).}
+
+\item{k}{penalty for the parameters (k=2 by default)}
 }
 \description{
 The \code{FitSecondaryGrowth} class contains a model fitted to a set of growth rates
-gathered under a variety of static conditions. 
-Its constructor is \code{\link{fit_secondary_growth}}.
+gathered under a variety of static conditions.
+Its constructor is \code{\link[=fit_secondary_growth]{fit_secondary_growth()}}.
 
 It is a subclass of list with the items:
 \itemize{
-\item fit_results: object returned by \code{\link{modFit}}.
+\item fit_results: object returned by \code{\link[=modFit]{modFit()}}.
 \item secondary_model: secondary model fitted to the data.
 \item mu_opt_fit: estimated growth rate under optimum conditions.
 \item data: data used for the fit.
@@ -86,5 +96,9 @@ The fitted values are returned in the same scale as the one
 used for the fitting (sqrt, log or none).
 
 \item \code{predict.FitSecondaryGrowth}: vector of model predictions.
+
+\item \code{logLik.FitSecondaryGrowth}: loglikelihood of the model
+
+\item \code{AIC.FitSecondaryGrowth}: Akaike Information Criterion
 }}
 

@@ -11,7 +11,9 @@ fit_multiple_growth(
   sec_model_names,
   ...,
   check = TRUE,
-  formula = logN ~ time
+  formula = logN ~ time,
+  logbase_mu = logbase_logN,
+  logbase_logN = 10
 )
 }
 \arguments{
@@ -27,24 +29,35 @@ The default column names can be changed with the formula argument.}
 
 \item{known_pars}{named vector of known model parameters}
 
-\item{sec_model_names}{named character vector with names the
-environmental conditions and values the secondary model (see secondary_model_data).}
+\item{sec_model_names}{named character vector with names of the
+environmental conditions and values of the secondary model (see secondary_model_data).}
 
-\item{...}{additional arguments for \code{\link{modFit}}.}
+\item{...}{additional arguments for \code{\link[=modFit]{modFit()}}.}
 
 \item{check}{Whether to check the validity of the models. \code{TRUE} by default.}
 
 \item{formula}{an object of class "formula" describing the x and y variables.
 \code{logN ~ time} as a default.}
+
+\item{logbase_mu}{Base of the logarithm the growth rate is referred to.
+By default, the same as logbase_logN. See vignette about units for details.}
+
+\item{logbase_logN}{Base of the logarithm for the population size. By default,
+10 (i.e. log10). See vignette about units for details.}
 }
 \value{
-An instance of \code{\link{FitMultipleDynamicGrowth}}.
+An instance of \code{\link[=FitMultipleDynamicGrowth]{FitMultipleDynamicGrowth()}}.
 }
 \description{
-This functions enables to fit a growth model using a dataset comprised of
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
+
+The function \code{\link[=fit_multiple_growth]{fit_multiple_growth()}} has been superseded by the top-level
+function \code{\link[=fit_growth]{fit_growth()}}, which provides a unified approach for growth modelling.
+
+But, if you so wish, this function still enables fitting a growth model using a dataset comprised of
 several experiments with potentially different dynamic experimental conditions.
 Note that the definition of secondary models must comply with the
-`secondary_model_data` function.
+\code{secondary_model_data} function.
 }
 \examples{
 \donttest{

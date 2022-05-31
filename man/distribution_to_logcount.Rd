@@ -12,14 +12,19 @@ distribution_to_logcount(model, log_count)
 \item{log_count}{The target microbial count.}
 }
 \value{
-An instance of \code{\link{TimeDistribution}}.
+An instance of \code{\link[=TimeDistribution]{TimeDistribution()}}.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
+
+The function \code{\link[=distribution_to_logcount]{distribution_to_logcount()}} has been superseded by
+function \code{\link[=time_to_size]{time_to_size()}}, which provides more general interface.
+
 Returns the probability distribution of the storage time required for
 the microbial count to reach \code{log_count} according to the predictions of
 a stochastic \code{model}.
 Calculations are done using linear interpolation of the individual
- model predictions.
+model predictions.
 }
 \examples{
 \donttest{
@@ -41,13 +46,6 @@ pars <- tribble(
 
 stoc_growth <- predict_stochastic_growth(my_model, my_times, n_sims, pars)
 
-## We can now call the function
-
-time_distrib <- distribution_to_logcount(stoc_growth, 4)
-
-## And plot the results
-
-plot(time_distrib)
 }
 
 }

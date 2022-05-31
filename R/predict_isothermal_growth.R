@@ -15,9 +15,16 @@
 #' @return Numeric vector with the predicted microbial count.
 #'
 iso_Baranyi <- function(times, logN0, mu, lambda, logNmax) {
-
-    # mu <- mu/log(10)
-
+    
+    ## Comprobation using the "other" formulation  --> it does return the same
+    
+    # mu <- mu*log(10)  # This one is defined in a different scale
+    # 
+    # inside <- exp(-mu * times) + exp(-mu*lambda) - exp(-mu*times - mu*lambda)
+    # A <- times + 1/mu*log(inside)
+    # 
+    # logN <- logN0 + mu/log(10)*A - 1/log(10)*log(1 + (exp(mu*A) - 1)/(10^(logNmax - logN0)))
+    
     num <- 1 + exp(log(10)*mu*(times - lambda)) - exp(-log(10)*mu*lambda)
     den <- exp(log(10)*mu*(times-lambda)) - exp(-log(10)*mu*lambda) + 10^(logNmax - logN0)
     logN <- logNmax + log10(num/den)
@@ -31,7 +38,7 @@ iso_Baranyi <- function(times, logN0, mu, lambda, logNmax) {
 #' Reparameterized Gompertz growth model defined by Zwietering et al. (1990).
 #'
 #' @inheritParams iso_Baranyi
-#' @param C Difference between \code{logN0} and the maximum log-count.
+#' @param C Difference between `logN0` and the maximum log-count.
 #'
 #' @return Numeric vector with the predicted microbial count.
 #' 
@@ -40,8 +47,12 @@ iso_Baranyi <- function(times, logN0, mu, lambda, logNmax) {
 iso_repGompertz <- function(times, logN0, C, mu, lambda) {
     
     # mu <- mu/log(10)
+    
+    exponent <- (mu/C)*exp(1)*(lambda - times) +1
+    
+    logN <- logN0 + C*exp( -exp( exponent ) )
 
-    logN <- logN0 + C*(exp(-exp( exp(1)*(mu/C)*(lambda-times)+1 )))
+    # logN <- logN0 + C*(exp(-exp( exp(1)*(mu/C)*(lambda-times)+1 )))
 
     logN
 
@@ -101,15 +112,26 @@ richards_model <- function(times, logN0, mu, lambda, C, nu) {
 }
 
 #' Isothermal microbial growth
-#'
-#' Predicts population growth under static conditions using primary models.
+#' 
+#' @description 
+#' `r lifecycle::badge("superseded")`
+#' 
+#' The function [predict_isothermal_growth()] has been superseded by the top-level
+#' function [predict_growth()], which provides a unified approach for growth modelling.
+#' 
+#' Regardless of that, it can still be used to predict population growth under static 
+#' environmental conditions (i.e. using primary models).
 #'
 #' @param model_name Character defining the growth model.
 #' @param times Numeric vector of storage times for the predictions.
 #' @param model_pars Named vector or list defining the values of the model parameters.
 #' @param check Whether to do basic checks (TRUE by default).
+#' @param logbase_mu Base of the logarithm the growth rate is referred to. 
+#' By default, the same as logbase_logN. See vignette about units for details. 
+#' @param logbase_logN Base of the logarithm for the population size. By default,
+#' 10 (i.e. log10). See vignette about units for details.
 #'
-#' @return An instance of \code{\link{IsothermalGrowth}}.
+#' @return An instance of [IsothermalGrowth()].
 #'
 #' @importFrom tibble tibble
 #'
@@ -131,7 +153,8 @@ richards_model <- function(times, logN0, mu, lambda, C, nu) {
 #' plot(static_prediction)
 #'
 #'
-predict_isothermal_growth <- function(model_name, times, model_pars, check = TRUE) {
+predict_isothermal_growth <- function(model_name, times, model_pars, check = TRUE,
+                                      logbase_mu = 10, logbase_logN = 10) {
 
     ## Check the model parameters
     
@@ -142,23 +165,39 @@ predict_isothermal_growth <- function(model_name, times, model_pars, check = TRU
         check_primary_pars(model_name, model_pars)
 
     }
+    
+    ## Apply the logbase transformation to mu
+    
+    simul_pars <- model_pars
+    
+    simul_pars$mu <- simul_pars$mu/log(10, base = logbase_mu)
+    
+    ## Convert logN0, C and logNmax to log10
+    
+    simul_pars$C <- simul_pars$C*log10(logbase_logN)
+    simul_pars$logN0 <- simul_pars$logN0*log10(logbase_logN)
+    simul_pars$logNmax <- simul_pars$logNmax*log10(logbase_logN)
 
     ## Calculate the prediction
 
     logN <- switch(model_name,
-           modGompertz = iso_repGompertz(times, model_pars$logN0, model_pars$C,
-                                         model_pars$mu, model_pars$lambda),
-           Baranyi = iso_Baranyi(times, model_pars$logN0, model_pars$mu,
-                                 model_pars$lambda, model_pars$logNmax),
-           Trilinear = trilinear_model(times, model_pars$logN0, model_pars$mu,
-                                       model_pars$lambda,model_pars$logNmax),
-           Logistic = logistic_model(times, model_pars$logN0, model_pars$mu,
-                                     model_pars$lambda, model_pars$C),
-           Richards = richards_model(times, model_pars$logN0, model_pars$mu,
-                                     model_pars$lambda, model_pars$C,
-                                     model_pars$nu),
+           modGompertz = iso_repGompertz(times, simul_pars$logN0, simul_pars$C,
+                                         simul_pars$mu, simul_pars$lambda),
+           Baranyi = iso_Baranyi(times, simul_pars$logN0, simul_pars$mu,
+                                 simul_pars$lambda, simul_pars$logNmax),
+           Trilinear = trilinear_model(times, simul_pars$logN0, simul_pars$mu,
+                                       simul_pars$lambda,simul_pars$logNmax),
+           Logistic = logistic_model(times, simul_pars$logN0, simul_pars$mu,
+                                     simul_pars$lambda, simul_pars$C),
+           Richards = richards_model(times, simul_pars$logN0, simul_pars$mu,
+                                     simul_pars$lambda, simul_pars$C,
+                                     simul_pars$nu),
            stop(paste("Unknown model:", model_name))
            )
+    
+    ## Convert logN to logbase_logN
+    
+    logN <- logN/log10(logbase_logN)
 
     ## Prepare the output
 
@@ -166,7 +205,9 @@ predict_isothermal_growth <- function(model_name, times, model_pars, check = TRU
 
     out <- list(simulation = my_sim,
                 model = model_name,
-                pars = model_pars
+                pars = model_pars,
+                logbase_mu = logbase_mu,
+                logbase_logN = logbase_logN
                 )
 
     class(out) <- c("IsothermalGrowth", class(out))

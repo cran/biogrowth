@@ -1,14 +1,21 @@
 
 #' Stochastic growth of MCMC fit
+#' 
+#' @description 
+#' `r lifecycle::badge("superseded")`
+#' 
+#' The function [predict_MCMC_growth()] has been superseded by [predictMCMC()]
+#' S3 methods of the relevant classes. 
 #'
-#' Makes a stochastic prediction of microbial growth based on a growth model
-#' fitted using \code{\link{fit_MCMC_growth}} or \code{\link{fit_multiple_growth_MCMC}}.
-#' This function predicts growth curves for \code{niter} samples (with replacement)
+#' Nonetheless, it can still make a prediction of microbial growth including
+#' parameter uncertainty based on a growth model
+#' fitted using [fit_MCMC_growth()] or [fit_multiple_growth_MCMC()].
+#' This function predicts growth curves for `niter` samples (with replacement)
 #' of the samples of the MCMC algorithm. Then, credible intervals are calculated based on the
 #' quantiles of the model predictions at each time point.
 #'
-#' @param MCMCfit An instance of \code{FitDynamicGrowthMCMC} or
-#' \code{FitMultipleGrowthMCMC}.
+#' @param MCMCfit An instance of `FitDynamicGrowthMCMC` or
+#' `FitMultipleGrowthMCMC`.
 #' @param times Numeric vector of storage times for the predictions.
 #' @param env_conditions Tibble with the (dynamic) environmental conditions
 #' during the experiment. It must have one column named 'time' with the
@@ -17,9 +24,11 @@
 #' @param newpars A named list defining new values for the some model parameters. 
 #' The name must be the identifier of a model already included in the model. 
 #' These parameters do not include variation, so defining a new value for a fitted
-#' parameters "fixes" it. \code{NULL} by default (no new parameters).
+#' parameters "fixes" it. `NULL` by default (no new parameters).
+#' @param formula A formula stating the column named defining the elapsed time in 
+#' `env_conditions`. By default, . ~ time.
 #'
-#' @return An instance of \code{\link{MCMCgrowth}}.
+#' @return An instance of [MCMCgrowth()].
 #'
 #' @importFrom dplyr sample_n
 #' @importFrom dplyr %>%
@@ -87,8 +96,12 @@
 #' print(my_MCMC_prediction$quantiles)
 #' }
 #'
-predict_MCMC_growth <- function(MCMCfit, times, env_conditions, niter,
-                                newpars = NULL) {
+predict_MCMC_growth <- function(MCMCfit, 
+                                times, 
+                                env_conditions, 
+                                niter,
+                                newpars = NULL,
+                                formula = . ~ time) {
 
     ## Extract the parameters
 
@@ -143,7 +156,8 @@ predict_MCMC_growth <- function(MCMCfit, times, env_conditions, niter,
     simulations <- map2(primary_pars, secondary_models,
                         ~ predict_dynamic_growth(times, env_conditions,
                                                  as.list(.x),
-                                                 .y)
+                                                 .y,
+                                                 formula = formula)
                         ) %>%
         map(~.$simulation) %>%
         imap_dfr(~ mutate(.x, sim = .y))

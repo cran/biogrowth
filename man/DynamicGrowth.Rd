@@ -4,6 +4,7 @@
 \alias{DynamicGrowth}
 \alias{print.DynamicGrowth}
 \alias{plot.DynamicGrowth}
+\alias{coef.DynamicGrowth}
 \title{DynamicGrowth class}
 \usage{
 \method{print}{DynamicGrowth}(x, ...)
@@ -21,13 +22,16 @@
   line_type = "solid",
   line_col2 = "black",
   line_size2 = 1,
-  line_type2 = "dashed"
+  line_type2 = "dashed",
+  label_x = "time"
 )
+
+\method{coef}{DynamicGrowth}(object, ...)
 }
 \arguments{
 \item{x}{The object of class \code{DynamicGrowth} to plot.}
 
-\item{...}{additional arguments passed to \code{plot}.}
+\item{...}{ignored}
 
 \item{y}{ignored}
 
@@ -42,21 +46,29 @@ that condition is plotted in the secondary axis}
 
 \item{label_y2}{Label of the secondary y-axis.}
 
-\item{line_col}{Aesthetic parameter to change the colour of the line geom in the plot, see: \code{\link{geom_line}}}
+\item{line_col}{Aesthetic parameter to change the colour of the line geom in the plot, see: \code{\link[=geom_line]{geom_line()}}}
 
-\item{line_size}{Aesthetic parameter to change the thickness of the line geom in the plot, see: \code{\link{geom_line}}}
+\item{line_size}{Aesthetic parameter to change the thickness of the line geom in the plot, see: \code{\link[=geom_line]{geom_line()}}}
 
-\item{line_type}{Aesthetic parameter to change the type of the line geom in the plot, takes numbers (1-6) or strings ("solid") see: \code{\link{geom_line}}}
+\item{line_type}{Aesthetic parameter to change the type of the line geom in the plot, takes numbers (1-6) or strings ("solid") see: \code{\link[=geom_line]{geom_line()}}}
 
 \item{line_col2}{Same as lin_col, but for the environmental factor.}
 
 \item{line_size2}{Same as line_size, but for the environmental factor.}
 
 \item{line_type2}{Same as lin_type, but for the environmental factor.}
+
+\item{label_x}{Label of the x-axis.}
+
+\item{object}{an instance of \link{DynamicGrowth}}
 }
 \description{
-The \code{DynamicGrowth} class contains the results of a growth prediction
-under dynamic conditions. Its constructor is \code{\link{predict_dynamic_growth}}.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
+
+The class \link{DynamicGrowth} has been superseded by the top-level
+class \link{GrowthPrediction}, which provides a unified approach for growth modelling.
+
+Still, it is returned if the superseded \code{\link[=predict_dynamic_growth]{predict_dynamic_growth()}} is called.
 
 A subclass of list with items:
 \itemize{
@@ -74,5 +86,7 @@ conditions.
 \item \code{print.DynamicGrowth}: print of the model
 
 \item \code{plot.DynamicGrowth}: predicted growth curve under dynamic conditions.
+
+\item \code{coef.DynamicGrowth}: coefficients of the model
 }}
 

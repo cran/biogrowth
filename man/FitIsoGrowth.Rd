@@ -11,6 +11,8 @@
 \alias{deviance.FitIsoGrowth}
 \alias{fitted.FitIsoGrowth}
 \alias{predict.FitIsoGrowth}
+\alias{logLik.FitIsoGrowth}
+\alias{AIC.FitIsoGrowth}
 \title{FitIsoGrowth class}
 \usage{
 \method{print}{FitIsoGrowth}(x, ...)
@@ -40,6 +42,10 @@
 \method{fitted}{FitIsoGrowth}(object, ...)
 
 \method{predict}{FitIsoGrowth}(object, times = NULL, ...)
+
+\method{logLik}{FitIsoGrowth}(object, ...)
+
+\method{AIC}{FitIsoGrowth}(object, ..., k = 2)
 }
 \arguments{
 \item{x}{The object of class \code{FitIsoGrowth} to plot.}
@@ -48,36 +54,42 @@
 
 \item{y}{ignored}
 
-\item{line_col}{Aesthetic parameter to change the colour of the line geom in the plot, see: \code{\link{geom_line}}}
+\item{line_col}{Aesthetic parameter to change the colour of the line geom in the plot, see: \code{\link[=geom_line]{geom_line()}}}
 
-\item{line_size}{Aesthetic parameter to change the thickness of the line geom in the plot, see: \code{\link{geom_line}}}
+\item{line_size}{Aesthetic parameter to change the thickness of the line geom in the plot, see: \code{\link[=geom_line]{geom_line()}}}
 
-\item{line_type}{Aesthetic parameter to change the type of the line geom in the plot, takes numbers (1-6) or strings ("solid") see: \code{\link{geom_line}}}
+\item{line_type}{Aesthetic parameter to change the type of the line geom in the plot, takes numbers (1-6) or strings ("solid") see: \code{\link[=geom_line]{geom_line()}}}
 
-\item{point_col}{Aesthetic parameter to change the colour of the point geom, see: \code{\link{geom_point}}}
+\item{point_col}{Aesthetic parameter to change the colour of the point geom, see: \code{\link[=geom_point]{geom_point()}}}
 
-\item{point_size}{Aesthetic parameter to change the size of the point geom, see: \code{\link{geom_point}}}
+\item{point_size}{Aesthetic parameter to change the size of the point geom, see: \code{\link[=geom_point]{geom_point()}}}
 
-\item{point_shape}{Aesthetic parameter to change the shape of the point geom, see: \code{\link{geom_point}}}
+\item{point_shape}{Aesthetic parameter to change the shape of the point geom, see: \code{\link[=geom_point]{geom_point()}}}
 
 \item{object}{an instance of FitIsoGrowth}
 
 \item{times}{numeric vector describing the time points for the prediction.
 If \code{NULL} (default), uses the same points as those used for fitting.}
+
+\item{k}{penalty for the parameters (k=2 by default)}
 }
 \description{
-The \code{FitIsoGrowth} class contains a growth model fitted to data under
-static conditions. Its constructor is \code{\link{fit_isothermal_growth}}.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
+
+The class \link{FitIsoGrowth} has been superseded by the top-level
+class \link{GrowthFit}, which provides a unified approach for growth modelling.
+
+Still, it is still returned if the superseded \code{\link[=fit_isothermal_growth]{fit_isothermal_growth()}} is called.
 
 It is a subclass of list with the items:
-     \itemize{
-         \item data: data used for model fitting
-         \item model: name of the primary inactivation model
-         \item starting_point: initial value of the model parameters
-         \item known: fixed model parameters
-         \item fit: object returned by \code{\link{modFit}}
-         \item best_prediction: model prediction for the model fitted.
-         }
+\itemize{
+\item data: data used for model fitting
+\item model: name of the primary inactivation model
+\item starting_point: initial value of the model parameters
+\item known: fixed model parameters
+\item fit: object returned by \code{\link[=modFit]{modFit()}}
+\item best_prediction: model prediction for the model fitted.
+}
 }
 \section{Functions}{
 \itemize{
@@ -99,5 +111,9 @@ as 1/(0.5*Hessian)
 \item \code{fitted.FitIsoGrowth}: vector of fitted values.
 
 \item \code{predict.FitIsoGrowth}: vector of model predictions.
+
+\item \code{logLik.FitIsoGrowth}: loglikelihood of the model
+
+\item \code{AIC.FitIsoGrowth}: Akaike Information Criterion
 }}
 

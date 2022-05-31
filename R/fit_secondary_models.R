@@ -7,12 +7,12 @@
 #' factors must be named identically in the 3 arguments.
 #'
 #' @param sec_model_names named character vector defining the type of secondary
-#' model. Its names correspond to the environmental condition and the values
+#' model. Its names correspond to the environmental conditions and its values
 #' define the corresponding type of secondary model.
 #' @param my_data Tibble of experimental conditions.
 #' @param secondary_models A list defining the parameters of the secondary models.
 #'
-#' @return a numeric vector of length \code{nrow(my_data)} with the gamma factor
+#' @return a numeric vector of length `nrow(my_data)` with the gamma factor
 #' for each experimental condition.
 #'
 #' @importFrom dplyr bind_cols
@@ -47,16 +47,16 @@ calculate_gammas_secondary <- function(sec_model_names, my_data, secondary_model
 
 #' Residuals of secondary models
 #'
-#' Residual function for \code{\link{fit_secondary_growth}}.
+#' Residual function for [fit_secondary_growth()].
 #'
 #' @param this_p Named vector of model parameter values.
 #' @param my_data Tibble with the data used for the fit.
 #' @param known_pars Named vector of fixed model paramaters.
 #' @param sec_model_names Named character vector defining the secondary model
 #' for each environmental factor.
-#' @param transformation Character defining the tranformation of \code{mu} for
-#' model fitting. One of \code{sq} (square root), \code{log} (log-transform) or
-#' \code{none} (no transformation).
+#' @param transformation Character defining the tranformation of `mu` for
+#' model fitting. One of `sq` (square root), `log` (log-transform) or
+#' `none` (no transformation).
 #'
 #' @return A numeric vector of residuals.
 #'
@@ -103,31 +103,34 @@ get_secondary_residuals <- function(this_p, my_data,
 
 #' Fit secondary growth models
 #'
+#' @description 
+#' `r lifecycle::badge("stable")`
+#' 
 #' Fits a secondary growth model to a set of growth rates obtained experimentally.
 #' Modelling is done according to the gamma concept proposed by Zwietering (1992)
 #' and cardinal parameter models.
 #'
 #' @param fit_data Tibble with the data used for the fit. It must have
-#' one column with the observed growth rate (named \code{mu} by default; can be
+#' one column with the observed growth rate (named `mu` by default; can be
 #' changed using the "formula" argument) and as many columns
 #' as needed with the environmental factors.
 #' @param starting_point Named vector with initial values for the model parameters
 #' to estimate from the data. The growth rate under optimum conditions must be named
-#' \code{mu_opt}. The rest must be called 'env_factor'+'_'+'parameter'. For instance,
+#' `mu_opt`. The rest must be called 'env_factor'+'_'+'parameter'. For instance,
 #' the minimum pH for growth is 'pH_xmin'.
 #' @param known_pars Named vector of fixed model parameters. Must be named using the
-#' same convention as \code{starting_point}.
+#' same convention as `starting_point`.
 #' @param sec_model_names Named character vector defining the secondary model
 #' for each environmental factor.
-#' @param transformation Character defining the transformation of \code{mu} for
-#' model fitting. One of \code{sq} (square root; default), \code{log} (log-transform) or
-#' \code{none} (no transformation).
-#' @param ... Additional arguments passed to \code{\link{modFit}}.
+#' @param transformation Character defining the transformation of `mu` for
+#' model fitting. One of `sq` (square root; default), `log` (log-transform) or
+#' `none` (no transformation).
+#' @param ... Additional arguments passed to [modFit()].
 #' @param check Whether to do some basic checks (TRUE by default).
 #' @param formula an object of class "formula" describing the y variable. The
-#' right hand side must be ".". By default \code{mu ~ .}.
+#' right hand side must be ".". By default `mu ~ .`.
 #'
-#' @return An instance of \code{\link{FitSecondaryGrowth}}.
+#' @return An instance of [FitSecondaryGrowth()].
 #'
 #' @importFrom dplyr mutate rename
 #' @importFrom FME modFit
@@ -171,6 +174,7 @@ get_secondary_residuals <- function(this_p, my_data,
 #'
 #' plot(fit_cardinal, which = 2)
 #' plot(fit_cardinal, which = 2, add_trend = TRUE)
+#' plot(fit_cardinal, which = 2, add_segment = TRUE)
 #'
 fit_secondary_growth <- function(fit_data, starting_point,
                                  known_pars, sec_model_names,

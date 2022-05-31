@@ -2,7 +2,7 @@
 #' Generates functions for linear interpolation of environmental conditions
 #'
 #' @param env_conditions A tibble describing the variation of the environmental
-#' conditions through the storage time. Must contain a column named \code{time}
+#' conditions through the storage time. Must contain a column named `time`
 #' and as many additional columns as environmental factors.
 #'
 #' @importFrom stats approxfun
@@ -108,6 +108,9 @@ extract_secondary_pars <- function(this_p, known_pars, sec_model_names) {
 
 #' Lag phase duration from Q0
 #' 
+#' @description 
+#' `r lifecycle::badge("stable")`
+#' 
 #' Convenience function to calculate the lag phase duration (lambda) of the 
 #' Baranyi model from the
 #' maximum specific growth rate and the initial value of the variable Q.
@@ -116,26 +119,47 @@ extract_secondary_pars <- function(this_p, known_pars, sec_model_names) {
 #' be taken when using parameters obtained from other sources.
 #' 
 #' @param q0 Initial value of the variable Q.
-#' @param mu Specific growth rate in the exponential phase (log10(units)/[time]).
+#' @param mu Specific growth rate in the exponential phase.
+#' @param logbase_mu Base of the logarithm the growth rate is referred to. 
+#' By default, 10 (i.e. log10). See vignette about units for details. 
 #' 
 #' @export
 #' 
-Q0_to_lambda <- function(q0, mu) {
-    log10(1 +1/q0)/mu
+Q0_to_lambda <- function(q0, mu, logbase_mu = 10) {
+    
+    ## Convert mu to base e
+    
+    mu <- mu*log(logbase_mu)
+    
+    ## Make the calculation
+    
+    log(1 +1/q0)/mu
 }
 
 #' Q0 from lag phase duration
+#' 
+#' @description 
+#' `r lifecycle::badge("stable")`
 #' 
 #' Convenience function to calculate the value of Q0 for the Baranyi model from
 #' the duration of the lag phase
 #' 
 #' @param lambda Duration of the lag phase.
-#' @param mu Specific growth rate in the exponential phase (log10(units)/[time]).
+#' @param mu Specific growth rate in the exponential phase.
+#' @param logbase_mu Base of the logarithm the growth rate is referred to. 
+#' By default, 10 (i.e. log10). See vignette about units for details. 
 #' 
 #' @export
 #' 
-lambda_to_Q0 <- function(lambda, mu) {
-    1/(10^(mu*lambda) - 1)
+lambda_to_Q0 <- function(lambda, mu, logbase_mu = 10) {
+    
+    ## Convert mu to base e
+    
+    mu <- mu*log(logbase_mu)
+    
+    ## Make the calculation
+    
+    1/(exp(mu*lambda) - 1)
 }
 
 

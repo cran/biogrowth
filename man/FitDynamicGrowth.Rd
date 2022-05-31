@@ -11,6 +11,8 @@
 \alias{deviance.FitDynamicGrowth}
 \alias{fitted.FitDynamicGrowth}
 \alias{predict.FitDynamicGrowth}
+\alias{logLik.FitDynamicGrowth}
+\alias{AIC.FitDynamicGrowth}
 \title{FitDynamicGrowth class}
 \usage{
 \method{print}{FitDynamicGrowth}(x, ...)
@@ -47,6 +49,10 @@
 \method{fitted}{FitDynamicGrowth}(object, ...)
 
 \method{predict}{FitDynamicGrowth}(object, times = NULL, newdata = NULL, ...)
+
+\method{logLik}{FitDynamicGrowth}(object, ...)
+
+\method{AIC}{FitDynamicGrowth}(object, ..., k = 2)
 }
 \arguments{
 \item{x}{The object of class \code{FitDynamicGrowth} to plot.}
@@ -56,7 +62,7 @@
 \item{y}{ignored}
 
 \item{add_factor}{whether to plot also one environmental factor.
-If \code{NULL} (default), no environmenta factor is plotted. If set
+If \code{NULL} (default), no environmental factor is plotted. If set
 to one character string that matches one entry of x$env_conditions,
 that condition is plotted in the secondary axis}
 
@@ -66,17 +72,17 @@ that condition is plotted in the secondary axis}
 
 \item{label_y2}{Label of the secondary y-axis.}
 
-\item{line_col}{Aesthetic parameter to change the colour of the line geom in the plot, see: \code{\link{geom_line}}}
+\item{line_col}{Aesthetic parameter to change the colour of the line geom in the plot, see: \code{\link[=geom_line]{geom_line()}}}
 
-\item{line_size}{Aesthetic parameter to change the thickness of the line geom in the plot, see: \code{\link{geom_line}}}
+\item{line_size}{Aesthetic parameter to change the thickness of the line geom in the plot, see: \code{\link[=geom_line]{geom_line()}}}
 
-\item{line_type}{Aesthetic parameter to change the type of the line geom in the plot, takes numbers (1-6) or strings ("solid") see: \code{\link{geom_line}}}
+\item{line_type}{Aesthetic parameter to change the type of the line geom in the plot, takes numbers (1-6) or strings ("solid") see: \code{\link[=geom_line]{geom_line()}}}
 
-\item{point_col}{Aesthetic parameter to change the colour of the point geom, see: \code{\link{geom_point}}}
+\item{point_col}{Aesthetic parameter to change the colour of the point geom, see: \code{\link[=geom_point]{geom_point()}}}
 
-\item{point_size}{Aesthetic parameter to change the size of the point geom, see: \code{\link{geom_point}}}
+\item{point_size}{Aesthetic parameter to change the size of the point geom, see: \code{\link[=geom_point]{geom_point()}}}
 
-\item{point_shape}{Aesthetic parameter to change the shape of the point geom, see: \code{\link{geom_point}}}
+\item{point_shape}{Aesthetic parameter to change the shape of the point geom, see: \code{\link[=geom_point]{geom_point()}}}
 
 \item{line_col2}{Same as lin_col, but for the environmental factor.}
 
@@ -84,30 +90,36 @@ that condition is plotted in the secondary axis}
 
 \item{line_type2}{Same as lin_type, but for the environmental factor.}
 
-\item{object}{an instance of \code{FitDynamicGrowth}.}
+\item{object}{an instance of FitDynamicGrowth}
 
 \item{times}{A numeric vector with the time points for the simulations. \code{NULL}
 by default (using the same time points as those for the simulation).}
 
 \item{newdata}{a tibble describing the environmental conditions (as \code{env_conditions})
-in \code{\link{predict_dynamic_growth}}. 
+in \code{\link[=predict_dynamic_growth]{predict_dynamic_growth()}}.
 If \code{NULL} (default), uses the same conditions as those for fitting.}
+
+\item{k}{penalty for the parameters (k=2 by default)}
 }
 \description{
-The \code{FitDynamicGrowth} class contains a model fitted based on growth data
-under dynamic conditions. Its constructor is \code{\link{fit_dynamic_growth}}.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
+
+The class \link{FitDynamicGrowth} has been superseded by the top-level
+class \link{GrowthFit}, which provides a unified approach for growth modelling.
+
+Still, it is still returned if the superseded \code{\link[=fit_dynamic_growth]{fit_dynamic_growth()}} is called.
 
 It is a subclass of list with the items:
-     \itemize{
-         \item fit_results: the object returned by \code{modFit}.
-         \item best_prediction: the model prediction for the fitted parameters.
-         \item env_conditions: environmental conditions for the fit.
-         \item data: data used for the fit.
-         \item starting: starting values for model fitting
-         \item known: parameter values set as known.
-         \item sec_models: a named vector with the secondary model
-         for each environmental factor
-         }
+\itemize{
+\item fit_results: the object returned by \code{modFit}.
+\item best_prediction: the model prediction for the fitted parameters.
+\item env_conditions: environmental conditions for the fit.
+\item data: data used for the fit.
+\item starting: starting values for model fitting
+\item known: parameter values set as known.
+\item sec_models: a named vector with the secondary model
+for each environmental factor
+}
 }
 \section{Functions}{
 \itemize{
@@ -129,5 +141,9 @@ calculated as 1/(0.5*Hessian)
 \item \code{fitted.FitDynamicGrowth}: fitted values.
 
 \item \code{predict.FitDynamicGrowth}: model predictions.
+
+\item \code{logLik.FitDynamicGrowth}: loglikelihood of the model
+
+\item \code{AIC.FitDynamicGrowth}: Akaike Information Criterion
 }}
 
