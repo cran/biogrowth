@@ -1,7 +1,7 @@
-e89e96b1c73fff9f14a7625eeef1360d *DESCRIPTION
+70ad493a8b097e762e7a63f3e63f1ae6 *DESCRIPTION
 68e9bf59f0ee3f0f72c702fecda2cce8 *NAMESPACE
-94b92f60bd6aac3b53ef60c488b089ed *NEWS.md
-2142b69444707440d314dce7c37381b6 *R/CompareIsoGrowth_class.R
+5c928e671d1d231d2933d43b7b0bdae6 *NEWS.md
+606076dab5a8a23ddecf16f6f298c5ed *R/CompareIsoGrowth_class.R
 a3ca90bbd1dcc7b85d21ac8a6f506de1 *R/DynamicGrowth_class.R
 eb628e93dbdb668a34e15f1f5e5be997 *R/FitDynamicGrowthMCMC_class.R
 158986b930e4268d5f8f5a34e4b2e147 *R/FitDynamicGrowth_class.R
@@ -9,7 +9,7 @@ eb628e93dbdb668a34e15f1f5e5be997 *R/FitDynamicGrowthMCMC_class.R
 6712554ce6d1b445778e1400ce45508c *R/FitMultipleDynamicGrowth_class.R
 303ed8c894a32e988f5bd5a02ff4cc24 *R/FitMultipleGrowthMCMC_class.R
 b68a26909a9612e5cd0b45946c1897e1 *R/FitSecondaryGrowth_class.R
-1885b9d91f2ec4e5d5505f1c8d8c4a29 *R/GlobalGrowthComparison_class.R
+da5e9d481c66e7b0d043c3388d340966 *R/GlobalGrowthComparison_class.R
 95708d2870cd37d29cdb0d58211e414a *R/GlobalGrowthFit_class.R
 3381d37b27bec8a2aa85c9c062a5ece0 *R/GrowthFit_class.R
 66f98448ddd12f3b39dd6021bea9f27c *R/GrowthPrediction_class.R
@@ -61,7 +61,7 @@ bb9d255c46c7545c32acd8765f59afa8 *inst/doc/v02_growth_fitting.R
 1d9074224db1b86f44f1e5a7bbdc76b3 *inst/doc/v02_growth_fitting.html
 9930efd6d7fdef4bfd68ddb4586ac9e7 *inst/doc/v03_growth_uncertainty.R
 b5c2c2ff8265703a2277fc1627292cc7 *inst/doc/v03_growth_uncertainty.Rmd
-0c787ae78c2b34b11b1ac82789394ec8 *inst/doc/v03_growth_uncertainty.html
+c50767b9f001577bd4775c3d06a206f9 *inst/doc/v03_growth_uncertainty.html
 27ce1ba39e9b68b579fbb15fcd3bf3b8 *inst/doc/v04_model_comparison.R
 fd3a820c156879ca51a5bb70992ecef6 *inst/doc/v04_model_comparison.Rmd
 d6506ac790849242146c7018dd48c40b *inst/doc/v04_model_comparison.html

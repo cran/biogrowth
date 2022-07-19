@@ -1,3 +1,7 @@
+# biogrowth 1.0.0-2 
+
+* fixed a bug in coef.GlobalGrowthComparison and coef.GrowthComparison
+
 # biogrowth 1.0.0
 
 * added a biogrowth-package help page
