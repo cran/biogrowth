@@ -1,3 +1,7 @@
+# biogrowth 1.0.0-3
+
+* upgraded the HTML documentation to the format of R version 4
+
 # biogrowth 1.0.0-2 
 
 * fixed a bug in coef.GlobalGrowthComparison and coef.GrowthComparison
