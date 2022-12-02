@@ -1,3 +1,7 @@
+# biogrowth 1.0.1
+
+* included two new datasets: `refrigeratorSpain` and `greek_tractors`.
+
 # biogrowth 1.0.0-3
 
 * upgraded the HTML documentation to the format of R version 4

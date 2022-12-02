@@ -14,19 +14,16 @@
 
 <title>Description of datasets</title>
 
-<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
-// v0.0.1
-// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
-
-document.addEventListener('DOMContentLoaded', function() {
-  const codeList = document.getElementsByClassName("sourceCode");
-  for (var i = 0; i < codeList.length; i++) {
-    var linkList = codeList[i].getElementsByTagName('a');
-    for (var j = 0; j < linkList.length; j++) {
-      if (linkList[j].innerHTML === "") {
-        linkList[j].setAttribute('aria-hidden', 'true');
-      }
-    }
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
   }
 });
 </script>
@@ -51,19 +48,19 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 </style>
 <style type="text/css" data-origin="pandoc">
-code.sourceCode > span { display: inline-block; line-height: 1.25; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-code.sourceCode > span:empty { height: 1.2em; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -83,7 +80,7 @@ pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-le
 div.sourceCode
   {   }
 @media screen {
-code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -344,80 +341,116 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(biogrowth)</span></code></pre></div>
-<p>The <strong>biogrowth</strong> package includes several datasets to aid in the understanding of its functions. They can be loaded with a call to the function <code>data()</code> passing the name of the dataset as an argument.</p>
-<p>The dataset <code>example_cardinal</code> includes an example of the type of data used for estimating cardinal model parameters. It has three columns: temperature, pH and mu. The two first represent the storage conditions during several static growth experiments, whereas the latter is the specific growth rate observed in those experiments. This dataset is intended to be used for <code>fit_secondary_growth()</code>.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">data</span>(<span class="st">&quot;example_cardinal&quot;</span>)</span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="kw">head</span>(example_cardinal)</span>
-<span id="cb2-3"><a href="#cb2-3"></a><span class="co">#&gt;   temperature pH           mu</span></span>
-<span id="cb2-4"><a href="#cb2-4"></a><span class="co">#&gt; 1    0.000000  5 9.768505e-04</span></span>
-<span id="cb2-5"><a href="#cb2-5"></a><span class="co">#&gt; 2    5.714286  5 2.624919e-03</span></span>
-<span id="cb2-6"><a href="#cb2-6"></a><span class="co">#&gt; 3   11.428571  5 0.000000e+00</span></span>
-<span id="cb2-7"><a href="#cb2-7"></a><span class="co">#&gt; 4   17.142857  5 1.530706e-04</span></span>
-<span id="cb2-8"><a href="#cb2-8"></a><span class="co">#&gt; 5   22.857143  5 2.301817e-05</span></span>
-<span id="cb2-9"><a href="#cb2-9"></a><span class="co">#&gt; 6   28.571429  5 3.895598e-04</span></span></code></pre></div>
-<p>The datasets <code>example_dynamic_growth</code> and <code>example_env_conditions</code> describe a dynamic growth experiment, which can be used for the <code>fit_dynamic_growth()</code> function. The dataset <code>example_env_conditions</code> describes the experimental design; i.e. how the environmental factors vary during the experiment. It has three columns: time (the elapsed time), temperature (the storage temperature) and aw (the water activity).</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">data</span>(<span class="st">&quot;example_env_conditions&quot;</span>)</span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="kw">head</span>(example_env_conditions)</span>
-<span id="cb3-3"><a href="#cb3-3"></a><span class="co">#&gt; # A tibble: 3 × 3</span></span>
-<span id="cb3-4"><a href="#cb3-4"></a><span class="co">#&gt;    time temperature    aw</span></span>
-<span id="cb3-5"><a href="#cb3-5"></a><span class="co">#&gt;   &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt;</span></span>
-<span id="cb3-6"><a href="#cb3-6"></a><span class="co">#&gt; 1     0          20  0.99</span></span>
-<span id="cb3-7"><a href="#cb3-7"></a><span class="co">#&gt; 2     5          30  0.95</span></span>
-<span id="cb3-8"><a href="#cb3-8"></a><span class="co">#&gt; 3    15          35  0.9</span></span></code></pre></div>
-<p>The dataset <code>example_dynamic_growth</code> illustrates the population size observed during the experiment described by <code>example_env_conditions</code>. It has two columns: time (the elapsed time) and logN (the decimal logarithm of the observed population size).</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">data</span>(<span class="st">&quot;example_dynamic_growth&quot;</span>)</span>
-<span id="cb4-2"><a href="#cb4-2"></a><span class="kw">head</span>(example_dynamic_growth)</span>
-<span id="cb4-3"><a href="#cb4-3"></a><span class="co">#&gt; # A tibble: 6 × 2</span></span>
-<span id="cb4-4"><a href="#cb4-4"></a><span class="co">#&gt;    time     logN</span></span>
-<span id="cb4-5"><a href="#cb4-5"></a><span class="co">#&gt;   &lt;dbl&gt;    &lt;dbl&gt;</span></span>
-<span id="cb4-6"><a href="#cb4-6"></a><span class="co">#&gt; 1 0      0.0670 </span></span>
-<span id="cb4-7"><a href="#cb4-7"></a><span class="co">#&gt; 2 0.517 -0.00463</span></span>
-<span id="cb4-8"><a href="#cb4-8"></a><span class="co">#&gt; 3 1.03  -0.0980 </span></span>
-<span id="cb4-9"><a href="#cb4-9"></a><span class="co">#&gt; 4 1.55  -0.0986 </span></span>
-<span id="cb4-10"><a href="#cb4-10"></a><span class="co">#&gt; 5 2.07   0.111  </span></span>
-<span id="cb4-11"><a href="#cb4-11"></a><span class="co">#&gt; 6 2.59  -0.0465</span></span></code></pre></div>
-<p>The dataset <code>growth_salmonella</code> contains the growth of <em>Salmonella spp.</em> in broth. It has been retrived from ComBase (ID: B092_10). It has two columns: time (elapsed time) and logN (the decimal logarithm of the observed population size).</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">data</span>(<span class="st">&quot;growth_salmonella&quot;</span>)</span>
-<span id="cb5-2"><a href="#cb5-2"></a><span class="kw">head</span>(growth_salmonella)</span>
-<span id="cb5-3"><a href="#cb5-3"></a><span class="co">#&gt; # A tibble: 6 × 2</span></span>
-<span id="cb5-4"><a href="#cb5-4"></a><span class="co">#&gt;    time  logN</span></span>
-<span id="cb5-5"><a href="#cb5-5"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt;</span></span>
-<span id="cb5-6"><a href="#cb5-6"></a><span class="co">#&gt; 1  0     3.36</span></span>
-<span id="cb5-7"><a href="#cb5-7"></a><span class="co">#&gt; 2  1.95  3.4 </span></span>
-<span id="cb5-8"><a href="#cb5-8"></a><span class="co">#&gt; 3  2.78  3.44</span></span>
-<span id="cb5-9"><a href="#cb5-9"></a><span class="co">#&gt; 4  3.78  3.31</span></span>
-<span id="cb5-10"><a href="#cb5-10"></a><span class="co">#&gt; 5  4.8   3.39</span></span>
-<span id="cb5-11"><a href="#cb5-11"></a><span class="co">#&gt; 6  5.7   3.65</span></span></code></pre></div>
-<p>The datasets <code>multiple_counts</code> and <code>multiple_conditions</code> simulate several growth experiments performed for the same microorganism under dynamic conditions that vary between experiments. The observed microbial counts are included in <code>multiple_counts</code>, which is a list where each element includes the observations of one experiment with two columns: <code>time</code> (elapsed time) and <code>logN</code> the logarithm of the observed population size.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">data</span>(<span class="st">&quot;multiple_counts&quot;</span>)</span>
-<span id="cb6-2"><a href="#cb6-2"></a><span class="kw">head</span>(multiple_counts[[<span class="dv">1</span>]])</span>
-<span id="cb6-3"><a href="#cb6-3"></a><span class="co">#&gt;       time        logN</span></span>
-<span id="cb6-4"><a href="#cb6-4"></a><span class="co">#&gt; 1 0.000000 -0.20801574</span></span>
-<span id="cb6-5"><a href="#cb6-5"></a><span class="co">#&gt; 2 1.666667 -0.03630986</span></span>
-<span id="cb6-6"><a href="#cb6-6"></a><span class="co">#&gt; 3 3.333333 -0.29846914</span></span>
-<span id="cb6-7"><a href="#cb6-7"></a><span class="co">#&gt; 4 5.000000  0.35029686</span></span>
-<span id="cb6-8"><a href="#cb6-8"></a><span class="co">#&gt; 5 6.666667  0.14326140</span></span>
-<span id="cb6-9"><a href="#cb6-9"></a><span class="co">#&gt; 6 8.333333 -0.40357904</span></span></code></pre></div>
-<p>Then, <code>multiple_conditions</code> describes the (dynamic) values of the environmental conditions during the experiment. In this case, the experiment considers the effect of temperature and pH. This is reflected in each entry including a column, <code>time</code>, with the elapsed time and two additional columns: <code>pH</code> (observed pH) and <code>temperature</code> (observed temperature. )</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">data</span>(<span class="st">&quot;multiple_conditions&quot;</span>)</span>
-<span id="cb7-2"><a href="#cb7-2"></a><span class="kw">head</span>(multiple_conditions[[<span class="dv">1</span>]])</span>
-<span id="cb7-3"><a href="#cb7-3"></a><span class="co">#&gt;   time temperature  pH</span></span>
-<span id="cb7-4"><a href="#cb7-4"></a><span class="co">#&gt; 1    0          20 6.5</span></span>
-<span id="cb7-5"><a href="#cb7-5"></a><span class="co">#&gt; 2   15          30 7.0</span></span>
-<span id="cb7-6"><a href="#cb7-6"></a><span class="co">#&gt; 3   40          40 6.5</span></span></code></pre></div>
-<p>The dataset <code>arabian_tractors</code> includes the number of agricultural tractors in the Arab World according to the World Bank. It is included to show the applicability of <code>fit_isothermal_growth</code> for data from other fields.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">data</span>(<span class="st">&quot;arabian_tractors&quot;</span>)</span>
-<span id="cb8-2"><a href="#cb8-2"></a><span class="kw">head</span>(arabian_tractors)</span>
-<span id="cb8-3"><a href="#cb8-3"></a><span class="co">#&gt; # A tibble: 6 × 2</span></span>
-<span id="cb8-4"><a href="#cb8-4"></a><span class="co">#&gt;    year tractors</span></span>
-<span id="cb8-5"><a href="#cb8-5"></a><span class="co">#&gt;   &lt;dbl&gt;    &lt;dbl&gt;</span></span>
-<span id="cb8-6"><a href="#cb8-6"></a><span class="co">#&gt; 1  1961    73480</span></span>
-<span id="cb8-7"><a href="#cb8-7"></a><span class="co">#&gt; 2  1962    76900</span></span>
-<span id="cb8-8"><a href="#cb8-8"></a><span class="co">#&gt; 3  1963    81263</span></span>
-<span id="cb8-9"><a href="#cb8-9"></a><span class="co">#&gt; 4  1964    86067</span></span>
-<span id="cb8-10"><a href="#cb8-10"></a><span class="co">#&gt; 5  1965    91117</span></span>
-<span id="cb8-11"><a href="#cb8-11"></a><span class="co">#&gt; 6  1966    97645</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(biogrowth)</span></code></pre></div>
+<p>The <strong>biogrowth</strong> package includes several datasets to
+aid in the understanding of its functions. They can be loaded with a
+call to the function <code>data()</code> passing the name of the dataset
+as an argument.</p>
+<p>The dataset <code>example_cardinal</code> includes an example of the
+type of data used for estimating cardinal model parameters. It has three
+columns: temperature, pH and mu. The two first represent the storage
+conditions during several static growth experiments, whereas the latter
+is the specific growth rate observed in those experiments. This dataset
+is intended to be used for <code>fit_secondary_growth()</code>.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;example_cardinal&quot;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(example_cardinal)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   temperature pH           mu</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1    0.000000  5 9.768505e-04</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2    5.714286  5 2.624919e-03</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3   11.428571  5 0.000000e+00</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4   17.142857  5 1.530706e-04</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5   22.857143  5 2.301817e-05</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6   28.571429  5 3.895598e-04</span></span></code></pre></div>
+<p>The datasets <code>example_dynamic_growth</code> and
+<code>example_env_conditions</code> describe a dynamic growth
+experiment, which can be used for the <code>fit_dynamic_growth()</code>
+function. The dataset <code>example_env_conditions</code> describes the
+experimental design; i.e. how the environmental factors vary during the
+experiment. It has three columns: time (the elapsed time), temperature
+(the storage temperature) and aw (the water activity).</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;example_env_conditions&quot;</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(example_env_conditions)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 3 × 3</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    time temperature    aw</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     0          20  0.99</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2     5          30  0.95</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3    15          35  0.9</span></span></code></pre></div>
+<p>The dataset <code>example_dynamic_growth</code> illustrates the
+population size observed during the experiment described by
+<code>example_env_conditions</code>. It has two columns: time (the
+elapsed time) and logN (the decimal logarithm of the observed population
+size).</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;example_dynamic_growth&quot;</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(example_dynamic_growth)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 6 × 2</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    time     logN</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;dbl&gt;    &lt;dbl&gt;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 0      0.0670 </span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 0.517 -0.00463</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 1.03  -0.0980 </span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 1.55  -0.0986 </span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5 2.07   0.111  </span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6 2.59  -0.0465</span></span></code></pre></div>
+<p>The dataset <code>growth_salmonella</code> contains the growth of
+<em>Salmonella spp.</em> in broth. It has been retrived from ComBase
+(ID: B092_10). It has two columns: time (elapsed time) and logN (the
+decimal logarithm of the observed population size).</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;growth_salmonella&quot;</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(growth_salmonella)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 6 × 2</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    time  logN</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1  0     3.36</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2  1.95  3.4 </span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3  2.78  3.44</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4  3.78  3.31</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5  4.8   3.39</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6  5.7   3.65</span></span></code></pre></div>
+<p>The datasets <code>multiple_counts</code> and
+<code>multiple_conditions</code> simulate several growth experiments
+performed for the same microorganism under dynamic conditions that vary
+between experiments. The observed microbial counts are included in
+<code>multiple_counts</code>, which is a list where each element
+includes the observations of one experiment with two columns:
+<code>time</code> (elapsed time) and <code>logN</code> the logarithm of
+the observed population size.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;multiple_counts&quot;</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(multiple_counts[[<span class="dv">1</span>]])</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       time        logN</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 0.000000 -0.20801574</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 1.666667 -0.03630986</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 3.333333 -0.29846914</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 5.000000  0.35029686</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5 6.666667  0.14326140</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6 8.333333 -0.40357904</span></span></code></pre></div>
+<p>Then, <code>multiple_conditions</code> describes the (dynamic) values
+of the environmental conditions during the experiment. In this case, the
+experiment considers the effect of temperature and pH. This is reflected
+in each entry including a column, <code>time</code>, with the elapsed
+time and two additional columns: <code>pH</code> (observed pH) and
+<code>temperature</code> (observed temperature. )</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;multiple_conditions&quot;</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(multiple_conditions[[<span class="dv">1</span>]])</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   time temperature  pH</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1    0          20 6.5</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2   15          30 7.0</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3   40          40 6.5</span></span></code></pre></div>
+<p>The dataset <code>arabian_tractors</code> includes the number of
+agricultural tractors in the Arab World according to the World Bank. It
+is included to show the applicability of
+<code>fit_isothermal_growth</code> for data from other fields.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;arabian_tractors&quot;</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(arabian_tractors)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 6 × 2</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    year tractors</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;dbl&gt;    &lt;dbl&gt;</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1  1961    73480</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2  1962    76900</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3  1963    81263</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4  1964    86067</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5  1965    91117</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6  1966    97645</span></span></code></pre></div>
 
 
 
