@@ -1,3 +1,7 @@
+# biogrowth 1.0.2
+
+* included a new vignette describing the use of custom distributions for forward uncertainty propagation.
+
 # biogrowth 1.0.1
 
 * included two new datasets: `refrigeratorSpain` and `greek_tractors`.

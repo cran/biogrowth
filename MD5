@@ -1,6 +1,6 @@
-f7283546e75d84a552965aed3b53f21e *DESCRIPTION
+e45aafe8d79adcb420ede3801cca1946 *DESCRIPTION
 68e9bf59f0ee3f0f72c702fecda2cce8 *NAMESPACE
-8cd50ce1873ef4ef7440b38dc2d41adf *NEWS.md
+48d4caf332fa5f05193361389dd39852 *NEWS.md
 606076dab5a8a23ddecf16f6f298c5ed *R/CompareIsoGrowth_class.R
 a3ca90bbd1dcc7b85d21ac8a6f506de1 *R/DynamicGrowth_class.R
 eb628e93dbdb668a34e15f1f5e5be997 *R/FitDynamicGrowthMCMC_class.R
@@ -42,7 +42,7 @@ a202f5342c8bd40f844d710be32c557a *R/predict_MCMC_growth.R
 7ee9fe10b928ad5e14ea2b0dcc3528ed *R/top_fit.R
 f5f0dc0403018e73f27b6de2dbfafd4b *R/top_predict.R
 33b0b8c276f9578c1e8b1f2c845db7c3 *README.md
-2633e561a87421f5626688df2c4a12bc *build/vignette.rds
+9add06fd33d4bdb5cb17e0b23173f405 *build/vignette.rds
 df727aab105bcea37555b96c563fb797 *data/arabian_tractors.rda
 4fe4e4354f4f2387bcc5cab8cc757c51 *data/conditions_pH_temperature.rda
 d180c479f6831ec3e9396a04378ec9d6 *data/example_cardinal.rda
@@ -63,10 +63,13 @@ bb9d255c46c7545c32acd8765f59afa8 *inst/doc/v02_growth_fitting.R
 e3f0ba3d121418dce7ee409029a22884 *inst/doc/v02_growth_fitting.html
 9930efd6d7fdef4bfd68ddb4586ac9e7 *inst/doc/v03_growth_uncertainty.R
 b5c2c2ff8265703a2277fc1627292cc7 *inst/doc/v03_growth_uncertainty.Rmd
-5071ed30abd31f1b39b9581b57aec5e0 *inst/doc/v03_growth_uncertainty.html
+e781836393d3818c5714351e4c5e888f *inst/doc/v03_growth_uncertainty.html
 27ce1ba39e9b68b579fbb15fcd3bf3b8 *inst/doc/v04_model_comparison.R
 fd3a820c156879ca51a5bb70992ecef6 *inst/doc/v04_model_comparison.Rmd
 58300c424bd831b9a161849a93658a37 *inst/doc/v04_model_comparison.html
+898c146d3e1d71bc1703461706575d41 *inst/doc/v05_custom_stochastic.R
+3245e33fd8a737e47eac7c1ca43ea4bd *inst/doc/v05_custom_stochastic.Rmd
+1dba98624a60388a9c4e7a22c2db2562 *inst/doc/v05_custom_stochastic.html
 88daea2f014310944a98a2fbbdf76b5d *inst/doc/v21_math_models.R
 7780bb1aa2de78da6bd2a0c07395cec6 *inst/doc/v21_math_models.Rmd
 6175eb2f9530524d0edc19d3784f6a26 *inst/doc/v21_math_models.html
@@ -84,7 +87,7 @@ ee2e00151cabed85d9c4d7590c34dede *inst/doc/v23_units-dilemma.html
 3567e226f87f6ff74f8f3fd1220e451d *inst/doc/v31_secondary_for_static.html
 a14a1d41669d40ed02f3805625bc2fe4 *inst/doc/v99_deprecated.R
 1515569c98b57e5240f5a0a1d4f60dcb *inst/doc/v99_deprecated.Rmd
-42571df3182fbcd8164ac279c60804a7 *inst/doc/v99_deprecated.html
+954218584773993336aa3690eb6928d5 *inst/doc/v99_deprecated.html
 98420056b4d08f3aede643aee28dc47a *man/CPM_model.Rd
 063a5a4c66eb4db34ed1c2a7b3b03703 *man/DynamicGrowth.Rd
 4a8f00f7e0a4fb6e43942a35ab70fab6 *man/FitDynamicGrowth.Rd
@@ -199,6 +202,7 @@ f03daa7fc624e32a7f49207c697d8f48 *vignettes/v01_growth_predictions.Rmd
 8e86f843e3caec458673cfb2343f806a *vignettes/v02_growth_fitting.Rmd
 b5c2c2ff8265703a2277fc1627292cc7 *vignettes/v03_growth_uncertainty.Rmd
 fd3a820c156879ca51a5bb70992ecef6 *vignettes/v04_model_comparison.Rmd
+3245e33fd8a737e47eac7c1ca43ea4bd *vignettes/v05_custom_stochastic.Rmd
 7780bb1aa2de78da6bd2a0c07395cec6 *vignettes/v21_math_models.Rmd
 50f58689ed203f36513608f53cc0edf1 *vignettes/v22_datasets.Rmd
 9b68220f138f586f77404e140c784d4c *vignettes/v23_units-dilemma.Rmd
