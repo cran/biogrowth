@@ -1,3 +1,7 @@
+# biogrowth 1.0.3
+
+* added the CITATION to the paper in the JSS.
+
 # biogrowth 1.0.2
 
 * included a new vignette describing the use of custom distributions for forward uncertainty propagation.
