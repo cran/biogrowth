@@ -1,6 +1,6 @@
-503d37cfbe9b11b7805111333fb8e88e *DESCRIPTION
+2d71df786ae44d0b37ee31b3d0cf37a5 *DESCRIPTION
 68e9bf59f0ee3f0f72c702fecda2cce8 *NAMESPACE
-c9e7bcf90608a097fed92c42e83bf008 *NEWS.md
+6bd61d15843001e0591f15f78974de31 *NEWS.md
 606076dab5a8a23ddecf16f6f298c5ed *R/CompareIsoGrowth_class.R
 a3ca90bbd1dcc7b85d21ac8a6f506de1 *R/DynamicGrowth_class.R
 eb628e93dbdb668a34e15f1f5e5be997 *R/FitDynamicGrowthMCMC_class.R
@@ -13,7 +13,7 @@ da5e9d481c66e7b0d043c3388d340966 *R/GlobalGrowthComparison_class.R
 95708d2870cd37d29cdb0d58211e414a *R/GlobalGrowthFit_class.R
 3381d37b27bec8a2aa85c9c062a5ece0 *R/GrowthFit_class.R
 66f98448ddd12f3b39dd6021bea9f27c *R/GrowthPrediction_class.R
-1813fa9dd818b2bb7736bf87164721dc *R/GrowthUncertainty_class.R
+cf50a62a5684dcadd451630d2d62281b *R/GrowthUncertainty_class.R
 adc64826b66b60565d61e32040317aca *R/IsothermalGrowth_class.R
 748131861cb706786b6c212d22e7a68b *R/MCMCgrowth_class.R
 303a988a1389470527ce83a9ed1890fd *R/S3_methods.R
@@ -25,7 +25,7 @@ c9d3b02ac5453453419d2be7ac368dcc *R/StochasticGrowth_class.R
 45182b9593f6535b8bbd0821c6e9a10a *R/data.R
 bd6b6271574e25fa8aad10f8fbe46a80 *R/fit_dynamic_growth.R
 2581d9081217254565db14b00ba8c331 *R/fit_iso_growth.R
-4f14f3d92a484a03b1471b1882725120 *R/fit_multi_dynamic.R
+a4af67dfbb3005d03ff2e276daf3def5 *R/fit_multi_dynamic.R
 8b82310456e5a980108ef49c7f4ec783 *R/fit_secondary_models.R
 a9fa3bb667e5c38b61d002435e44db00 *R/functions_counts.R
 96a2798deba7e6d169db269f2074d932 *R/gamma_models.R
@@ -38,7 +38,7 @@ b7b244c3860035ed0a8d3e325eff7d7f *R/predictMCMC.R
 a202f5342c8bd40f844d710be32c557a *R/predict_MCMC_growth.R
 34c02fe32642be00aa05a574334fb0a2 *R/predict_dynamic_growth.R
 31d821c37e5116d666b34f8dfdaa474c *R/predict_isothermal_growth.R
-34260fff0cac4a39d7f50cc379d3b0b1 *R/predict_stochastic_growth.R
+036a2442bb746c761f796ae89c53c370 *R/predict_stochastic_growth.R
 7ee9fe10b928ad5e14ea2b0dcc3528ed *R/top_fit.R
 f5f0dc0403018e73f27b6de2dbfafd4b *R/top_predict.R
 cf0a8c574145243d3ab643f4ab1a88ec *build/vignette.rds
@@ -62,8 +62,8 @@ f03daa7fc624e32a7f49207c697d8f48 *inst/doc/v01_growth_predictions.Rmd
 8e86f843e3caec458673cfb2343f806a *inst/doc/v02_growth_fitting.Rmd
 f775bff6eb07f39533c70037c8aefcde *inst/doc/v02_growth_fitting.html
 e511a11268d932327e11afcdd758cf9b *inst/doc/v03_growth_uncertainty.R
-b5c2c2ff8265703a2277fc1627292cc7 *inst/doc/v03_growth_uncertainty.Rmd
-adc7aa1de347dfee8ad9a415c680a514 *inst/doc/v03_growth_uncertainty.html
+77ad235c9869d203b86d0a5d4c407ec8 *inst/doc/v03_growth_uncertainty.Rmd
+9c5025cb9d8b979a6d7eb1c5777511e3 *inst/doc/v03_growth_uncertainty.html
 d269aaf49871d6767c4f00b050417782 *inst/doc/v04_model_comparison.R
 fd3a820c156879ca51a5bb70992ecef6 *inst/doc/v04_model_comparison.Rmd
 78f1130db4dd7af5ac8d83737cb75e5b *inst/doc/v04_model_comparison.html
@@ -101,7 +101,7 @@ bb1d05fbb599d8515e67ec960b99116e *man/GlobalGrowthFit.Rd
 2511d3a6d94a5da96e47fd4c72a8a38b *man/GrowthComparison.Rd
 9cab603bea786e41cd0375760868c1ad *man/GrowthFit.Rd
 52a76871b1563803f8551809cdba550c *man/GrowthPrediction.Rd
-08e2ea604e209ac386ae1b7ebe606ea1 *man/GrowthUncertainty.Rd
+541da38210c0b5262cac314c44853b59 *man/GrowthUncertainty.Rd
 e3efc4727aa006e81732586f491c4f23 *man/IsothermalGrowth.Rd
 90663fc12175b531e008cfe0a3961433 *man/MCMCgrowth.Rd
 6f55782962d10756400b133f76193090 *man/Q0_to_lambda.Rd
@@ -185,7 +185,7 @@ f71ba4bc5acedb7dd07cdcf67058f960 *man/predictMCMC.Rd
 61171f53398bff685ab1e5a95ab67296 *man/predict_MCMC_growth.Rd
 d96688fbe62dbdacf536457eb023c9c9 *man/predict_dynamic_growth.Rd
 5093fce402f49e9c2d2e6ca3975f65cd *man/predict_growth.Rd
-0113f07e0fdb9968ec2b10f4f04ccff7 *man/predict_growth_uncertainty.Rd
+8bb65d5a4b2b95bebfce23256b67a478 *man/predict_growth_uncertainty.Rd
 1d408108c0ff09e130b0f998bdee2c2b *man/predict_isothermal_growth.Rd
 6403f1ca1d53df43f693d1cf90b555b7 *man/predict_stochastic_growth.Rd
 08f1a8cdf513063435b818522446f6eb *man/primary_model_data.Rd
@@ -200,7 +200,7 @@ adb8d229e9644f057a064704a1963b7e *man/trilinear_model.Rd
 fc2ba8b9d70e23ca07df820b8e4abb9d *man/zwietering_gamma.Rd
 f03daa7fc624e32a7f49207c697d8f48 *vignettes/v01_growth_predictions.Rmd
 8e86f843e3caec458673cfb2343f806a *vignettes/v02_growth_fitting.Rmd
-b5c2c2ff8265703a2277fc1627292cc7 *vignettes/v03_growth_uncertainty.Rmd
+77ad235c9869d203b86d0a5d4c407ec8 *vignettes/v03_growth_uncertainty.Rmd
 fd3a820c156879ca51a5bb70992ecef6 *vignettes/v04_model_comparison.Rmd
 3245e33fd8a737e47eac7c1ca43ea4bd *vignettes/v05_custom_stochastic.Rmd
 7780bb1aa2de78da6bd2a0c07395cec6 *vignettes/v21_math_models.Rmd
