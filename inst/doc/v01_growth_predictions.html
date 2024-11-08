@@ -415,7 +415,10 @@ called <code>&quot;model&quot;</code> that defines the model equation. The keys
 identifying the types of model can be retrieved by calling
 <code>primary_model_data()</code>.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">primary_model_data</span>()</span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;modGompertz&quot; &quot;Baranyi&quot;     &quot;Trilinear&quot;   &quot;Logistic&quot;    &quot;Richards&quot;</span></span></code></pre></div>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co">#&gt;  [1] &quot;modGompertz&quot;          &quot;Baranyi&quot;              &quot;Baranyi_noLag&quot;       </span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt;  [4] &quot;Baranyi_noStationary&quot; &quot;Trilinear&quot;            &quot;Logistic&quot;            </span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt;  [7] &quot;Richards&quot;             &quot;Loglinear&quot;            &quot;Bilinear_lag&quot;        </span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt; [10] &quot;Bilinear_stationary&quot;</span></span></code></pre></div>
 <p>In this example, we will use the modified Baranyi model.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>my_model <span class="ot">&lt;-</span> <span class="st">&quot;Baranyi&quot;</span></span></code></pre></div>
 <p>Then, the values of the model parameters are defined using additional
@@ -727,7 +730,8 @@ for each environmental condition. The function
 secondary models. Calling it without any arguments returns the available
 model keys.</p>
 <div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="fu">secondary_model_data</span>()</span>
-<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;CPM&quot;           &quot;Zwietering&quot;    &quot;fullRatkowsky&quot;</span></span></code></pre></div>
+<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;CPM&quot;           &quot;Zwietering&quot;    &quot;fullRatkowsky&quot; &quot;Aryani&quot;       </span></span>
+<span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a><span class="co">#&gt; [5] &quot;Rosso_aw&quot;      &quot;Inhibitory&quot;</span></span></code></pre></div>
 <p>For instance, we will define a gamma-type model for temperature as
 defined by Zwietering et al. (1992). This is done by including an item
 called <code>model</code> in the list and assigning it the value

@@ -186,17 +186,32 @@ make_guess_factor <- function(fit_data, sec_model, factor
     
     c <- (mu_opt - 0)/(xopt - xmin)
     
+    ## guess for xhalf
+    
+    xhalf <- (xopt-xmin)/2
+    
+    ## guess for MIC
+    
+    MIC <- xmin
+    
+    ## guess for alpha
+    
+    alpha <- 1
+    
     ## Take the cardinal parameters
     
-    out <- list(xopt = xopt, xmin = xmin, xmax = xmax, n = n, c = c)
+    out <- list(xopt = xopt, xmin = xmin, xmax = xmax, n = n, c = c, xhalf = xhalf, MIC = MIC, alpha = alpha)
     
     par_map <- tribble(
-        ~ par,  ~CPM, ~Zwietering, ~fullRatkowsky,
-        "xmin", TRUE, TRUE, TRUE,
-        "xopt", TRUE, TRUE, FALSE,
-        "xmax", TRUE, FALSE, TRUE,
-        "n", TRUE, TRUE, FALSE,
-        "c", FALSE, FALSE, TRUE
+        ~ par,  ~CPM, ~Zwietering, ~fullRatkowsky, ~Rosso_aw, ~Aryani, ~Inhibitory,
+        "xmin", TRUE, TRUE, TRUE, TRUE, TRUE, FALSE,
+        "xopt", TRUE, TRUE, FALSE, FALSE, FALSE, FALSE,
+        "xmax", TRUE, FALSE, TRUE, FALSE, FALSE, FALSE,
+        "n", TRUE, TRUE, FALSE, FALSE, FALSE, FALSE, 
+        "c", FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, 
+        "xhalf", FALSE, FALSE, FALSE, FALSE, TRUE, FALSE,
+        "MIC", FALSE, FALSE, FALSE, FALSE, FALSE, TRUE,
+        "alpha", FALSE, FALSE, FALSE, FALSE, FALSE, TRUE
     )
     
     my_pars <- par_map$par[par_map[[sec_model]]]
@@ -283,7 +298,7 @@ make_guess_secondary <- function(fit_data, sec_model_names
 #' @param logbase_mu Base of the logarithm the growth rate is referred to. 
 #' By default, 10 (i.e. log10). See vignette about units for details. 
 #' 
-#' @return A [ggplot()] comparing the model prediction against the data
+#' @return A [ggplot2::ggplot()] comparing the model prediction against the data
 #' 
 #' 
 show_guess_primary <- function(fit_data, model_name, guess, 
@@ -337,7 +352,7 @@ show_guess_primary <- function(fit_data, model_name, guess,
 #' @param logbase_mu Base of the logarithm the growth rate is referred to. 
 #' By default, 10 (i.e. log10). See vignette about units for details. 
 #' 
-#' @return A [ggplot()] comparing the model prediction against the data
+#' @return A [ggplot2::ggplot()] comparing the model prediction against the data
 #' 
 #' 
 show_guess_dynamic <- function(fit_data, model_keys, guess,
@@ -407,7 +422,7 @@ show_guess_dynamic <- function(fit_data, model_keys, guess,
 #' @importFrom purrr map2
 #' @importFrom cowplot plot_grid
 #' 
-#' @return A [ggplot()] comparing the model prediction against the data
+#' @return A [ggplot2::ggplot()] comparing the model prediction against the data
 #' 
 #' @export
 #' 

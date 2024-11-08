@@ -35,6 +35,22 @@ primary_model_data <- function(model_name=NULL) {
                                       "to predicting bacterial growth in food. International Journal of Food",
                                       "Microbiology, 23(3-4), 277-294. https://doi.org/10.1016/0168-1605(94)90157-0")
                                       ),
+                       Baranyi_noLag = list(identifier = "Baranyi_noLag",
+                                            name = "Isothermal Baranyi model without lag phase",
+                                            pars = c("logN0", "logNmax", "mu"),
+                                            model = iso_Baranyi_noLag,
+                                            ref = paste("Baranyi, J., and Roberts, T. A. (1994). A dynamic approach",
+                                                        "to predicting bacterial growth in food. International Journal of Food",
+                                                        "Microbiology, 23(3-4), 277-294. https://doi.org/10.1016/0168-1605(94)90157-0")
+                                            ),
+                       Baranyi_noStationary = list(identifier = "Baranyi_noLag",
+                                            name = "Isothermal Baranyi model without stationary phase",
+                                            pars = c("logN0", "lambda", "mu"),
+                                            model = iso_Baranyi_noStat,
+                                            ref = paste("Baranyi, J., and Roberts, T. A. (1994). A dynamic approach",
+                                                        "to predicting bacterial growth in food. International Journal of Food",
+                                                        "Microbiology, 23(3-4), 277-294. https://doi.org/10.1016/0168-1605(94)90157-0")
+                                            ),
                        Trilinear = list(identifier = "Trilinear",
                                         name = "Tri-linear growth model",
                                         pars = c("logN0", "logNmax", "mu", "lambda"),
@@ -60,7 +76,26 @@ primary_model_data <- function(model_name=NULL) {
                                        ref = paste("Zwietering, M. H., Jongenburger, I., Rombouts,",
                                                    "F. M., and Riet, K. van t. (1990). Modeling of the Bacterial",
                                                    "Growth Curve. Applied and Environmental Microbiology, 56(6), 1875-1881.")
-                                       )
+                                       ),
+                       Loglinear = list(identifier = "Loglinear",
+                                        name = "Loglinear growth model",
+                                        pars = c("logN0", "mu"),
+                                        model = loglinear_model,
+                                        ref = paste("")
+                       ),
+                       Bilinear_lag = list(identifier = "Bilinear_lag",
+                                        name = "Bilinear growth model with lag phase (no stationary)",
+                                        pars = c("logN0", "mu", "lambda"),
+                                        model = bilinear_lag,
+                                        ref = paste("")
+                       ),
+                       Bilinear_stationary = list(identifier = "Bilinear_stationary",
+                                           name = "Bilinear growth model with stationary phase (no lag)",
+                                           pars = c("logN0", "mu", "logNmax"),
+                                           model = bilinear_stationary,
+                                           ref = paste("")
+                       )
+                       
                        )
 
 

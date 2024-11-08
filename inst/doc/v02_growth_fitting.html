@@ -451,7 +451,10 @@ must have a unique entry named “primary” with the model key of a primary
 model. A list of valid keys can be retrieved calling
 <code>primary_model_data()</code> without any argument.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">primary_model_data</span>()</span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;modGompertz&quot; &quot;Baranyi&quot;     &quot;Trilinear&quot;   &quot;Logistic&quot;    &quot;Richards&quot;</span></span></code></pre></div>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#&gt;  [1] &quot;modGompertz&quot;          &quot;Baranyi&quot;              &quot;Baranyi_noLag&quot;       </span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt;  [4] &quot;Baranyi_noStationary&quot; &quot;Trilinear&quot;            &quot;Logistic&quot;            </span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt;  [7] &quot;Richards&quot;             &quot;Loglinear&quot;            &quot;Bilinear_lag&quot;        </span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt; [10] &quot;Bilinear_stationary&quot;</span></span></code></pre></div>
 <p>In this example, we will use the Baranyi growth model.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>models <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">primary =</span> <span class="st">&quot;Baranyi&quot;</span>)</span></code></pre></div>
 <p>In the case of primary model fitting, <code>fit_growth()</code> uses
@@ -782,7 +785,8 @@ vector where the names refer to the environmental factor and the value
 to the type of model. Supported models can be retrieved using
 <code>secondary_model_data()</code>.</p>
 <div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="fu">secondary_model_data</span>()</span>
-<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;CPM&quot;           &quot;Zwietering&quot;    &quot;fullRatkowsky&quot;</span></span></code></pre></div>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;CPM&quot;           &quot;Zwietering&quot;    &quot;fullRatkowsky&quot; &quot;Aryani&quot;       </span></span>
+<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a><span class="co">#&gt; [5] &quot;Rosso_aw&quot;      &quot;Inhibitory&quot;</span></span></code></pre></div>
 <p>In this example we will use cardinal models for water activity and a
 Zwietering-type model for temperature. Note that the names of this
 vector must be identical to the columns in
@@ -1166,7 +1170,8 @@ the model to use. The model keys implemented in
 <strong>biogrowth</strong> can be retrieved using
 <code>secondary_model_data()</code>.</p>
 <div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" tabindex="-1"></a><span class="fu">secondary_model_data</span>()</span>
-<span id="cb46-2"><a href="#cb46-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;CPM&quot;           &quot;Zwietering&quot;    &quot;fullRatkowsky&quot;</span></span></code></pre></div>
+<span id="cb46-2"><a href="#cb46-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;CPM&quot;           &quot;Zwietering&quot;    &quot;fullRatkowsky&quot; &quot;Aryani&quot;       </span></span>
+<span id="cb46-3"><a href="#cb46-3" tabindex="-1"></a><span class="co">#&gt; [5] &quot;Rosso_aw&quot;      &quot;Inhibitory&quot;</span></span></code></pre></div>
 <p>For this example, we will use a CPM for pH and an Zwietering model
 for temperature (this decision is not based on any scientific argument,
 just as demonstration of the functions in the package). Note that the

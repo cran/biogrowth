@@ -29,6 +29,9 @@ calculate_gammas_secondary <- function(sec_model_names, my_data, secondary_model
                                              this_sec$xopt, this_sec$xmax, this_sec$n),
                              Zwietering = zwietering_gamma(this_x, this_sec$xmin, this_sec$xopt, this_sec$n),
                              fullRatkowsky = full_Ratkowski(this_x, this_sec$xmin, this_sec$xmax, this_sec$c),
+                             Aryani = Aryani_model(this_x, this_sec$xmin, this_sec$xhalf),
+                             Rosso_aw = Rossoaw_model(this_x, this_sec$xmin),
+                             Inhibitory = inhibitory_model(this_x, this_sec$MIC, this_sec$alpha),
                              stop(paste("Model", this_sec$model, "not known."))
         )
         
@@ -125,7 +128,7 @@ get_secondary_residuals <- function(this_p, my_data,
 #' @param transformation Character defining the transformation of `mu` for
 #' model fitting. One of `sq` (square root; default), `log` (log-transform) or
 #' `none` (no transformation).
-#' @param ... Additional arguments passed to [modFit()].
+#' @param ... Additional arguments passed to [FME::modFit()].
 #' @param check Whether to do some basic checks (TRUE by default).
 #' @param formula an object of class "formula" describing the y variable. The
 #' right hand side must be ".". By default `mu ~ .`.

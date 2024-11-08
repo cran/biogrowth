@@ -78,7 +78,7 @@
 #' conditions for dynamic experiments. It must have with the elapsed time (named `time` 
 #' by default; can be changed with the "formula" argument), 
 #' and as many additional columns as environmental factors. Ignored for "constant" environments.
-#' @param ... Additional arguments for [ode()].
+#' @param ... Additional arguments for [deSolve::ode()].
 #' @param check Whether to check the validity of the models. `TRUE` by default.
 #' @param logbase_mu Base of the logarithm the growth rate is referred to. 
 #' By default, the same as logbase_logN. See vignette about units for details. 
@@ -211,8 +211,11 @@ predict_growth <- function(times,
         }
         
         if( is.null(my_pars$logNmax) & is.null(my_pars$C) ) {
+          
+          if (! is.null(my_pars$Nmax)) {  # Now, some models do not have an Nmax
             my_pars$logNmax <- log(my_pars$Nmax, base = logbase_logN)
             my_pars$Nmax <- NULL
+          }
         }
         
         if( is.null(my_pars[["mu"]]) ) {
@@ -221,9 +224,12 @@ predict_growth <- function(times,
         }
         
         if( is.null(my_pars$lambda) ) {
+          
+          if (! is.null(my_pars$Q0)) {  # Now, some models do not have lambda
             my_pars$lambda <- Q0_to_lambda(my_pars$Q0, my_pars$mu,
                                            logbase_mu = logbase_mu)
             my_pars$Q0 <- NULL
+          }
         }
         
         ## Give a warning if someone defined environmental conditions

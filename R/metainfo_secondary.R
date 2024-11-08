@@ -46,7 +46,33 @@ secondary_model_data <- function(model_name=NULL) {
                                                         "bacterial culture growth rate throughout the entire",
                                                         "biokinetic temperature range. Journal of Bacteriology,",
                                                         "154(3), 1222-1226.")
-                                            )
+                                            ),
+                       Aryani = list(identifier = "Aryani",
+                                     name = "Aryani pH model",
+                                     pars = c("xmin", "xhalf"),
+                                     model = Aryani_model,
+                                     ref = paste("Aryani, D.C., den Besten, H.M.W., Zwietering, M.H.,", 
+                                                 "2016. Quantifying Variability in Growth and Thermal Inactivation", 
+                                                 "Kinetics of Lactobacillus plantarum. Appl. Environ. Microbiol. 82,", 
+                                                 "4896-4908."
+                                                 )
+                                     ),
+                       Rosso_aw = list(identifier = "Rosso_aw",
+                            name = "Rosso aw model",
+                            pars = c("xmin"),
+                            model = Rossoaw_model,
+                            ref = paste("Rosso, L., Robinson, T.P., 2001.",
+                            "A cardinal model to describe the effect of water activity",
+                            "on the growth of moulds. International Journal of Food Microbiology",
+                            "63, 265-273."
+                            )
+                            ),
+                       Inhibitory = list(identifier = "Inhibitory",
+                                         name = "Model for inhibitory chemicals",
+                                         pars = c("MIC", "alpha"),
+                                         model = inhibitory_model,
+                                         ref = paste("")
+                                         )
                        )
 
     if (is.null(model_name)) {

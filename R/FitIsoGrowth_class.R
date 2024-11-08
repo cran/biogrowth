@@ -14,7 +14,7 @@
 #'          \item model: name of the primary inactivation model
 #'          \item starting_point: initial value of the model parameters
 #'          \item known: fixed model parameters
-#'          \item fit: object returned by [modFit()]
+#'          \item fit: object returned by [FME::modFit()]
 #'          \item best_prediction: model prediction for the model fitted.
 #'          }
 #' 
@@ -53,12 +53,12 @@ print.FitIsoGrowth <- function(x, ...) {
 #' @param x The object of class `FitIsoGrowth` to plot.
 #' @param y ignored
 #' @param ... ignored.
-#' @param line_col Aesthetic parameter to change the colour of the line geom in the plot, see: [geom_line()]
-#' @param line_size Aesthetic parameter to change the thickness of the line geom in the plot, see: [geom_line()]
-#' @param line_type Aesthetic parameter to change the type of the line geom in the plot, takes numbers (1-6) or strings ("solid") see: [geom_line()]
-#' @param point_col Aesthetic parameter to change the colour of the point geom, see: [geom_point()]
-#' @param point_size Aesthetic parameter to change the size of the point geom, see: [geom_point()]
-#' @param point_shape Aesthetic parameter to change the shape of the point geom, see: [geom_point()]
+#' @param line_col Aesthetic parameter to change the colour of the line geom in the plot, see: [ggplot2::geom_line()]
+#' @param line_size Aesthetic parameter to change the thickness of the line geom in the plot, see: [ggplot2::geom_line()]
+#' @param line_type Aesthetic parameter to change the type of the line geom in the plot, takes numbers (1-6) or strings ("solid") see: [ggplot2::geom_line()]
+#' @param point_col Aesthetic parameter to change the colour of the point geom, see: [ggplot2::geom_point()]
+#' @param point_size Aesthetic parameter to change the size of the point geom, see: [ggplot2::geom_point()]
+#' @param point_shape Aesthetic parameter to change the shape of the point geom, see: [ggplot2::geom_point()]
 #'
 #' @export
 #'

@@ -54,17 +54,17 @@
 
 \item{y}{ignored}
 
-\item{line_col}{Aesthetic parameter to change the colour of the line geom in the plot, see: \code{\link[=geom_line]{geom_line()}}}
+\item{line_col}{Aesthetic parameter to change the colour of the line geom in the plot, see: \code{\link[ggplot2:geom_path]{ggplot2::geom_line()}}}
 
-\item{line_size}{Aesthetic parameter to change the thickness of the line geom in the plot, see: \code{\link[=geom_line]{geom_line()}}}
+\item{line_size}{Aesthetic parameter to change the thickness of the line geom in the plot, see: \code{\link[ggplot2:geom_path]{ggplot2::geom_line()}}}
 
-\item{line_type}{Aesthetic parameter to change the type of the line geom in the plot, takes numbers (1-6) or strings ("solid") see: \code{\link[=geom_line]{geom_line()}}}
+\item{line_type}{Aesthetic parameter to change the type of the line geom in the plot, takes numbers (1-6) or strings ("solid") see: \code{\link[ggplot2:geom_path]{ggplot2::geom_line()}}}
 
-\item{point_col}{Aesthetic parameter to change the colour of the point geom, see: \code{\link[=geom_point]{geom_point()}}}
+\item{point_col}{Aesthetic parameter to change the colour of the point geom, see: \code{\link[ggplot2:geom_point]{ggplot2::geom_point()}}}
 
-\item{point_size}{Aesthetic parameter to change the size of the point geom, see: \code{\link[=geom_point]{geom_point()}}}
+\item{point_size}{Aesthetic parameter to change the size of the point geom, see: \code{\link[ggplot2:geom_point]{ggplot2::geom_point()}}}
 
-\item{point_shape}{Aesthetic parameter to change the shape of the point geom, see: \code{\link[=geom_point]{geom_point()}}}
+\item{point_shape}{Aesthetic parameter to change the shape of the point geom, see: \code{\link[ggplot2:geom_point]{ggplot2::geom_point()}}}
 
 \item{object}{an instance of FitIsoGrowth}
 
@@ -87,7 +87,7 @@ It is a subclass of list with the items:
 \item model: name of the primary inactivation model
 \item starting_point: initial value of the model parameters
 \item known: fixed model parameters
-\item fit: object returned by \code{\link[=modFit]{modFit()}}
+\item fit: object returned by \code{\link[FME:modFit]{FME::modFit()}}
 \item best_prediction: model prediction for the model fitted.
 }
 }

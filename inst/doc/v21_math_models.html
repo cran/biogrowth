@@ -526,6 +526,29 @@ constant environmental conditions</em> for some critical points when
 using them.</p>
 </div>
 </div>
+<div id="baranyi-model-under-static-conditions-without-stationary-phase" class="section level3">
+<h3>Baranyi model under static conditions without stationary phase</h3>
+<p>The algebraic solution of the Baranyi model can be simplified when
+there is no stationary phase to</p>
+<p><span class="math display">\[
+  \log N = \log N_0 + \mu A
+\]</span></p>
+<p>where</p>
+<p>$$ A = t + ( e^{-t} + e^{-} - e^{-t - } )</p>
+<p>$$</p>
+</div>
+<div id="baranyi-model-under-static-conditions-without-lag-phase" class="section level3">
+<h3>Baranyi model under static conditions without lag phase</h3>
+<p>The algebraic solution of the Baranyi model can be simplified when
+there is no lag phase to</p>
+<p><span class="math display">\[
+\log_{10} N = \log_{10} N_{max} + \log_{10}{ \frac{1 + \exp{ \left( \ln
+(10) \mu t \right)} - 1}
+  {\exp \left( \ln (10) \mu (t-\lambda) \right) + 10^{\log_{10} N_{max}
+- \log_{10} N_0}}  
+  }
+\]</span></p>
+</div>
 <div id="trilinear-model-under-static-conditions" class="section level3">
 <h3>Trilinear model under static conditions</h3>
 <p>Buchanan et al. (1997) proposed a trilinear model as a more simple
@@ -548,6 +571,34 @@ this phase, the specific growth rate is constant, with slope <span class="math i
 time required for the population size to reach <span class="math inline">\(N_{max}\)</span> ($t_{max} = ( <em>{10}
 N</em>{max} - _{10} N_0 )/+ $).</p>
 </div>
+<div id="bilinear-model-with-lag-phase" class="section level3">
+<h3>Bilinear model with lag phase</h3>
+<p>This model is a simplification of the trilinear model without a
+stationary phase. It is described by the following equations:</p>
+<p><span class="math display">\[
+\log_{10} N(t) = \log_{10} N_0; t \leq \lambda \\
+\log_{10} N(t) = \log_{10} N_0 + \mu(t-\lambda); otherwise
+\]</span></p>
+</div>
+<div id="bilinear-model-with-stationary-phase" class="section level3">
+<h3>Bilinear model with stationary phase</h3>
+<p>This model is a simplification of the trilinear model without a lag
+phase. It is described by the following equations:</p>
+<p><span class="math display">\[
+\log_{10} N(t) = \log_{10} N_0 + \mu \cdot t; t &lt; t_{max} \\
+\log_{10} N(t) = \log N_{max}; otherwise
+\]</span> where <span class="math inline">\(t_{max}\)</span>, defined is
+the time required for the population size to reach <span class="math inline">\(N_{max}\)</span> ($t_{max} = ( <em>{10}
+N</em>{max} - _{10} N_0 )/$).</p>
+</div>
+<div id="loglinear-model" class="section level3">
+<h3>Loglinear model</h3>
+<p>This model is a simplification of the trilinear model that only has
+an exponential phase. It is described by the following equation:</p>
+<p><span class="math display">\[
+\log_{10} N(t) = \log_{10} N_0 + \mu \cdot t
+\]</span></p>
+</div>
 <div id="gathering-primary-models-metadata-directly-from-biogrowth" class="section level3">
 <h3>Gathering primary models metadata directly from biogrowth</h3>
 <p>The <strong>biogrowth</strong> package includes the
@@ -557,7 +608,10 @@ argument (<code>model_name</code>). By default, this argument is
 <code>NULL</code>, and the function returns the identifiers of the
 available models.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">primary_model_data</span>()</span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;modGompertz&quot; &quot;Baranyi&quot;     &quot;Trilinear&quot;   &quot;Logistic&quot;    &quot;Richards&quot;</span></span></code></pre></div>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co">#&gt;  [1] &quot;modGompertz&quot;          &quot;Baranyi&quot;              &quot;Baranyi_noLag&quot;       </span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt;  [4] &quot;Baranyi_noStationary&quot; &quot;Trilinear&quot;            &quot;Logistic&quot;            </span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt;  [7] &quot;Richards&quot;             &quot;Loglinear&quot;            &quot;Bilinear_lag&quot;        </span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt; [10] &quot;Bilinear_stationary&quot;</span></span></code></pre></div>
 <p>If a model identifier is passed, it returns a list with mode
 meta-information.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>meta_info <span class="ot">&lt;-</span> <span class="fu">primary_model_data</span>(<span class="st">&quot;Trilinear&quot;</span>)</span></code></pre></div>
@@ -671,6 +725,40 @@ as</p>
 <p>Note that parameter <span class="math inline">\(b\)</span> banishes
 after doing the division, so this model has 3 model parameters: <span class="math inline">\(c\)</span>, <span class="math inline">\(X_{min}\)</span> and <span class="math inline">\(X_{max}\)</span>.</p>
 </div>
+</div>
+<div id="secondary-model-by-aryani" class="section level2">
+<h2>Secondary model by Aryani</h2>
+<p>The secondary model by Aryani et al. (2016) was defined for the
+relationship between the growth rate and pH. It is defined as</p>
+<p><span class="math display">\[
+\gamma(X) = 1 - 2^{- \left( X - X_{min} \right)/ \left( X_{1/2} -
+X_{min} \right) }
+\]</span></p>
+<p>where <span class="math inline">\(X_{min}\)</span> is the minimum
+value of <span class="math inline">\(X\)</span> enabling growth, and
+<span class="math inline">\(X_{1/2}\)</span> is the value of <span class="math inline">\(X\)</span> where <span class="math inline">\(\gamma(X) = 0.5\)</span>.</p>
+</div>
+<div id="secondary-model-for-water-activity-by-rosso" class="section level2">
+<h2>Secondary model for water activity by Rosso</h2>
+<p>The secondary model for water activity by Rosso (et al. 2001) is
+defined as</p>
+<p><span class="math display">\[
+\gamma(X) = \frac{X-X_{min}}{1 - X_{min}}
+\]</span></p>
+<p>where <span class="math inline">\(X_{min}\)</span> is the minimum
+value of <span class="math inline">\(X\)</span> enabling growth. Please
+note that this model is defined between 0 and 1, so it specially
+tailored for the effect of water activity.</p>
+</div>
+<div id="secondary-model-for-inhibitory-compounds" class="section level2">
+<h2>Secondary model for inhibitory compounds</h2>
+<p>The general model for inhibitory compounds is defined as</p>
+<p><span class="math display">\[
+\gamma(X) &lt;- 1 - \left( \frac{X}{MIC} \right)^\alpha
+\]</span></p>
+<p>where <span class="math inline">\(MIC\)</span> is the minimum
+inhibitory concentration and <span class="math inline">\(\alpha\)</span>
+is a shape factor.</p>
 <div id="gathering-meta-data-about-secondary-models-directly-from-biogrowth" class="section level3">
 <h3>Gathering meta data about secondary models directly from
 biogrowth</h3>
@@ -681,7 +769,8 @@ about the secondary models it implements. It takes just one argument
 <code>NULL</code>, and the function returns the identifiers of the
 available models.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">secondary_model_data</span>()</span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;CPM&quot;           &quot;Zwietering&quot;    &quot;fullRatkowsky&quot;</span></span></code></pre></div>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;CPM&quot;           &quot;Zwietering&quot;    &quot;fullRatkowsky&quot; &quot;Aryani&quot;       </span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&gt; [5] &quot;Rosso_aw&quot;      &quot;Inhibitory&quot;</span></span></code></pre></div>
 <p>If, instead, one passes any valid model identifier, the function
 returns its meta-information.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>meta_info <span class="ot">&lt;-</span> <span class="fu">secondary_model_data</span>(<span class="st">&quot;CPM&quot;</span>)</span></code></pre></div>
@@ -779,17 +868,32 @@ growth.</td>
 growth.</td>
 </tr>
 <tr class="even">
+<td><span class="math inline">\(X_{1/2}\)</span></td>
+<td><code>xhalf</code></td>
+<td>Value of <span class="math inline">\(X\)</span> where <span class="math inline">\(\mu = \mu_{opt}/2\)</span>.</td>
+</tr>
+<tr class="odd">
 <td><span class="math inline">\(X_{max}\)</span></td>
 <td><code>xmax</code></td>
 <td>Maximum value of <span class="math inline">\(X\)</span> enabling
 growth.</td>
 </tr>
+<tr class="even">
+<td><span class="math inline">\(MIC\)</span></td>
+<td><code>MIC</code></td>
+<td>Minimum inhibitory concentration.</td>
+</tr>
 <tr class="odd">
+<td><span class="math inline">\(alpha\)</span></td>
+<td><code>alpha</code></td>
+<td>Shape factor.</td>
+</tr>
+<tr class="even">
 <td><span class="math inline">\(n\)</span></td>
 <td><code>n</code></td>
 <td>Order of the secondary model.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><span class="math inline">\(\mu_{opt}\)</span></td>
 <td><code>mu_opt</code></td>
 <td>Value of <span class="math inline">\(\mu\)</span> under optimal
@@ -814,6 +918,9 @@ default settings of these functions, although this can changed using the
 </div>
 <div id="references" class="section level2">
 <h2>References</h2>
+<p>Aryani, D.C., den Besten, H.M.W., Zwietering, M.H., 2016. Quantifying
+Variability in Growth and Thermal Inactivation Kinetics of Lactobacillus
+plantarum. Appl. Environ. Microbiol. 82, 4896–4908. <a href="https://doi.org/10.1128/AEM.00277-16" class="uri">https://doi.org/10.1128/AEM.00277-16</a></p>
 <p>Baranyi, J., &amp; Roberts, T. A. (1994). A dynamic approach to
 predicting bacterial growth in food. International Journal of Food
 Microbiology, 23(3–4), 277–294. <a href="https://doi.org/10.1016/0168-1605(94)90157-0" class="uri">https://doi.org/10.1016/0168-1605(94)90157-0</a></p>
@@ -856,6 +963,9 @@ J Bacteriol, 149(1), 1–5.</p>
 Convenient Model To Describe the Combined Effects of Temperature and pH
 on Microbial Growth. Applied and Environmental Microbiology, 61(2),
 610–616.</p>
+<p>Rosso, L., Robinson, T.P., 2001. A cardinal model to describe the
+effect of water activity on the growth of moulds. International Journal
+of Food Microbiology 63, 265–273.</p>
 <p>Soetaert, K., &amp; Petzoldt, T. (2010). Inverse Modelling,
 Sensitivity and Monte Carlo Analysis in R Using Package FME. Journal of
 Statistical Software, 33(3). <a href="https://doi.org/10.18637/jss.v033.i03" class="uri">https://doi.org/10.18637/jss.v033.i03</a></p>
