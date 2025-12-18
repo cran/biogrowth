@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Serial dilution method</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Serial dilution method</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(biogrowth)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
+<p>C:6f2837a024707_serial_dilution.R</p>
+<div id="the-serial-fold-dilution-method" class="section level2">
+<h2>The serial-fold dilution method</h2>
+<p>Plate counts are generally a reliable method for studying microbial
+growth. However, this approach does not scale well with the size of the
+experimental design, such as when studying variability or developing a
+secondary model, where we must analyze hundreds of curves. This issue
+can be mitigated using experiments based on optical density, as devices
+(such as a bioscreen or a plate reader) can use 96-well or 100-well
+plates, so a large number of conditions can be run in parallel.</p>
+<p>It is important to underline that these devices do not measure the
+microbial concentration directly. Instead, it is estimated from the
+optical density. The device sends a ray of light through the well and
+measures the intensity that reaches a sensor. Higher microbial
+concentration will scatter more light and reduce the light intensity
+read. The dataset <code>example_od</code> includes a typical dataset
+provided by this type of device:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;example_od&quot;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>example_od <span class="sc">%&gt;%</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span><span class="st">&quot;time&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> time, <span class="at">y =</span> value, <span class="at">colour =</span> name)) <span class="sc">+</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- -->C:6f2837a024707_serial_dilution.R</p>
+<p>Although the OD curve looks like a bacterial growth curve, it is not.
+Higher microbial concentrations imply a higher OD, but this relation is
+not one-to-one. Furthermore, OD-based devices have a relatively large
+detection limit (often around 6 log CFU/mL, although this limit is
+strain and media dependent), so only the background noise is measured
+for low microbial concentrations. As a result, the OD curve has a longer
+lag phase than the actual microbial growth curve. Another issue is that
+the device often “saturates” before the stationary growth phase. This is
+because, at some point, the OD is so high (due to the high microbial
+concentration) that there is no longer a measurable change in OD. Hence,
+the OD curve enters the stationary phase before the actual microbial
+population (red in the plot above).</p>
+<p>Therefore, when using OD-based devices, we only observe a relativelly
+small part of the growth curve. Also, even though we can estimate some
+growth parameters (<span class="math inline">\(\lambda\)</span>, <span class="math inline">\(\log N_{max}\)</span> and <span class="math inline">\(\mu\)</span>) directly from the OD curve, they are
+not really representative of the actual microbial growth.</p>
+</div>
+<div id="the-serial-fold-dilution-method-1" class="section level2">
+<h2>The serial-fold dilution method</h2>
+<div id="principles" class="section level3">
+<h3>Principles</h3>
+<p>The serial-fold dilution method allows the estimation of the
+parameters of the growth curve directly from OD measurements. This
+method is based on these hypotheses:</p>
+<ul>
+<li>the microbial concentration that corresponds to a given OD (within a
+reasonable range) is unique. For instance, that an OD of 0.2 corresponds
+to a microbial concentration of 6 log CFU/ml.</li>
+<li>that the growth parameters (<span class="math inline">\(\lambda\)</span>, <span class="math inline">\(\mu\)</span>) do not depend on the initial
+bacterial concentration.</li>
+</ul>
+<p>Under these hypotheses, we would observe this for different initial
+levels of the inoculum:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">c</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">4</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>    <span class="fu">map</span>(.,</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>        <span class="sc">~</span> <span class="fu">predict_growth</span>(<span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">100</span>, <span class="at">length =</span> <span class="dv">1000</span>),</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>                         <span class="fu">list</span>(<span class="at">model =</span> <span class="st">&quot;Baranyi&quot;</span>, </span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>                              <span class="at">logN0 =</span> <span class="fu">log10</span>(<span class="dv">100</span><span class="sc">/</span><span class="dv">6</span><span class="sc">^</span>.),</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>                              <span class="at">logNmax =</span> <span class="dv">8</span>,</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>                              <span class="at">mu =</span> .<span class="dv">2</span>, <span class="at">lambda =</span> <span class="dv">15</span>))</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>        ) <span class="sc">%&gt;%</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>    <span class="fu">imap_dfr</span>(., <span class="sc">~</span> <span class="fu">mutate</span>(.x<span class="sc">$</span>simulation, <span class="at">dil =</span> .y<span class="dv">-1</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>    <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> time, <span class="at">y =</span> logN, <span class="at">colour =</span> <span class="fu">factor</span>(dil))) <span class="sc">+</span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>    <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">6</span>, <span class="at">linetype =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- -->C:6f2837a024707_serial_dilution.R</p>
+<p>The plot shows a horizontal line, which corresponds to a hypothetical
+detection concentration <span class="math inline">\(N_{det}\)</span>
+according to some OD (e.g., 0.25). It can be demonstrated that, under
+those hypotheses, the time to detection <span class="math inline">\(t_{det}\)</span> is linear with the initial
+concentration on each well (<span class="math inline">\(N_0\)</span>:</p>
+<p><span class="math display">\[
+t_{det} = \left( \lambda + \frac{1}{\mu} \log N_{det} \right) -
+\frac{1}{\mu} \log N_0
+\]</span></p>
+<p>Taking advantage of that, the serial-dilution method performs several
+experiments in parallel for different initial concentrations. Then, the
+parameters of the growth curve can be obtained from the values of <span class="math inline">\(t_{det}\)</span> by (non-linear) regression.</p>
+<p>For practical reasons, the different initial concentrations are
+defined by serial dilution of the samples. A bacterial inoculum is
+introduced in the wells at one edge of the plate. Then, this is serially
+diluted (often two-fold) over the whole row. Therefore, the initial
+concentration on each well is defined by</p>
+<p><span class="math display">\[
+\log N_0 = \log \left( N_{dil0} / f^d \right) = \log N_{dil0} - \log f^d
+= \log N_{dil0} - d \cdot \log f
+\]</span></p>
+<p>where <span class="math inline">\(N_{dil0}\)</span> is the microbial
+concentration in the well corresponding to the zero-dilution, <span class="math inline">\(d\)</span> is the number of dilutions and <span class="math inline">\(f\)</span> is the dilution factor.</p>
+<p>By introducing that expression in the equation above, the <span class="math inline">\(t_{det}\)</span> can be calculated from the number
+of dilutions according to</p>
+<p><span class="math display">\[
+t_{det} = \left( \lambda + \frac{1}{\mu} \log N_{det} - \frac{1}{\mu}
+\log N_{dil0} \right) + \frac{1}{\mu} \cdot d \cdot \log f
+\]</span></p>
+</div>
+</div>
+<div id="implementation-of-the-serial-dilution-method" class="section level2">
+<h2>Implementation of the serial dilution method</h2>
+<div id="getting-the-time-to-detection" class="section level3">
+<h3>Getting the time-to-detection</h3>
+<p>The <strong>biogrowth</strong> package includes several functions and
+methods that implement the serial dilution method. First,
+<code>get_TTDs()</code> can be used to calculate <span class="math inline">\(t_{det}\)</span> directly from OD data. This
+function takes three arguments:</p>
+<ul>
+<li><code>OD_data</code></li>
+<li><code>target_OD</code></li>
+<li><code>codified</code></li>
+</ul>
+<p>The data is introduced as a <code>tibble</code> (or
+<code>data.frame</code>) using <code>OD_data</code>. It must include a
+column named <code>time</code> with the time of the reading. Then, the
+remaining columns indicate the OD measured on each well. The
+<code>example_od</code> dataset includes an example of the data
+format.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;example_od&quot;</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">head</span>(example_od)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt; # A tibble: 6 × 61</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt;    time `S/7/35/R1_0` `S/7/35/R2_0` `S/7/35/R3_0` `S/7/35/R1_1` `S/7/35/R2_1`</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt;   &lt;dbl&gt;         &lt;dbl&gt;         &lt;dbl&gt;         &lt;dbl&gt;         &lt;dbl&gt;         &lt;dbl&gt;</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt; 1  0            0.075         0.075         0.076         0.074         0.075</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt; 2  0.25         0.077         0.076         0.077         0.074         0.075</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt; 3  0.5          0.077         0.076         0.077         0.074         0.075</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt; 4  0.75         0.077         0.076         0.077         0.073         0.074</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co">#&gt; 5  1            0.077         0.076         0.077         0.074         0.074</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co">#&gt; 6  1.25         0.076         0.076         0.077         0.074         0.074</span></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="co">#&gt; # ℹ 55 more variables: `S/7/35/R3_1` &lt;dbl&gt;, `S/7/35/R1_2` &lt;dbl&gt;,</span></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="co">#&gt; #   `S/7/35/R2_2` &lt;dbl&gt;, `S/7/35/R3_2` &lt;dbl&gt;, `S/7/35/R1_3` &lt;dbl&gt;,</span></span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="co">#&gt; #   `S/7/35/R2_3` &lt;dbl&gt;, `S/7/35/R3_3` &lt;dbl&gt;, `S/7/35/R1_4` &lt;dbl&gt;,</span></span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="co">#&gt; #   `S/7/35/R2_4` &lt;dbl&gt;, `S/7/35/R3_4` &lt;dbl&gt;, `S/7/35/R1_5` &lt;dbl&gt;,</span></span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a><span class="co">#&gt; #   `S/7/35/R2_5` &lt;dbl&gt;, `S/7/35/R3_5` &lt;dbl&gt;, `S/7/35/R1_6` &lt;dbl&gt;,</span></span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a><span class="co">#&gt; #   `S/7/35/R2_6` &lt;dbl&gt;, `S/7/35/R3_6` &lt;dbl&gt;, `S/7/35/R1_7` &lt;dbl&gt;,</span></span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a><span class="co">#&gt; #   `S/7/35/R2_7` &lt;dbl&gt;, `S/7/35/R3_7` &lt;dbl&gt;, `S/7/35/R1_8` &lt;dbl&gt;, …</span></span></code></pre></div>
+<p>C:6f2837a024707_serial_dilution.R</p>
+<p>Any detection OD can be defined using the <code>target_OD</code>
+argument. The <span class="math inline">\(t_{det}\)</span> for each well
+is calculated by linear interpolation.</p>
+<p>By passing these two arguments to <code>get_TTDs()</code>, the
+function returns a <code>tibble</code> with two columns:
+<code>condition</code> (the name of the well, according to the names in
+<code>OD_data</code>) and <code>TTD</code> (the value of <span class="math inline">\(t_{det}\)</span> for that well). For wells where
+<span class="math inline">\(t_{det}\)</span> is not reached, the
+function returns an <code>NA</code>.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>my_TTDs <span class="ot">&lt;-</span> <span class="fu">get_TTDs</span>(example_od, <span class="at">target_OD =</span> <span class="fl">0.2</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a></span>
+<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a></span>
+<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-24"><a href="#cb5-24" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-25"><a href="#cb5-25" tabindex="-1"></a></span>
+<span id="cb5-26"><a href="#cb5-26" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-27"><a href="#cb5-27" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-28"><a href="#cb5-28" tabindex="-1"></a></span>
+<span id="cb5-29"><a href="#cb5-29" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-30"><a href="#cb5-30" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-31"><a href="#cb5-31" tabindex="-1"></a></span>
+<span id="cb5-32"><a href="#cb5-32" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-33"><a href="#cb5-33" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-34"><a href="#cb5-34" tabindex="-1"></a></span>
+<span id="cb5-35"><a href="#cb5-35" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-36"><a href="#cb5-36" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-37"><a href="#cb5-37" tabindex="-1"></a></span>
+<span id="cb5-38"><a href="#cb5-38" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-39"><a href="#cb5-39" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-40"><a href="#cb5-40" tabindex="-1"></a></span>
+<span id="cb5-41"><a href="#cb5-41" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-42"><a href="#cb5-42" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-43"><a href="#cb5-43" tabindex="-1"></a></span>
+<span id="cb5-44"><a href="#cb5-44" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-45"><a href="#cb5-45" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-46"><a href="#cb5-46" tabindex="-1"></a></span>
+<span id="cb5-47"><a href="#cb5-47" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-48"><a href="#cb5-48" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-49"><a href="#cb5-49" tabindex="-1"></a></span>
+<span id="cb5-50"><a href="#cb5-50" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-51"><a href="#cb5-51" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-52"><a href="#cb5-52" tabindex="-1"></a></span>
+<span id="cb5-53"><a href="#cb5-53" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-54"><a href="#cb5-54" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-55"><a href="#cb5-55" tabindex="-1"></a></span>
+<span id="cb5-56"><a href="#cb5-56" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-57"><a href="#cb5-57" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-58"><a href="#cb5-58" tabindex="-1"></a></span>
+<span id="cb5-59"><a href="#cb5-59" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-60"><a href="#cb5-60" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-61"><a href="#cb5-61" tabindex="-1"></a></span>
+<span id="cb5-62"><a href="#cb5-62" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-63"><a href="#cb5-63" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-64"><a href="#cb5-64" tabindex="-1"></a></span>
+<span id="cb5-65"><a href="#cb5-65" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-66"><a href="#cb5-66" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-67"><a href="#cb5-67" tabindex="-1"></a></span>
+<span id="cb5-68"><a href="#cb5-68" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-69"><a href="#cb5-69" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-70"><a href="#cb5-70" tabindex="-1"></a></span>
+<span id="cb5-71"><a href="#cb5-71" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-72"><a href="#cb5-72" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-73"><a href="#cb5-73" tabindex="-1"></a></span>
+<span id="cb5-74"><a href="#cb5-74" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-75"><a href="#cb5-75" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-76"><a href="#cb5-76" tabindex="-1"></a></span>
+<span id="cb5-77"><a href="#cb5-77" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-78"><a href="#cb5-78" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-79"><a href="#cb5-79" tabindex="-1"></a></span>
+<span id="cb5-80"><a href="#cb5-80" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-81"><a href="#cb5-81" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-82"><a href="#cb5-82" tabindex="-1"></a></span>
+<span id="cb5-83"><a href="#cb5-83" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-84"><a href="#cb5-84" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-85"><a href="#cb5-85" tabindex="-1"></a></span>
+<span id="cb5-86"><a href="#cb5-86" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-87"><a href="#cb5-87" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-88"><a href="#cb5-88" tabindex="-1"></a></span>
+<span id="cb5-89"><a href="#cb5-89" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-90"><a href="#cb5-90" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-91"><a href="#cb5-91" tabindex="-1"></a></span>
+<span id="cb5-92"><a href="#cb5-92" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-93"><a href="#cb5-93" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-94"><a href="#cb5-94" tabindex="-1"></a></span>
+<span id="cb5-95"><a href="#cb5-95" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-96"><a href="#cb5-96" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-97"><a href="#cb5-97" tabindex="-1"></a></span>
+<span id="cb5-98"><a href="#cb5-98" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-99"><a href="#cb5-99" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-100"><a href="#cb5-100" tabindex="-1"></a></span>
+<span id="cb5-101"><a href="#cb5-101" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-102"><a href="#cb5-102" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-103"><a href="#cb5-103" tabindex="-1"></a></span>
+<span id="cb5-104"><a href="#cb5-104" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-105"><a href="#cb5-105" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-106"><a href="#cb5-106" tabindex="-1"></a></span>
+<span id="cb5-107"><a href="#cb5-107" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-108"><a href="#cb5-108" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-109"><a href="#cb5-109" tabindex="-1"></a></span>
+<span id="cb5-110"><a href="#cb5-110" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-111"><a href="#cb5-111" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-112"><a href="#cb5-112" tabindex="-1"></a></span>
+<span id="cb5-113"><a href="#cb5-113" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-114"><a href="#cb5-114" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-115"><a href="#cb5-115" tabindex="-1"></a></span>
+<span id="cb5-116"><a href="#cb5-116" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-117"><a href="#cb5-117" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-118"><a href="#cb5-118" tabindex="-1"></a></span>
+<span id="cb5-119"><a href="#cb5-119" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-120"><a href="#cb5-120" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-121"><a href="#cb5-121" tabindex="-1"></a></span>
+<span id="cb5-122"><a href="#cb5-122" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-123"><a href="#cb5-123" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-124"><a href="#cb5-124" tabindex="-1"></a></span>
+<span id="cb5-125"><a href="#cb5-125" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-126"><a href="#cb5-126" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-127"><a href="#cb5-127" tabindex="-1"></a></span>
+<span id="cb5-128"><a href="#cb5-128" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-129"><a href="#cb5-129" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-130"><a href="#cb5-130" tabindex="-1"></a></span>
+<span id="cb5-131"><a href="#cb5-131" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-132"><a href="#cb5-132" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-133"><a href="#cb5-133" tabindex="-1"></a></span>
+<span id="cb5-134"><a href="#cb5-134" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-135"><a href="#cb5-135" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-136"><a href="#cb5-136" tabindex="-1"></a></span>
+<span id="cb5-137"><a href="#cb5-137" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-138"><a href="#cb5-138" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-139"><a href="#cb5-139" tabindex="-1"></a></span>
+<span id="cb5-140"><a href="#cb5-140" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-141"><a href="#cb5-141" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-142"><a href="#cb5-142" tabindex="-1"></a></span>
+<span id="cb5-143"><a href="#cb5-143" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-144"><a href="#cb5-144" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-145"><a href="#cb5-145" tabindex="-1"></a></span>
+<span id="cb5-146"><a href="#cb5-146" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-147"><a href="#cb5-147" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-148"><a href="#cb5-148" tabindex="-1"></a></span>
+<span id="cb5-149"><a href="#cb5-149" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-150"><a href="#cb5-150" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-151"><a href="#cb5-151" tabindex="-1"></a></span>
+<span id="cb5-152"><a href="#cb5-152" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-153"><a href="#cb5-153" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-154"><a href="#cb5-154" tabindex="-1"></a></span>
+<span id="cb5-155"><a href="#cb5-155" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-156"><a href="#cb5-156" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-157"><a href="#cb5-157" tabindex="-1"></a></span>
+<span id="cb5-158"><a href="#cb5-158" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-159"><a href="#cb5-159" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-160"><a href="#cb5-160" tabindex="-1"></a></span>
+<span id="cb5-161"><a href="#cb5-161" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-162"><a href="#cb5-162" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-163"><a href="#cb5-163" tabindex="-1"></a></span>
+<span id="cb5-164"><a href="#cb5-164" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-165"><a href="#cb5-165" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-166"><a href="#cb5-166" tabindex="-1"></a></span>
+<span id="cb5-167"><a href="#cb5-167" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-168"><a href="#cb5-168" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-169"><a href="#cb5-169" tabindex="-1"></a></span>
+<span id="cb5-170"><a href="#cb5-170" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-171"><a href="#cb5-171" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-172"><a href="#cb5-172" tabindex="-1"></a></span>
+<span id="cb5-173"><a href="#cb5-173" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-174"><a href="#cb5-174" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-175"><a href="#cb5-175" tabindex="-1"></a></span>
+<span id="cb5-176"><a href="#cb5-176" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-177"><a href="#cb5-177" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-178"><a href="#cb5-178" tabindex="-1"></a></span>
+<span id="cb5-179"><a href="#cb5-179" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb5-180"><a href="#cb5-180" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb5-181"><a href="#cb5-181" tabindex="-1"></a><span class="fu">head</span>(my_TTDs)</span>
+<span id="cb5-182"><a href="#cb5-182" tabindex="-1"></a><span class="co">#&gt; # A tibble: 6 × 2</span></span>
+<span id="cb5-183"><a href="#cb5-183" tabindex="-1"></a><span class="co">#&gt;   condition       TTD</span></span>
+<span id="cb5-184"><a href="#cb5-184" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;         &lt;dbl&gt;</span></span>
+<span id="cb5-185"><a href="#cb5-185" tabindex="-1"></a><span class="co">#&gt; 1 S/6,5/35/R1_0  6.32</span></span>
+<span id="cb5-186"><a href="#cb5-186" tabindex="-1"></a><span class="co">#&gt; 2 S/6,5/35/R1_1  6.87</span></span>
+<span id="cb5-187"><a href="#cb5-187" tabindex="-1"></a><span class="co">#&gt; 3 S/6,5/35/R1_2  7.30</span></span>
+<span id="cb5-188"><a href="#cb5-188" tabindex="-1"></a><span class="co">#&gt; 4 S/6,5/35/R1_3  7.73</span></span>
+<span id="cb5-189"><a href="#cb5-189" tabindex="-1"></a><span class="co">#&gt; 5 S/6,5/35/R1_4  8.15</span></span>
+<span id="cb5-190"><a href="#cb5-190" tabindex="-1"></a><span class="co">#&gt; 6 S/6,5/35/R1_5  8.51</span></span></code></pre></div>
+<p>C:6f2837a024707_serial_dilution.R</p>
+<p>Using the serial-dilution method requires the number of dilutions to
+be identified. This can be done by setting <code>codified = TRUE</code>.
+In that case, the column names of <code>OD_data</code> must be defined
+as “condition” + “_” + “n_dilutions”. For instance, the following column
+names in <code>example_od</code> indicate dilution 0, 1 and 2 for the
+same condition:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">names</span>(example_od)[<span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">8</span>)]</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;S/7/35/R1_0&quot; &quot;S/7/35/R1_1&quot; &quot;S/7/35/R1_2&quot;</span></span></code></pre></div>
+<p>C:6f2837a024707_serial_dilution.R</p>
+<p>Now, the <code>tibble</code> returned by <code>get_TTDs()</code> has
+an additional column with the number of dilutions. Furthermore, the
+identified of the dilution number is removed from
+<code>condition</code>:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>my_TTDs <span class="ot">&lt;-</span> <span class="fu">get_TTDs</span>(example_od, <span class="at">target_OD =</span> <span class="fl">0.2</span>, <span class="at">codified =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a></span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a></span>
+<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a></span>
+<span id="cb7-20"><a href="#cb7-20" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-21"><a href="#cb7-21" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-22"><a href="#cb7-22" tabindex="-1"></a></span>
+<span id="cb7-23"><a href="#cb7-23" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-24"><a href="#cb7-24" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-25"><a href="#cb7-25" tabindex="-1"></a></span>
+<span id="cb7-26"><a href="#cb7-26" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-27"><a href="#cb7-27" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-28"><a href="#cb7-28" tabindex="-1"></a></span>
+<span id="cb7-29"><a href="#cb7-29" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-30"><a href="#cb7-30" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-31"><a href="#cb7-31" tabindex="-1"></a></span>
+<span id="cb7-32"><a href="#cb7-32" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-33"><a href="#cb7-33" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-34"><a href="#cb7-34" tabindex="-1"></a></span>
+<span id="cb7-35"><a href="#cb7-35" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-36"><a href="#cb7-36" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-37"><a href="#cb7-37" tabindex="-1"></a></span>
+<span id="cb7-38"><a href="#cb7-38" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-39"><a href="#cb7-39" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-40"><a href="#cb7-40" tabindex="-1"></a></span>
+<span id="cb7-41"><a href="#cb7-41" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-42"><a href="#cb7-42" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-43"><a href="#cb7-43" tabindex="-1"></a></span>
+<span id="cb7-44"><a href="#cb7-44" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-45"><a href="#cb7-45" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-46"><a href="#cb7-46" tabindex="-1"></a></span>
+<span id="cb7-47"><a href="#cb7-47" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-48"><a href="#cb7-48" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-49"><a href="#cb7-49" tabindex="-1"></a></span>
+<span id="cb7-50"><a href="#cb7-50" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-51"><a href="#cb7-51" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-52"><a href="#cb7-52" tabindex="-1"></a></span>
+<span id="cb7-53"><a href="#cb7-53" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-54"><a href="#cb7-54" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-55"><a href="#cb7-55" tabindex="-1"></a></span>
+<span id="cb7-56"><a href="#cb7-56" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-57"><a href="#cb7-57" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-58"><a href="#cb7-58" tabindex="-1"></a></span>
+<span id="cb7-59"><a href="#cb7-59" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-60"><a href="#cb7-60" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-61"><a href="#cb7-61" tabindex="-1"></a></span>
+<span id="cb7-62"><a href="#cb7-62" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-63"><a href="#cb7-63" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-64"><a href="#cb7-64" tabindex="-1"></a></span>
+<span id="cb7-65"><a href="#cb7-65" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-66"><a href="#cb7-66" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-67"><a href="#cb7-67" tabindex="-1"></a></span>
+<span id="cb7-68"><a href="#cb7-68" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-69"><a href="#cb7-69" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-70"><a href="#cb7-70" tabindex="-1"></a></span>
+<span id="cb7-71"><a href="#cb7-71" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-72"><a href="#cb7-72" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-73"><a href="#cb7-73" tabindex="-1"></a></span>
+<span id="cb7-74"><a href="#cb7-74" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-75"><a href="#cb7-75" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-76"><a href="#cb7-76" tabindex="-1"></a></span>
+<span id="cb7-77"><a href="#cb7-77" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-78"><a href="#cb7-78" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-79"><a href="#cb7-79" tabindex="-1"></a></span>
+<span id="cb7-80"><a href="#cb7-80" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-81"><a href="#cb7-81" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-82"><a href="#cb7-82" tabindex="-1"></a></span>
+<span id="cb7-83"><a href="#cb7-83" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-84"><a href="#cb7-84" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-85"><a href="#cb7-85" tabindex="-1"></a></span>
+<span id="cb7-86"><a href="#cb7-86" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-87"><a href="#cb7-87" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-88"><a href="#cb7-88" tabindex="-1"></a></span>
+<span id="cb7-89"><a href="#cb7-89" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-90"><a href="#cb7-90" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-91"><a href="#cb7-91" tabindex="-1"></a></span>
+<span id="cb7-92"><a href="#cb7-92" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-93"><a href="#cb7-93" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-94"><a href="#cb7-94" tabindex="-1"></a></span>
+<span id="cb7-95"><a href="#cb7-95" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-96"><a href="#cb7-96" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-97"><a href="#cb7-97" tabindex="-1"></a></span>
+<span id="cb7-98"><a href="#cb7-98" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-99"><a href="#cb7-99" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-100"><a href="#cb7-100" tabindex="-1"></a></span>
+<span id="cb7-101"><a href="#cb7-101" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-102"><a href="#cb7-102" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-103"><a href="#cb7-103" tabindex="-1"></a></span>
+<span id="cb7-104"><a href="#cb7-104" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-105"><a href="#cb7-105" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-106"><a href="#cb7-106" tabindex="-1"></a></span>
+<span id="cb7-107"><a href="#cb7-107" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-108"><a href="#cb7-108" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-109"><a href="#cb7-109" tabindex="-1"></a></span>
+<span id="cb7-110"><a href="#cb7-110" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-111"><a href="#cb7-111" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-112"><a href="#cb7-112" tabindex="-1"></a></span>
+<span id="cb7-113"><a href="#cb7-113" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-114"><a href="#cb7-114" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-115"><a href="#cb7-115" tabindex="-1"></a></span>
+<span id="cb7-116"><a href="#cb7-116" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-117"><a href="#cb7-117" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-118"><a href="#cb7-118" tabindex="-1"></a></span>
+<span id="cb7-119"><a href="#cb7-119" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-120"><a href="#cb7-120" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-121"><a href="#cb7-121" tabindex="-1"></a></span>
+<span id="cb7-122"><a href="#cb7-122" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-123"><a href="#cb7-123" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-124"><a href="#cb7-124" tabindex="-1"></a></span>
+<span id="cb7-125"><a href="#cb7-125" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-126"><a href="#cb7-126" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-127"><a href="#cb7-127" tabindex="-1"></a></span>
+<span id="cb7-128"><a href="#cb7-128" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-129"><a href="#cb7-129" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-130"><a href="#cb7-130" tabindex="-1"></a></span>
+<span id="cb7-131"><a href="#cb7-131" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-132"><a href="#cb7-132" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-133"><a href="#cb7-133" tabindex="-1"></a></span>
+<span id="cb7-134"><a href="#cb7-134" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-135"><a href="#cb7-135" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-136"><a href="#cb7-136" tabindex="-1"></a></span>
+<span id="cb7-137"><a href="#cb7-137" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-138"><a href="#cb7-138" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-139"><a href="#cb7-139" tabindex="-1"></a></span>
+<span id="cb7-140"><a href="#cb7-140" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-141"><a href="#cb7-141" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-142"><a href="#cb7-142" tabindex="-1"></a></span>
+<span id="cb7-143"><a href="#cb7-143" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-144"><a href="#cb7-144" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-145"><a href="#cb7-145" tabindex="-1"></a></span>
+<span id="cb7-146"><a href="#cb7-146" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-147"><a href="#cb7-147" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-148"><a href="#cb7-148" tabindex="-1"></a></span>
+<span id="cb7-149"><a href="#cb7-149" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-150"><a href="#cb7-150" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-151"><a href="#cb7-151" tabindex="-1"></a></span>
+<span id="cb7-152"><a href="#cb7-152" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-153"><a href="#cb7-153" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-154"><a href="#cb7-154" tabindex="-1"></a></span>
+<span id="cb7-155"><a href="#cb7-155" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-156"><a href="#cb7-156" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-157"><a href="#cb7-157" tabindex="-1"></a></span>
+<span id="cb7-158"><a href="#cb7-158" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-159"><a href="#cb7-159" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-160"><a href="#cb7-160" tabindex="-1"></a></span>
+<span id="cb7-161"><a href="#cb7-161" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-162"><a href="#cb7-162" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-163"><a href="#cb7-163" tabindex="-1"></a></span>
+<span id="cb7-164"><a href="#cb7-164" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-165"><a href="#cb7-165" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-166"><a href="#cb7-166" tabindex="-1"></a></span>
+<span id="cb7-167"><a href="#cb7-167" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-168"><a href="#cb7-168" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-169"><a href="#cb7-169" tabindex="-1"></a></span>
+<span id="cb7-170"><a href="#cb7-170" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-171"><a href="#cb7-171" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-172"><a href="#cb7-172" tabindex="-1"></a></span>
+<span id="cb7-173"><a href="#cb7-173" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-174"><a href="#cb7-174" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-175"><a href="#cb7-175" tabindex="-1"></a></span>
+<span id="cb7-176"><a href="#cb7-176" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-177"><a href="#cb7-177" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-178"><a href="#cb7-178" tabindex="-1"></a></span>
+<span id="cb7-179"><a href="#cb7-179" tabindex="-1"></a><span class="co">#&gt; Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):</span></span>
+<span id="cb7-180"><a href="#cb7-180" tabindex="-1"></a><span class="co">#&gt; collapsing to unique &#39;x&#39; values</span></span>
+<span id="cb7-181"><a href="#cb7-181" tabindex="-1"></a><span class="fu">head</span>(my_TTDs)</span>
+<span id="cb7-182"><a href="#cb7-182" tabindex="-1"></a><span class="co">#&gt; # A tibble: 6 × 3</span></span>
+<span id="cb7-183"><a href="#cb7-183" tabindex="-1"></a><span class="co">#&gt;   condition     dil   TTD</span></span>
+<span id="cb7-184"><a href="#cb7-184" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;       &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb7-185"><a href="#cb7-185" tabindex="-1"></a><span class="co">#&gt; 1 S/6,5/35/R1     0  6.32</span></span>
+<span id="cb7-186"><a href="#cb7-186" tabindex="-1"></a><span class="co">#&gt; 2 S/6,5/35/R1     1  6.87</span></span>
+<span id="cb7-187"><a href="#cb7-187" tabindex="-1"></a><span class="co">#&gt; 3 S/6,5/35/R1     2  7.30</span></span>
+<span id="cb7-188"><a href="#cb7-188" tabindex="-1"></a><span class="co">#&gt; 4 S/6,5/35/R1     3  7.73</span></span>
+<span id="cb7-189"><a href="#cb7-189" tabindex="-1"></a><span class="co">#&gt; 5 S/6,5/35/R1     4  8.15</span></span>
+<span id="cb7-190"><a href="#cb7-190" tabindex="-1"></a><span class="co">#&gt; 6 S/6,5/35/R1     5  8.51</span></span></code></pre></div>
+<p>C:6f2837a024707_serial_dilution.R</p>
+</div>
+<div id="estimating-the-growth-rate-from-the-time-to-detection" class="section level3">
+<h3>Estimating the growth rate from the time-to-detection</h3>
+<p>The <code>fit_serial_dilution()</code> function implements the
+serial-dilution method. It takes 7 arguments:</p>
+<ul>
+<li><code>TTD_data</code></li>
+<li><code>start</code></li>
+<li><code>dil_factor</code></li>
+<li><code>mode</code></li>
+<li><code>logN_det</code></li>
+<li><code>logN_dil0</code></li>
+<li><code>max_dil</code></li>
+</ul>
+<p>The argument <code>TTD_data</code> defines the data for the fitting.
+It must be a <code>tibble</code> (or <code>data.frame</code>) with two
+columns: <code>TTD</code> (the <span class="math inline">\(t_{det}\)</span>) and <code>dil</code> the
+dilution number. The output of <code>get_TTDs</code> (after filtering
+for one condition) already has that format.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>my_data <span class="ot">&lt;-</span> <span class="fu">filter</span>(my_TTDs, condition <span class="sc">==</span> <span class="st">&quot;S/6,5/35/R1&quot;</span>)</span></code></pre></div>
+<p>C:6f2837a024707_serial_dilution.R</p>
+<p>The dilution factor is defined by the argument
+<code>dil_factor</code>. By default, this parameter takes the value
+<code>2</code> (as the two-fold dilution method is the most common).
+Then, the fitting is done by nonlinear regression, so the function
+requires initial guesses for the model parameters using the argument
+<code>start</code>.</p>
+<p>The fitting can be done in two different modes. The default
+(“intercept”) simplifies the equation into an intercept term
+(<code>a</code>). Therefore, <code>start</code> must include an initial
+guess for <code>mu</code> and <code>a</code>.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>my_fit <span class="ot">&lt;-</span> <span class="fu">fit_serial_dilution</span>(my_data, <span class="at">start =</span> <span class="fu">c</span>(<span class="at">a =</span> <span class="dv">0</span>, <span class="at">mu =</span> .<span class="dv">1</span>))</span></code></pre></div>
+<p>C:6f2837a024707_serial_dilution.R</p>
+<p>The function returns an instance of <code>FitSerial</code> with the
+results of the fit. It includes common S3 methods for analysing the
+model output such as print</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>my_fit</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="co">#&gt; Primary model estimated from OD data</span></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co">#&gt; Fitting approach: intercept </span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="co">#&gt; Parameter estimates:</span></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="co">#&gt;         a        mu </span></span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a><span class="co">#&gt; 6.4205359 0.7131304</span></span></code></pre></div>
+<p>C:6f2837a024707_serial_dilution.R</p>
+<p>coef</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">coef</span>(my_fit)</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="co">#&gt;         a        mu </span></span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="co">#&gt; 6.4205359 0.7131304</span></span></code></pre></div>
+<p>C:6f2837a024707_serial_dilution.R</p>
+<p>or summary</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">summary</span>(my_fit)</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="co">#&gt; Formula: TTD ~ a + x/mu</span></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="co">#&gt; Parameters:</span></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="co">#&gt;    Estimate Std. Error t value Pr(&gt;|t|)    </span></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="co">#&gt; a   6.42054    0.05949  107.92 1.55e-12 ***</span></span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a><span class="co">#&gt; mu  0.71313    0.02111   33.78 5.16e-09 ***</span></span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a><span class="co">#&gt; ---</span></span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a><span class="co">#&gt; Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</span></span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a><span class="co">#&gt; Residual standard error: 0.09679 on 7 degrees of freedom</span></span>
+<span id="cb12-13"><a href="#cb12-13" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-14"><a href="#cb12-14" tabindex="-1"></a><span class="co">#&gt; Number of iterations to convergence: 7 </span></span>
+<span id="cb12-15"><a href="#cb12-15" tabindex="-1"></a><span class="co">#&gt; Achieved convergence tolerance: 8.011e-08</span></span></code></pre></div>
+<p>C:6f2837a024707_serial_dilution.R</p>
+<p>It also includes a plot method to compare the fitted curve against
+the values of <span class="math inline">\(t_{det}\)</span>.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">plot</span>(my_fit)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- -->C:6f2837a024707_serial_dilution.R</p>
+<p>A common issue when applying the serial-dilution method is that high
+dilution numbers often have higher error. Therefore, the function
+includes the <code>max_dil</code> argument to define a maximum number of
+dilutions to consider. For instance, we can only take the first 5 serial
+dilutions:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>fit_max5 <span class="ot">&lt;-</span> <span class="fu">fit_serial_dilution</span>(my_data, <span class="at">start =</span> <span class="fu">c</span>(<span class="at">a =</span> <span class="dv">0</span>, <span class="at">mu =</span> .<span class="dv">1</span>), <span class="at">max_dil =</span> <span class="dv">5</span>)</span></code></pre></div>
+<p>C:6f2837a024707_serial_dilution.R</p>
+<p>Now, the plot method shows a lower number of data points:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="fu">plot</span>(fit_max5)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- -->C:6f2837a024707_serial_dilution.R</p>
+<p>Obviously, this results in different parameter estimates:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="fu">coef</span>(fit_max5)</span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a><span class="co">#&gt;         a        mu </span></span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a><span class="co">#&gt; 6.3920431 0.6911417</span></span></code></pre></div>
+<p>C:6f2837a024707_serial_dilution.R</p>
+</div>
+<div id="estimating-both-the-growth-rate-and-lag-phase-duration-from-the-time-to-detection" class="section level3">
+<h3>Estimating both the growth rate and lag phase duration from the
+time-to-detection</h3>
+<p>The serial-dilution method also allows for an estimation of the lag
+phase duration. This mode can be activated by passing
+<code>mode = &quot;lambda&quot;</code> to <code>fit_serial_dilution()</code>. This
+mode requires additional information; namely, the initial microbial
+concentration at the well with dilution 0 (<code>logN_dil0</code>) and
+the microbial concentration at the detection of (<code>logN_det</code>).
+This information must be identified using independent experiments (i.e.,
+by direct plating).</p>
+<p>Please note that this mode requires an initial guess on
+<code>lambda</code> instead on <code>a</code>:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a>my_fit2 <span class="ot">&lt;-</span> <span class="fu">fit_serial_dilution</span>(my_data, </span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a>                               <span class="at">start =</span> <span class="fu">c</span>(<span class="at">lambda =</span> <span class="dv">0</span>, <span class="at">mu =</span> .<span class="dv">1</span>),</span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a>                               <span class="at">mode =</span> <span class="st">&quot;lambda&quot;</span>, </span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a>                               <span class="at">logN_det =</span> <span class="fl">7.5</span>,</span>
+<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a>                               <span class="at">logN_dil0 =</span> <span class="dv">4</span>)</span></code></pre></div>
+<p>C:6f2837a024707_serial_dilution.R</p>
+<p>The function also returns for this mode an instance of
+<code>FitSerial</code> with the same methods. The plot method shows that
+the fitted curve is the same, regarless of the mode:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="fu">plot</span>(my_fit2)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- -->C:6f2837a024707_serial_dilution.R</p>
+<p>However, the <code>summary()</code> method now returns the estimate
+of <code>lambda</code> instead of <code>a</code>:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="fu">summary</span>(my_fit2)</span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a><span class="co">#&gt; Formula: TTD ~ (lambda + logN_det/mu - logN_dil0/mu) + x/mu</span></span>
+<span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb19-5"><a href="#cb19-5" tabindex="-1"></a><span class="co">#&gt; Parameters:</span></span>
+<span id="cb19-6"><a href="#cb19-6" tabindex="-1"></a><span class="co">#&gt;        Estimate Std. Error t value Pr(&gt;|t|)    </span></span>
+<span id="cb19-7"><a href="#cb19-7" tabindex="-1"></a><span class="co">#&gt; lambda  1.51260    0.19792   7.642 0.000122 ***</span></span>
+<span id="cb19-8"><a href="#cb19-8" tabindex="-1"></a><span class="co">#&gt; mu      0.71313    0.02111  33.781 5.16e-09 ***</span></span>
+<span id="cb19-9"><a href="#cb19-9" tabindex="-1"></a><span class="co">#&gt; ---</span></span>
+<span id="cb19-10"><a href="#cb19-10" tabindex="-1"></a><span class="co">#&gt; Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</span></span>
+<span id="cb19-11"><a href="#cb19-11" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb19-12"><a href="#cb19-12" tabindex="-1"></a><span class="co">#&gt; Residual standard error: 0.09679 on 7 degrees of freedom</span></span>
+<span id="cb19-13"><a href="#cb19-13" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb19-14"><a href="#cb19-14" tabindex="-1"></a><span class="co">#&gt; Number of iterations to convergence: 7 </span></span>
+<span id="cb19-15"><a href="#cb19-15" tabindex="-1"></a><span class="co">#&gt; Achieved convergence tolerance: 3.265e-07</span></span></code></pre></div>
+<p>C:6f2837a024707_serial_dilution.R</p>
+<p>Please note that the estimate for <span class="math inline">\(\mu\)</span> is the same regardless of the mode,
+as the slope term is only dependent on this parameter:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="fu">coef</span>(my_fit)</span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a><span class="co">#&gt;         a        mu </span></span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a><span class="co">#&gt; 6.4205359 0.7131304</span></span></code></pre></div>
+<p>C:6f2837a024707_serial_dilution.R</p>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

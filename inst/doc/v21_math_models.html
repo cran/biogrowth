@@ -341,6 +341,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(biogrowth)</span></code></pre></div>
+<p>C:6f2837a024701_math_models.R</p>
 <div id="population-growth-in-predictive-microbiology" class="section level2">
 <h2>Population growth in predictive microbiology</h2>
 <p>In predictive microbiology mathematical models are usually divided in
@@ -612,15 +613,19 @@ available models.</p>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt;  [4] &quot;Baranyi_noStationary&quot; &quot;Trilinear&quot;            &quot;Logistic&quot;            </span></span>
 <span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt;  [7] &quot;Richards&quot;             &quot;Loglinear&quot;            &quot;Bilinear_lag&quot;        </span></span>
 <span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt; [10] &quot;Bilinear_stationary&quot;</span></span></code></pre></div>
+<p>C:6f2837a024701_math_models.R</p>
 <p>If a model identifier is passed, it returns a list with mode
 meta-information.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>meta_info <span class="ot">&lt;-</span> <span class="fu">primary_model_data</span>(<span class="st">&quot;Trilinear&quot;</span>)</span></code></pre></div>
+<p>C:6f2837a024701_math_models.R</p>
 <p>It includes the full reference</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>meta_info<span class="sc">$</span>ref</span>
 <span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Buchanan, R. L., Whiting, R. C., and Damert, W. C. (1997). When is simple good enough: A comparison of the Gompertz, Baranyi, and three-phase linear models for fitting bacterial growth curves. Food Microbiology, 14(4), 313-326. https://doi.org/10.1006/fmic.1997.0125&quot;</span></span></code></pre></div>
+<p>C:6f2837a024701_math_models.R</p>
 <p>or the identifiers of the model parameters</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>meta_info<span class="sc">$</span>pars</span>
 <span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;logN0&quot;   &quot;logNmax&quot; &quot;mu&quot;      &quot;lambda&quot;</span></span></code></pre></div>
+<p>C:6f2837a024701_math_models.R</p>
 </div>
 </div>
 <div id="secondary-growth-models-included-in-biogrowth" class="section level2">
@@ -771,15 +776,19 @@ available models.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">secondary_model_data</span>()</span>
 <span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;CPM&quot;           &quot;Zwietering&quot;    &quot;fullRatkowsky&quot; &quot;Aryani&quot;       </span></span>
 <span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&gt; [5] &quot;Rosso_aw&quot;      &quot;Inhibitory&quot;</span></span></code></pre></div>
+<p>C:6f2837a024701_math_models.R</p>
 <p>If, instead, one passes any valid model identifier, the function
 returns its meta-information.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>meta_info <span class="ot">&lt;-</span> <span class="fu">secondary_model_data</span>(<span class="st">&quot;CPM&quot;</span>)</span></code></pre></div>
+<p>C:6f2837a024701_math_models.R</p>
 <p>This includes the full reference of the model</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>meta_info<span class="sc">$</span>ref</span>
 <span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Rosso, L., Lobry, J. R., Bajard, S., and Flandrois, J. P. (1995). Convenient Model To Describe the Combined Effects of Temperature and pH on Microbial Growth. Applied and Environmental Microbiology, 61(2), 610-616.&quot;</span></span></code></pre></div>
+<p>C:6f2837a024701_math_models.R</p>
 <p>or the identifiers of its model parameters</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>meta_info<span class="sc">$</span>pars</span>
 <span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;xmin&quot; &quot;xopt&quot; &quot;xmax&quot; &quot;n&quot;</span></span></code></pre></div>
+<p>C:6f2837a024701_math_models.R</p>
 </div>
 </div>
 <div id="summary-of-the-model-parameters" class="section level2">
